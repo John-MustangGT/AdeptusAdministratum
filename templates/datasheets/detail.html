@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}{{ ds.name }} — Adeptus Administratum{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>{{ ds.name }}</h1>
+  <span class="role-badge">{{ ds.battlefield_role }}</span>
+  <span class="faction-badge">{{ ds.faction.primary }}</span>
+</div>
+
+<div class="datasheet-meta">
+  <span><strong>Game:</strong> {{ ds.game_system }}</span>
+  <span><strong>Base Points:</strong> {{ ds.points.base }}</span>
+  <span><strong>Unit Size:</strong> {{ ds.unit_size.min }}&ndash;{{ ds.unit_size.max }}</span>
+</div>
+
+<form method="post" action="/roster/unit/add">
+  <input type="hidden" name="datasheet_id" value="{{ ds.id }}">
+  <button type="submit" class="btn btn-primary">+ Add to Roster</button>
+</form>
+
+<section>
+  <h2>Profiles</h2>
+  {% for profile in ds.profiles %}
+  <div class="profile-block">
+    <h3>{{ profile.name }}</h3>
+    <table class="stat-table">
+      <thead>
+        <tr>
+          {% for key in profile.stats.keys() %}
+          <th>{{ key }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {% for val in profile.stats.values() %}
+          <td>{{ val }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+</section>
+
+{% if !ds.weapons.ranged.is_empty() %}
+<section>
+  <h2>Ranged Weapons</h2>
+  <table class="weapon-table">
+    <thead>
+      <tr><th>Name</th><th>Profiles / Abilities</th></tr>
+    </thead>
+    <tbody>
+      {% for w in ds.weapons.ranged %}
+      <tr>
+        <td>{{ w.name }}</td>
+        <td>
+          {% if w.profiles.is_empty() %}
+            {{ w.abilities|join(", ") }}
+          {% else %}
+            {% for p in w.profiles %}
+            <div><em>{{ p.name }}:</em> {{ p.abilities|join(", ") }}</div>
+            {% endfor %}
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% if !ds.weapons.melee.is_empty() %}
+<section>
+  <h2>Melee Weapons</h2>
+  <table class="weapon-table">
+    <thead>
+      <tr><th>Name</th><th>Abilities</th></tr>
+    </thead>
+    <tbody>
+      {% for w in ds.weapons.melee %}
+      <tr>
+        <td>{{ w.name }}</td>
+        <td>{{ w.abilities|join(", ") }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% if !ds.abilities.is_empty() %}
+<section>
+  <h2>Abilities</h2>
+  <dl class="ability-list">
+    {% for ability in ds.abilities %}
+    <dt>{{ ability.name }}</dt>
+    <dd>{{ ability.description }}</dd>
+    {% endfor %}
+  </dl>
+</section>
+{% endif %}
+
+{% if !ds.keywords.unit.is_empty() %}
+<section>
+  <h2>Keywords</h2>
+  <p>
+    {% for kw in ds.keywords.faction %}
+    <span class="keyword">{{ kw }}</span>
+    {% endfor %}
+    {% for kw in ds.keywords.unit %}
+    <span class="keyword">{{ kw }}</span>
+    {% endfor %}
+  </p>
+</section>
+{% endif %}
+{% endblock %}

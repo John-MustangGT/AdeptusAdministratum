@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Adeptus Administratum{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/htmx.min.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a class="brand" href="/">⚙ Adeptus Administratum</a>
+      <ul>
+        <li><a href="/datasheets">Datasheets</a></li>
+        <li><a href="/roster">My Roster</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>Self-hosted army list builder &mdash; <a href="/roster/export.json">Export Roster JSON</a></p>
+  </footer>
+</body>
+</html>

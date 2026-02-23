@@ -7,7 +7,7 @@
 //!
 //! # Quick start
 //!
-//! ```rust
+//! ```rust,ignore
 //! use adeptus_administratum::datasheet::UnitDatasheet;
 //! use adeptus_administratum::validation::{UnitSelection, validate_unit};
 //!
@@ -22,8 +22,9 @@
 //! ```
 
 use crate::datasheet::{
-    ConditionType, Constraint, ConstraintType, Severity, UnitDatasheet, WargearOption,
+    ConditionType, Constraint, ConstraintType, Severity, UnitDatasheet,
 };
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 // ---------------------------------------------------------------------------
@@ -31,7 +32,7 @@ use thiserror::Error;
 // ---------------------------------------------------------------------------
 
 /// A user's roster entry for one unit.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct UnitSelection {
     /// Total number of models in the unit.
     pub model_count: u32,

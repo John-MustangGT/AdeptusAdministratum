@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}My Roster — Adeptus Administratum{% endblock %}
+
+{% block content %}
+<div id="roster-content">
+  <div class="roster-header">
+    <form method="post" action="/roster/rename"
+          hx-post="/roster/rename"
+          hx-target="#roster-content"
+          hx-swap="outerHTML"
+          hx-trigger="change">
+      <input type="text" name="roster_name" value="{{ roster_name }}" class="roster-name-input" aria-label="Roster name">
+    </form>
+
+    <div class="roster-totals">
+      <span class="total-points {% if has_errors %}has-errors{% endif %}">
+        {{ total_points }} pts
+        {% if has_errors %}<span class="error-badge" title="Roster has validation errors">⚠</span>{% endif %}
+      </span>
+      <a href="/roster/export.json" class="btn btn-sm">Export JSON</a>
+    </div>
+  </div>
+
+  <div class="add-unit-bar">
+    <form method="post" action="/roster/unit/add"
+          hx-post="/roster/unit/add"
+          hx-target="#roster-content"
+          hx-swap="outerHTML">
+      <select name="datasheet_id" required>
+        <option value="" disabled selected>Select a unit…</option>
+        {% for (id, name) in all_datasheets %}
+        <option value="{{ id }}">{{ name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary">+ Add Unit</button>
+    </form>
+  </div>
+
+  {% if entries.is_empty() %}
+  <div class="empty-roster">
+    <p>Your roster is empty. Add units from the <a href="/datasheets">datasheets browser</a> or the dropdown above.</p>
+  </div>
+  {% else %}
+  <div class="unit-list">
+    {% for entry in entries %}
+    {% include "roster/_unit_card.html" %}
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

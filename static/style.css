@@ -1,0 +1,335 @@
+/* ============================================================
+   Adeptus Administratum — stylesheet
+   Minimal, functional, no build step required.
+   ============================================================ */
+
+/* ----- Reset / base ----- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #0d0d0f;
+  --surface:    #18181c;
+  --border:     #2e2e36;
+  --accent:     #c9a84c;   /* gold */
+  --accent-dim: #7a6428;
+  --red:        #c0392b;
+  --yellow:     #e6b800;
+  --text:       #e0ddd5;
+  --text-dim:   #888;
+  --radius:     6px;
+  --font:       system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono:  "Cascadia Code", "Fira Code", Consolas, monospace;
+}
+
+html { font-size: 15px; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code, pre { font-family: var(--font-mono); }
+
+/* ----- Layout ----- */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+}
+
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+}
+
+.site-header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+main {
+  flex: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  width: 100%;
+}
+
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 0.75rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+/* ----- Buttons ----- */
+.btn {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: border-color 0.15s;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+.btn-primary {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+}
+.btn-primary:hover { background: var(--accent); color: #000; }
+
+.btn-sm { padding: 0.25rem 0.55rem; font-size: 0.8rem; }
+
+.btn-danger { border-color: var(--red); color: var(--red); }
+.btn-danger:hover { background: var(--red); color: #fff; }
+
+/* ----- Page header ----- */
+.page-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.page-header h1 { font-size: 1.6rem; }
+
+/* ----- Badges ----- */
+.role-badge, .faction-badge, .keyword {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.role-badge   { background: #1e2a1e; border: 1px solid #3a5a3a; color: #7ec87e; }
+.faction-badge { background: #1a1a2e; border: 1px solid #3a3a7a; color: #8888ee; }
+.keyword      { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); margin: 0.1rem; }
+
+/* ----- Tables ----- */
+table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; }
+th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+th { color: var(--text-dim); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+tr:hover td { background: var(--surface); }
+
+.stat-table th, .stat-table td { text-align: center; }
+
+/* ----- Datasheets list ----- */
+.faction-filter { margin-bottom: 1rem; }
+.faction-filter select {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius);
+  margin-left: 0.5rem;
+}
+
+/* ----- Hero (index) ----- */
+.hero { margin-bottom: 2.5rem; }
+.hero h1 { font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--accent); }
+.hero p { color: var(--text-dim); margin-bottom: 1.25rem; }
+.hero-actions { display: flex; gap: 0.75rem; }
+
+.faction-grid h2 { margin-bottom: 0.75rem; }
+.grid { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.grid li a {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+.grid li a:hover { border-color: var(--accent); text-decoration: none; }
+
+/* ----- Datasheet detail ----- */
+.datasheet-meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+.profile-block { margin-bottom: 1rem; }
+.profile-block h3 { font-size: 0.95rem; color: var(--text-dim); margin-bottom: 0.4rem; }
+
+section { margin-bottom: 2rem; }
+section h2 { font-size: 1.15rem; margin-bottom: 0.6rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+
+.ability-list dt { font-weight: 600; margin-top: 0.75rem; color: var(--accent); }
+.ability-list dd { margin-left: 1rem; color: var(--text-dim); font-size: 0.9rem; line-height: 1.5; }
+
+/* ----- Roster view ----- */
+.roster-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.roster-name-input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--border);
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: 700;
+  width: 300px;
+}
+.roster-name-input:focus { outline: none; border-color: var(--accent); }
+
+.roster-totals { display: flex; align-items: center; gap: 0.75rem; }
+.total-points { font-size: 1.25rem; font-weight: 700; }
+.total-points.has-errors { color: var(--red); }
+.error-badge { font-size: 1rem; }
+
+.add-unit-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.add-unit-bar select {
+  flex: 1;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius);
+}
+
+.empty-roster {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-dim);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.unit-list { display: flex; flex-direction: column; gap: 1rem; }
+
+/* ----- Unit card ----- */
+.unit-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  transition: border-color 0.15s;
+}
+.unit-card:has(.issue-error) { border-color: var(--red); }
+
+.unit-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.unit-name { font-weight: 600; font-size: 1.05rem; }
+.unit-card-actions { display: flex; align-items: center; gap: 0.75rem; }
+.unit-points { font-size: 1.05rem; color: var(--accent); }
+
+.unit-config-row {
+  margin-bottom: 0.75rem;
+}
+.model-count-input {
+  width: 80px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+}
+
+/* ----- Wargear ----- */
+.wargear-details summary {
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+  user-select: none;
+}
+.wargear-details summary:hover { color: var(--text); }
+.wargear-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem 0 0.25rem 0.5rem;
+}
+.wargear-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.wargear-option.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.wargear-option input[type="checkbox"] { accent-color: var(--accent); }
+.pts-delta { color: var(--text-dim); font-size: 0.8rem; margin-left: 0.25rem; }
+
+/* ----- Validation issues ----- */
+.issue-list {
+  list-style: none;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.issue {
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+.issue-error   { background: #2a0808; border-left: 3px solid var(--red); color: #e07070; }
+.issue-warning { background: #2a2008; border-left: 3px solid var(--yellow); color: #e0c070; }
+
+/* ----- Empty state ----- */
+.empty-state { color: var(--text-dim); font-style: italic; }
+
+/* ----- HTMX loading indicator ----- */
+.htmx-indicator { opacity: 0; transition: opacity 0.2s; }
+.htmx-request .htmx-indicator { opacity: 1; }
+
+/* ----- Responsive ----- */
+@media (max-width: 640px) {
+  .roster-header { flex-direction: column; align-items: flex-start; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero-actions { flex-direction: column; }
+  .datasheet-meta { flex-direction: column; gap: 0.4rem; }
+}

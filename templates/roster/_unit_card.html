@@ -1,0 +1,67 @@
+<div id="unit-{{ entry.entry_id }}" class="unit-card">
+  <div class="unit-card-header">
+    <div>
+      <a href="/datasheets/{{ entry.datasheet_id }}" class="unit-name">{{ entry.datasheet_name }}</a>
+      <span class="role-badge">{{ entry.battlefield_role }}</span>
+    </div>
+    <div class="unit-card-actions">
+      <strong class="unit-points">{{ entry.points }} pts</strong>
+      <form method="post" action="/roster/unit/{{ entry.entry_id }}/remove"
+            hx-post="/roster/unit/{{ entry.entry_id }}/remove"
+            hx-target="#roster-content"
+            hx-swap="outerHTML"
+            style="display:inline">
+        <button type="submit" class="btn btn-sm btn-danger" title="Remove unit">✕</button>
+      </form>
+    </div>
+  </div>
+
+  <form method="post" action="/roster/unit/{{ entry.entry_id }}/configure"
+        hx-post="/roster/unit/{{ entry.entry_id }}/configure"
+        hx-target="#unit-{{ entry.entry_id }}"
+        hx-swap="outerHTML"
+        hx-trigger="change">
+
+    <div class="unit-config-row">
+      <label>
+        Models:
+        <input type="number"
+               name="model_count"
+               value="{{ entry.model_count }}"
+               min="{{ entry.unit_min }}"
+               max="{{ entry.unit_max }}"
+               step="{{ entry.unit_step }}"
+               class="model-count-input">
+      </label>
+    </div>
+
+    {% if !entry.options.is_empty() %}
+    <details class="wargear-details">
+      <summary>Wargear Options</summary>
+      <div class="wargear-list">
+        {% for opt in entry.options %}
+        <label class="wargear-option{% if opt.disabled %} disabled{% endif %}">
+          <input type="checkbox"
+                 name="options"
+                 value="{{ opt.id }}"
+                 {% if opt.checked %}checked{% endif %}
+                 {% if opt.disabled %}disabled{% endif %}>
+          {{ opt.description }}
+          {% if opt.points_cost != 0 %}
+            <span class="pts-delta">{% if opt.points_cost > 0 %}+{% endif %}{{ opt.points_cost }}pts</span>
+          {% endif %}
+        </label>
+        {% endfor %}
+      </div>
+    </details>
+    {% endif %}
+  </form>
+
+  {% if !entry.issues.is_empty() %}
+  <ul class="issue-list">
+    {% for (cls, msg) in entry.issues %}
+    <li class="issue issue-{{ cls }}">{{ msg }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
