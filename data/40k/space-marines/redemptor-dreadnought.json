@@ -1,0 +1,118 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-redemptor-dreadnought",
+  "name": "Redemptor Dreadnought",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Elites",
+  "points": { "base": 185, "per_additional_model": 0, "free_wargear_included": true },
+  "unit_size": { "min": 1, "max": 1, "step": 1 },
+  "profiles": [
+    {
+      "name": "Redemptor Dreadnought",
+      "count": 1,
+      "stats": { "M": "8\"", "T": 10, "Sv": "2+", "W": 12, "Ld": "6+", "OC": 4 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "onslaught_gatling_cannon",
+        "name": "Onslaught Gatling Cannon",
+        "stats": { "range": "30\"", "A": "12", "BS": "3+", "S": 6, "AP": -1, "D": 1 },
+        "abilities": ["DEVASTATING HITS"]
+      },
+      {
+        "id": "macro_plasma_incinerator",
+        "name": "Macro Plasma Incinerator",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": { "range": "36\"", "A": "3", "BS": "3+", "S": 8, "AP": -3, "D": 2 },
+            "abilities": []
+          },
+          {
+            "name": "Supercharge",
+            "stats": { "range": "36\"", "A": "3", "BS": "3+", "S": 9, "AP": -4, "D": 3 },
+            "abilities": ["HAZARDOUS"]
+          }
+        ]
+      },
+      {
+        "id": "fragstorm_grenade_launcher",
+        "name": "Fragstorm Grenade Launcher",
+        "stats": { "range": "18\"", "A": "D6+3", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["BLAST"]
+      },
+      {
+        "id": "icarus_rocket_pod",
+        "name": "Icarus Rocket Pod",
+        "stats": { "range": "24\"", "A": "D3", "BS": "3+", "S": 8, "AP": -1, "D": 2 },
+        "abilities": ["ANTI-FLY 2+"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "redemptor_fist",
+        "name": "Redemptor Fist",
+        "stats": { "range": "Melee", "A": "5", "WS": "3+", "S": 14, "AP": -3, "D": "D6+1" },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "onslaught_gatling_cannon", "quantity": 1 },
+    { "weapon_id": "fragstorm_grenade_launcher", "quantity": 2 },
+    { "weapon_id": "icarus_rocket_pod", "quantity": 1 },
+    { "weapon_id": "redemptor_fist", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "macro_plasma_arm",
+      "description": "The Redemptor Dreadnought can replace its onslaught gatling cannon with a macro plasma incinerator.",
+      "type": "replace",
+      "replaces": ["onslaught_gatling_cannon"],
+      "adds": ["macro_plasma_incinerator"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Smoke",
+      "description": "Once per battle, this model can use its smoke launchers. When it does, until the start of your next turn, ranged attacks that target this model suffer a -1 penalty to the Hit roll.",
+      "type": "unit",
+      "timing": "any phase"
+    },
+    {
+      "name": "Brutal Assault",
+      "description": "Each time this model makes a melee attack, if the target unit has 10 or more models, that attack has a Strength characteristic of 16.",
+      "type": "unit",
+      "timing": "fight phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["VEHICLE", "WALKER", "DREADNOUGHT", "REDEMPTOR DREADNOUGHT"],
+    "transport_keywords": []
+  },
+  "constraints": [],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (185 pts). Choose between onslaught gatling cannon and macro plasma incinerator at army construction. Brutal Assault ability wording — verify against current index card. CHAPTER keyword replaced with army's specific chapter."
+}

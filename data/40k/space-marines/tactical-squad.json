@@ -1,0 +1,412 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-tactical-squad",
+  "name": "Tactical Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Troops",
+  "points": { "base": 75, "per_additional_model": 15, "free_wargear_included": true },
+  "unit_size": { "min": 5, "max": 10, "step": 5 },
+  "profiles": [
+    {
+      "name": "Space Marine Sergeant",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 3, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Space Marine",
+      "count": "remainder",
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 2, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "boltgun",
+        "name": "Boltgun",
+        "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["RAPID FIRE 1"]
+      },
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "flamer",
+        "name": "Flamer",
+        "stats": { "range": "12\"", "A": "D6", "BS": "auto", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["IGNORES COVER", "TORRENT"]
+      },
+      {
+        "id": "meltagun",
+        "name": "Meltagun",
+        "stats": { "range": "12\"", "A": "1", "BS": "3+", "S": 9, "AP": -4, "D": "D6" },
+        "abilities": ["MELTA 2"]
+      },
+      {
+        "id": "plasma_gun",
+        "name": "Plasma Gun",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": { "range": "24\"", "A": "1", "BS": "3+", "S": 7, "AP": -2, "D": 1 },
+            "abilities": ["RAPID FIRE 1"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": { "range": "24\"", "A": "1", "BS": "3+", "S": 8, "AP": -3, "D": 2 },
+            "abilities": ["HAZARDOUS", "RAPID FIRE 1"]
+          }
+        ]
+      },
+      {
+        "id": "grav_gun",
+        "name": "Grav-gun",
+        "stats": { "range": "18\"", "A": "2", "BS": "3+", "S": 5, "AP": -1, "D": 1 },
+        "abilities": ["ANTI-VEHICLE 6+", "RAPID FIRE 1"]
+      },
+      {
+        "id": "heavy_bolter",
+        "name": "Heavy Bolter",
+        "stats": { "range": "36\"", "A": "3", "BS": "3+", "S": 5, "AP": -1, "D": 2 },
+        "abilities": ["HEAVY", "SUSTAINED HITS 1"]
+      },
+      {
+        "id": "missile_launcher",
+        "name": "Missile Launcher",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Frag",
+            "stats": { "range": "48\"", "A": "D6+1", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+            "abilities": ["BLAST", "HEAVY"]
+          },
+          {
+            "name": "Krak",
+            "stats": { "range": "48\"", "A": "1", "BS": "3+", "S": 9, "AP": -2, "D": "D6" },
+            "abilities": ["HEAVY"]
+          }
+        ]
+      },
+      {
+        "id": "lascannon",
+        "name": "Lascannon",
+        "stats": { "range": "48\"", "A": "1", "BS": "3+", "S": 12, "AP": -3, "D": "D6+1" },
+        "abilities": ["HEAVY"]
+      },
+      {
+        "id": "plasma_cannon",
+        "name": "Plasma Cannon",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": { "range": "36\"", "A": "D3", "BS": "3+", "S": 7, "AP": -2, "D": 1 },
+            "abilities": ["BLAST", "HEAVY"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": { "range": "36\"", "A": "D3", "BS": "3+", "S": 8, "AP": -3, "D": 2 },
+            "abilities": ["BLAST", "HAZARDOUS", "HEAVY"]
+          }
+        ]
+      },
+      {
+        "id": "multi_melta",
+        "name": "Multi-melta",
+        "stats": { "range": "18\"", "A": "2", "BS": "3+", "S": 9, "AP": -4, "D": "D6" },
+        "abilities": ["HEAVY", "MELTA 2"]
+      },
+      {
+        "id": "grav_cannon",
+        "name": "Grav-cannon",
+        "stats": { "range": "24\"", "A": "4", "BS": "3+", "S": 5, "AP": -1, "D": 1 },
+        "abilities": ["ANTI-VEHICLE 6+", "HEAVY"]
+      },
+      {
+        "id": "combi_weapon",
+        "name": "Combi-weapon",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Boltgun",
+            "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+            "abilities": ["RAPID FIRE 1"]
+          },
+          {
+            "name": "Combi-attachment",
+            "stats": { "range": "24\"", "A": "1", "BS": "3+", "S": 9, "AP": -2, "D": "D3" },
+            "abilities": ["ANTI-INFANTRY 4+", "DEVASTATING WOUNDS", "RAPID FIRE 1"]
+          }
+        ]
+      }
+    ],
+    "melee": [
+      {
+        "id": "close_combat_weapon",
+        "name": "Close Combat Weapon",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_sword",
+        "name": "Power Sword",
+        "stats": { "range": "Melee", "A": "4", "WS": "3+", "S": 5, "AP": -2, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_fist",
+        "name": "Power Fist",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": []
+      },
+      {
+        "id": "thunder_hammer",
+        "name": "Thunder Hammer",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": ["DEVASTATING WOUNDS"]
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "boltgun",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Space Marine" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Space Marine" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Space Marine" }
+    },
+    {
+      "weapon_id": "boltgun",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Space Marine Sergeant" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Space Marine Sergeant" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Space Marine Sergeant" }
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "special_weapon_flamer",
+      "description": "1 Space Marine can replace their boltgun with a flamer (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["flamer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["special_weapon_melta", "special_weapon_plasma", "special_weapon_grav"]
+    },
+    {
+      "id": "special_weapon_melta",
+      "description": "1 Space Marine can replace their boltgun with a meltagun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["meltagun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["special_weapon_flamer", "special_weapon_plasma", "special_weapon_grav"]
+    },
+    {
+      "id": "special_weapon_plasma",
+      "description": "1 Space Marine can replace their boltgun with a plasma gun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["plasma_gun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["special_weapon_flamer", "special_weapon_melta", "special_weapon_grav"]
+    },
+    {
+      "id": "special_weapon_grav",
+      "description": "1 Space Marine can replace their boltgun with a grav-gun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["grav_gun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["special_weapon_flamer", "special_weapon_melta", "special_weapon_plasma"]
+    },
+    {
+      "id": "heavy_weapon_heavy_bolter",
+      "description": "1 Space Marine can replace their boltgun with a heavy bolter (10-model unit only).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["heavy_bolter"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1, "requires_min_unit_size": 10 },
+      "mutually_exclusive_with": ["heavy_weapon_missile", "heavy_weapon_lascannon", "heavy_weapon_plasma_cannon", "heavy_weapon_multi_melta", "heavy_weapon_grav_cannon"]
+    },
+    {
+      "id": "heavy_weapon_missile",
+      "description": "1 Space Marine can replace their boltgun with a missile launcher (10-model unit only).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["missile_launcher"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1, "requires_min_unit_size": 10 },
+      "mutually_exclusive_with": ["heavy_weapon_heavy_bolter", "heavy_weapon_lascannon", "heavy_weapon_plasma_cannon", "heavy_weapon_multi_melta", "heavy_weapon_grav_cannon"]
+    },
+    {
+      "id": "heavy_weapon_lascannon",
+      "description": "1 Space Marine can replace their boltgun with a lascannon (10-model unit only).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["lascannon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1, "requires_min_unit_size": 10 },
+      "mutually_exclusive_with": ["heavy_weapon_heavy_bolter", "heavy_weapon_missile", "heavy_weapon_plasma_cannon", "heavy_weapon_multi_melta", "heavy_weapon_grav_cannon"]
+    },
+    {
+      "id": "heavy_weapon_plasma_cannon",
+      "description": "1 Space Marine can replace their boltgun with a plasma cannon (10-model unit only).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["plasma_cannon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1, "requires_min_unit_size": 10 },
+      "mutually_exclusive_with": ["heavy_weapon_heavy_bolter", "heavy_weapon_missile", "heavy_weapon_lascannon", "heavy_weapon_multi_melta", "heavy_weapon_grav_cannon"]
+    },
+    {
+      "id": "heavy_weapon_multi_melta",
+      "description": "1 Space Marine can replace their boltgun with a multi-melta (10-model unit only).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["multi_melta"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1, "requires_min_unit_size": 10 },
+      "mutually_exclusive_with": ["heavy_weapon_heavy_bolter", "heavy_weapon_missile", "heavy_weapon_lascannon", "heavy_weapon_plasma_cannon", "heavy_weapon_grav_cannon"]
+    },
+    {
+      "id": "heavy_weapon_grav_cannon",
+      "description": "1 Space Marine can replace their boltgun with a grav-cannon (10-model unit only).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["grav_cannon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1, "requires_min_unit_size": 10 },
+      "mutually_exclusive_with": ["heavy_weapon_heavy_bolter", "heavy_weapon_missile", "heavy_weapon_lascannon", "heavy_weapon_plasma_cannon", "heavy_weapon_multi_melta"]
+    },
+    {
+      "id": "sergeant_combi_weapon",
+      "description": "The Sergeant can replace their boltgun with a combi-weapon.",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["combi_weapon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": []
+    },
+    {
+      "id": "sergeant_power_sword",
+      "description": "The Sergeant can replace their close combat weapon with a power sword.",
+      "type": "replace",
+      "replaces": ["close_combat_weapon"],
+      "adds": ["power_sword"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_fist", "sergeant_thunder_hammer"]
+    },
+    {
+      "id": "sergeant_power_fist",
+      "description": "The Sergeant can replace their close combat weapon with a power fist.",
+      "type": "replace",
+      "replaces": ["close_combat_weapon"],
+      "adds": ["power_fist"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_sword", "sergeant_thunder_hammer"]
+    },
+    {
+      "id": "sergeant_thunder_hammer",
+      "description": "The Sergeant can replace their close combat weapon with a thunder hammer.",
+      "type": "replace",
+      "replaces": ["close_combat_weapon"],
+      "adds": ["thunder_hammer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_sword", "sergeant_power_fist"]
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Combat Squads",
+      "description": "Before the battle, this unit can be split into two units of 5 models each (only if it contains 10 models).",
+      "type": "unit",
+      "timing": "passive",
+      "condition": { "type": "unit_size_gte", "value": 10 }
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["INFANTRY", "BATTLELINE", "TACTICAL SQUAD"],
+    "transport_keywords": ["INFANTRY"]
+  },
+  "constraints": [
+    {
+      "id": "tactical-unit-size",
+      "type": "unit_size",
+      "description": "Tactical Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [5, 10] }
+    },
+    {
+      "id": "tactical-special-weapons-per-5",
+      "type": "model_count_per_wargear",
+      "description": "Only 1 special weapon allowed per 5 models.",
+      "severity": "error",
+      "params": {
+        "option_ids": ["special_weapon_flamer", "special_weapon_melta", "special_weapon_plasma", "special_weapon_grav"],
+        "count_method": "sum_selections",
+        "limit_formula": "floor(unit_size / 5)"
+      }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (75 pts per 5 models). The heavy weapon slot is only available in a 10-model unit. CHAPTER keyword replaced with army's specific chapter."
+}

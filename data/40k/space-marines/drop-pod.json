@@ -1,0 +1,85 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-drop-pod",
+  "name": "Drop Pod",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Dedicated Transport",
+  "points": { "base": 75, "per_additional_model": 0, "free_wargear_included": true },
+  "unit_size": { "min": 1, "max": 1, "step": 1 },
+  "profiles": [
+    {
+      "name": "Drop Pod",
+      "count": 1,
+      "stats": { "M": "0\"", "T": 9, "Sv": "3+", "W": 8, "Ld": "6+", "OC": 0 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "storm_bolter",
+        "name": "Storm Bolter",
+        "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["RAPID FIRE 2"]
+      },
+      {
+        "id": "deathwind_missile_launcher",
+        "name": "Deathwind Missile Launcher",
+        "stats": { "range": "12\"", "A": "2D6", "BS": "3+", "S": 6, "AP": -1, "D": 1 },
+        "abilities": ["BLAST", "ONE SHOT"]
+      }
+    ],
+    "melee": []
+  },
+  "default_loadout": [
+    { "weapon_id": "storm_bolter", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "deathwind_launcher",
+      "description": "The Drop Pod can replace its storm bolter with a deathwind missile launcher.",
+      "type": "replace",
+      "replaces": ["storm_bolter"],
+      "adds": ["deathwind_missile_launcher"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Drop Pod Assault",
+      "description": "DEEP STRIKE. Once this unit has been set up on the battlefield, it cannot move for the rest of the battle. At the start of the first battle round, before the first turn begins, one unit embarked within this transport can disembark.",
+      "type": "unit",
+      "timing": "deployment"
+    }
+  ],
+  "transport": {
+    "capacity": 10,
+    "restrictions": [
+      { "type": "keyword_excluded", "keywords": ["JUMP PACK", "MOUNTED", "BEAST", "VEHICLE"] }
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["VEHICLE", "DEDICATED TRANSPORT", "DROP POD"],
+    "transport_keywords": []
+  },
+  "constraints": [],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual. Cannot move after deployment (M0\"). OC 0 — does not control objectives. Embarked units must disembark when the Drop Pod is set up. CHAPTER keyword replaced with army's specific chapter."
+}

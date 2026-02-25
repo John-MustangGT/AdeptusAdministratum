@@ -1,0 +1,124 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-chaplain",
+  "name": "Chaplain",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "HQ",
+  "points": { "base": 75, "free_wargear_included": true },
+  "unit_size": { "min": 1, "max": 1, "step": 1 },
+  "profiles": [
+    {
+      "name": "Chaplain",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 4, "Ld": "5+", "OC": 1 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "2+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "plasma_pistol",
+        "name": "Plasma Pistol",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": { "range": "12\"", "A": "1", "BS": "2+", "S": 7, "AP": -2, "D": 1 },
+            "abilities": ["PISTOL"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": { "range": "12\"", "A": "1", "BS": "2+", "S": 8, "AP": -3, "D": 2 },
+            "abilities": ["HAZARDOUS", "PISTOL"]
+          }
+        ]
+      }
+    ],
+    "melee": [
+      {
+        "id": "crozius_arcanum",
+        "name": "Crozius Arcanum",
+        "stats": { "range": "Melee", "A": "5", "WS": "2+", "S": 6, "AP": -1, "D": 2 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "bolt_pistol", "quantity": 1 },
+    { "weapon_id": "crozius_arcanum", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "chaplain_plasma_pistol",
+      "description": "Replace bolt pistol with plasma pistol.",
+      "type": "replace",
+      "replaces": ["bolt_pistol"],
+      "adds": ["plasma_pistol"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": []
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Litanies of Battle",
+      "description": "At the start of your Command Phase, select one Litany from the Chaplain's list. If this model is on the battlefield, recite the chosen Litany; roll one D6, on a 3+ the Litany is inspiring. RECITATION OF FOCUS: Inspiring — each time a model in this unit makes an attack, re-roll a wound roll of 1. CATECHISM OF FIRE: Inspiring — each time a model in this unit makes an attack that targets the closest eligible enemy unit, add 1 to the Damage for that attack.",
+      "type": "unit",
+      "timing": "command phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["CHARACTER", "INFANTRY", "CHAPLAIN"]
+  },
+  "leader": {
+    "can_lead": [
+      "40k-sm-intercessor-squad",
+      "40k-sm-tactical-squad",
+      "40k-sm-assault-intercessor-squad",
+      "40k-sm-sternguard-veteran-squad",
+      "40k-sm-bladeguard-veteran-squad",
+      "40k-sm-terminator-squad"
+    ],
+    "leader_abilities": [
+      {
+        "name": "Spiritual Leaders",
+        "description": "While this model is leading a unit, you can re-roll wound rolls for attacks made by models in that unit.",
+        "type": "leader",
+        "timing": "passive"
+      }
+    ]
+  },
+  "constraints": [
+    {
+      "id": "chaplain-unit-size",
+      "type": "unit_size",
+      "description": "The Chaplain is a single model.",
+      "severity": "error",
+      "params": { "allowed_sizes": [1] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual. The Litanies of Battle listed here are representative examples; verify full list in the Codex. CHAPTER keyword replaced with army's specific chapter."
+}

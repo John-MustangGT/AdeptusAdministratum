@@ -1,0 +1,88 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-bladeguard-veteran-squad",
+  "name": "Bladeguard Veteran Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Elites",
+  "points": { "base": 110, "per_additional_model": 37, "free_wargear_included": true },
+  "unit_size": { "min": 3, "max": 6, "step": 3 },
+  "profiles": [
+    {
+      "name": "Bladeguard Veteran Sergeant",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 4, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Bladeguard Veteran",
+      "count": "remainder",
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 3, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "heavy_bolt_pistol",
+        "name": "Heavy Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "3+", "S": 5, "AP": -1, "D": 1 },
+        "abilities": ["PISTOL"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "mc_power_sword",
+        "name": "Master-crafted Power Sword",
+        "stats": { "range": "Melee", "A": "4", "WS": "2+", "S": 5, "AP": -2, "D": 2 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "heavy_bolt_pistol", "quantity": 1 },
+    { "weapon_id": "mc_power_sword", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Storm Shield",
+      "description": "Models in this unit have a 4+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Bladeguard",
+      "description": "Each time an attack is allocated to a model in this unit, worsen the AP of that attack by 1 (e.g., AP-2 becomes AP-1).",
+      "type": "unit",
+      "timing": "passive"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["INFANTRY", "BLADEGUARD VETERAN SQUAD"],
+    "transport_keywords": ["INFANTRY"]
+  },
+  "constraints": [
+    {
+      "id": "bladeguard-unit-size",
+      "type": "unit_size",
+      "description": "Bladeguard Veteran Squad must contain 3 or 6 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [3, 6] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (110 pts per 3 models). 4+ invulnerable save from storm shields. Bladeguard ability reduces incoming AP (AP-3 attacks hit as AP-2, etc.). CHAPTER keyword replaced with army's specific chapter."
+}

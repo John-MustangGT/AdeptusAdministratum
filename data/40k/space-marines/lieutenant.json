@@ -1,0 +1,198 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-lieutenant",
+  "name": "Lieutenant",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "HQ",
+  "points": { "base": 65, "free_wargear_included": true },
+  "unit_size": { "min": 1, "max": 1, "step": 1 },
+  "profiles": [
+    {
+      "name": "Lieutenant",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 4, "Ld": "6+", "OC": 1 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "2+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "bolt_rifle",
+        "name": "Bolt Rifle",
+        "stats": { "range": "24\"", "A": "2", "BS": "2+", "S": 4, "AP": -1, "D": 1 },
+        "abilities": ["ASSAULT"]
+      },
+      {
+        "id": "plasma_pistol",
+        "name": "Plasma Pistol",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": { "range": "12\"", "A": "1", "BS": "2+", "S": 7, "AP": -2, "D": 1 },
+            "abilities": ["PISTOL"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": { "range": "12\"", "A": "1", "BS": "2+", "S": 8, "AP": -3, "D": 2 },
+            "abilities": ["HAZARDOUS", "PISTOL"]
+          }
+        ]
+      },
+      {
+        "id": "combi_weapon",
+        "name": "Combi-weapon",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Boltgun",
+            "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+            "abilities": ["RAPID FIRE 1"]
+          },
+          {
+            "name": "Combi-attachment",
+            "stats": { "range": "24\"", "A": "1", "BS": "3+", "S": 9, "AP": -2, "D": "D3" },
+            "abilities": ["ANTI-INFANTRY 4+", "DEVASTATING WOUNDS", "RAPID FIRE 1"]
+          }
+        ]
+      }
+    ],
+    "melee": [
+      {
+        "id": "power_sword",
+        "name": "Power Sword",
+        "stats": { "range": "Melee", "A": "4", "WS": "2+", "S": 5, "AP": -2, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "chainsword",
+        "name": "Chainsword",
+        "stats": { "range": "Melee", "A": "5", "WS": "2+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_fist",
+        "name": "Power Fist",
+        "stats": { "range": "Melee", "A": "4", "WS": "3+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "bolt_pistol", "quantity": 1 },
+    { "weapon_id": "power_sword", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "lt_bolt_rifle",
+      "description": "Replace bolt pistol with bolt rifle.",
+      "type": "replace",
+      "replaces": ["bolt_pistol"],
+      "adds": ["bolt_rifle"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["lt_plasma_pistol", "lt_combi_weapon"]
+    },
+    {
+      "id": "lt_plasma_pistol",
+      "description": "Replace bolt pistol with plasma pistol.",
+      "type": "replace",
+      "replaces": ["bolt_pistol"],
+      "adds": ["plasma_pistol"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["lt_bolt_rifle", "lt_combi_weapon"]
+    },
+    {
+      "id": "lt_combi_weapon",
+      "description": "Replace bolt pistol with combi-weapon.",
+      "type": "replace",
+      "replaces": ["bolt_pistol"],
+      "adds": ["combi_weapon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["lt_bolt_rifle", "lt_plasma_pistol"]
+    },
+    {
+      "id": "lt_chainsword",
+      "description": "Replace power sword with chainsword.",
+      "type": "replace",
+      "replaces": ["power_sword"],
+      "adds": ["chainsword"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["lt_power_fist"]
+    },
+    {
+      "id": "lt_power_fist",
+      "description": "Replace power sword with power fist.",
+      "type": "replace",
+      "replaces": ["power_sword"],
+      "adds": ["power_fist"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["lt_chainsword"]
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["CHARACTER", "INFANTRY", "LIEUTENANT"]
+  },
+  "leader": {
+    "can_lead": [
+      "40k-sm-intercessor-squad",
+      "40k-sm-tactical-squad",
+      "40k-sm-assault-intercessor-squad",
+      "40k-sm-sternguard-veteran-squad",
+      "40k-sm-hellblaster-squad",
+      "40k-sm-eradicator-squad",
+      "40k-sm-devastator-squad"
+    ],
+    "leader_abilities": [
+      {
+        "name": "Tactical Precision",
+        "description": "While this model is leading a unit, weapons equipped by models in that unit have the LETHAL HITS ability (Critical hits automatically wound the target).",
+        "type": "leader",
+        "timing": "passive"
+      }
+    ]
+  },
+  "constraints": [
+    {
+      "id": "lieutenant-unit-size",
+      "type": "unit_size",
+      "description": "The Lieutenant is a single model.",
+      "severity": "error",
+      "params": { "allowed_sizes": [1] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual. CHAPTER keyword replaced with army's specific chapter. Two Lieutenants may be taken per army (standard matched play rule)."
+}

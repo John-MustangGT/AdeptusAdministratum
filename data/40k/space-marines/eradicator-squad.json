@@ -1,0 +1,100 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-eradicator-squad",
+  "name": "Eradicator Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Heavy Support",
+  "points": { "base": 90, "per_additional_model": 30, "free_wargear_included": true },
+  "unit_size": { "min": 3, "max": 6, "step": 3 },
+  "profiles": [
+    {
+      "name": "Eradicator Sergeant",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 5, "Sv": "3+", "W": 4, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Eradicator",
+      "count": "remainder",
+      "stats": { "M": "6\"", "T": 5, "Sv": "3+", "W": 3, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "melta_rifle",
+        "name": "Melta Rifle",
+        "stats": { "range": "18\"", "A": "2", "BS": "3+", "S": 9, "AP": -4, "D": "D6" },
+        "abilities": ["MELTA 2", "ASSAULT"]
+      },
+      {
+        "id": "multi_melta",
+        "name": "Multi-melta",
+        "stats": { "range": "18\"", "A": "2", "BS": "3+", "S": 9, "AP": -4, "D": "D6" },
+        "abilities": ["HEAVY", "MELTA 3"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "astartes_chainsword",
+        "name": "Astartes Chainsword",
+        "stats": { "range": "Melee", "A": "5", "WS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "melta_rifle", "quantity": 1 },
+    { "weapon_id": "astartes_chainsword", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "multi_melta_upgrade",
+      "description": "One Eradicator per 3 models can replace their melta rifle with a multi-melta.",
+      "type": "replace",
+      "replaces": ["melta_rifle"],
+      "adds": ["multi_melta"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 3 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Total Obliteration",
+      "description": "Each time a model in this unit makes an attack that targets a VEHICLE or MONSTER unit, re-roll a wound roll of 1.",
+      "type": "unit",
+      "timing": "shooting phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["INFANTRY", "PRIMARIS", "GRAVIS", "ERADICATOR SQUAD"],
+    "transport_keywords": ["INFANTRY", "GRAVIS"]
+  },
+  "constraints": [
+    {
+      "id": "eradicator-unit-size",
+      "type": "unit_size",
+      "description": "Eradicator Squad must contain 3 or 6 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [3, 6] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (90 pts per 3 models). GRAVIS keyword — may restrict transport options. Total Obliteration ability wording — verify against current index card. CHAPTER keyword replaced with army's specific chapter."
+}
