@@ -8,8 +8,8 @@
 //! # Quick start
 //!
 //! ```rust,ignore
-//! use adeptus_administratum::datasheet::UnitDatasheet;
-//! use adeptus_administratum::validation::{UnitSelection, validate_unit};
+//! use administratio_militaris::datasheet::UnitDatasheet;
+//! use administratio_militaris::validation::{UnitSelection, validate_unit};
 //!
 //! let datasheet: UnitDatasheet = serde_json::from_str(/* JSON */).unwrap();
 //! let selection = UnitSelection {

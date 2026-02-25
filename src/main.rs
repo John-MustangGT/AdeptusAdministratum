@@ -1,4 +1,4 @@
-use adeptus_administratum::{store::DatasheetStore, web::{build_router, state::AppState}};
+use administratio_militaris::{store::DatasheetStore, web::{build_router, state::AppState}};
 use std::{net::SocketAddr, path::Path, sync::Arc};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -8,7 +8,7 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| "adeptus_administratum=info,tower_http=debug".into()),
+                .unwrap_or_else(|_| "administratio_militaris=info,tower_http=debug".into()),
         )
         .with(tracing_subscriber::fmt::layer())
         .init();

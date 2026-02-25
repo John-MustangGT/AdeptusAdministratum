@@ -1,16 +1,16 @@
 [package]
-name = "adeptus-administratum"
+name = "administratio-militaris"
 version = "0.1.0"
 edition = "2021"
 description = "Self-hosted tabletop wargaming army list builder"
 license = "MIT"
 
 [[bin]]
-name = "adeptus-administratum"
+name = "administratio-militaris"
 path = "src/main.rs"
 
 [lib]
-name = "adeptus_administratum"
+name = "administratio_militaris"
 path = "src/lib.rs"
 
 [dependencies]
