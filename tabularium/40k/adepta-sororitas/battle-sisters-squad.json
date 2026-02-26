@@ -369,9 +369,9 @@
     },
     {
       "id": "sister_superior_condemnor",
-      "description": "The Sister Superior can replace her boltgun and chainsword with a condemnor boltgun.",
+      "description": "The Sister Superior can replace her bolt pistol and chainsword with a condemnor boltgun.",
       "type": "replace",
-      "replaces": ["boltgun", "chainsword"],
+      "replaces": ["bolt_pistol", "chainsword"],
       "adds": ["condemnor_boltgun"],
       "points_cost": 0,
       "cost_per": "selection",
@@ -486,8 +486,7 @@
         "max_per_unit": 1
       },
       "is_unique": false,
-      "grants_keyword": "SIMULACRUM",
-      "description_long": "The model carrying the Simulacrum Imperialis replaces its close combat weapon with the simulacrum melee profile."
+      "grants_keyword": "SIMULACRUM"
     }
   ],
   "abilities": [

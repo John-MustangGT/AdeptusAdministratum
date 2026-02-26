@@ -14,6 +14,9 @@ pub struct RosterEntry {
     pub datasheet_id: String,
     /// The user's current selections for this entry.
     pub selection: UnitSelection,
+    /// Optional player-given name for this specific unit (e.g. "Sgt. Valdris").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub custom_name: Option<String>,
 }
 
 /// An army roster (the user's list being built).
@@ -64,6 +67,7 @@ impl RosterList {
                 model_count,
                 ..Default::default()
             },
+            custom_name: None,
         });
         entry_id
     }
@@ -74,6 +78,24 @@ impl RosterList {
 
     pub fn get_entry_mut(&mut self, entry_id: &str) -> Option<&mut RosterEntry> {
         self.entries.iter_mut().find(|e| e.entry_id == entry_id)
+    }
+
+    /// Move the entry one position toward the front of the list.
+    pub fn move_unit_up(&mut self, entry_id: &str) {
+        if let Some(idx) = self.entries.iter().position(|e| e.entry_id == entry_id) {
+            if idx > 0 {
+                self.entries.swap(idx, idx - 1);
+            }
+        }
+    }
+
+    /// Move the entry one position toward the back of the list.
+    pub fn move_unit_down(&mut self, entry_id: &str) {
+        if let Some(idx) = self.entries.iter().position(|e| e.entry_id == entry_id) {
+            if idx + 1 < self.entries.len() {
+                self.entries.swap(idx, idx + 1);
+            }
+        }
     }
 
     /// Total points across all entries, using current wargear selections.

@@ -640,7 +640,7 @@ mod tests {
     use crate::datasheet::UnitDatasheet;
 
     fn load_battle_sisters() -> UnitDatasheet {
-        let json = include_str!("../data/40k/adepta-sororitas/battle-sisters-squad.json");
+        let json = include_str!("../tabularium/40k/adepta-sororitas/battle-sisters-squad.json");
         serde_json::from_str(json).expect("Failed to parse battle-sisters-squad.json")
     }
 

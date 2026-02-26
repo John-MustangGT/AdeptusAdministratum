@@ -29,6 +29,10 @@ pub fn build_router(state: AppState) -> Router {
             post(routes::roster::remove_unit_handler),
         )
         .route(
+            "/roster/unit/:entry_id/move",
+            post(routes::roster::move_unit_handler),
+        )
+        .route(
             "/roster/unit/:entry_id/configure",
             post(routes::roster::configure_unit_handler),
         )

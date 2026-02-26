@@ -1,21 +1,43 @@
 <div id="unit-{{ entry.entry_id }}" class="unit-card">
+
+  <!-- ── Header: display name + points + action buttons ───────────────── -->
   <div class="unit-card-header">
-    <div>
-      <a href="/datasheets/{{ entry.datasheet_id }}" class="unit-name">{{ entry.datasheet_name }}</a>
+    <div class="unit-card-title">
+      {% if !entry.custom_name_str.is_empty() %}
+      <span class="unit-custom-name">{{ entry.custom_name_str }}</span>
+      {% endif %}
+      <a href="/datasheets/{{ entry.datasheet_id }}"
+         class="unit-datasheet-link{% if entry.custom_name_str.is_empty() %} unit-name{% endif %}">{{ entry.datasheet_name }}</a>
       <span class="role-badge">{{ entry.battlefield_role }}</span>
     </div>
     <div class="unit-card-actions">
       <strong class="unit-points">{{ entry.points }} pts</strong>
+
+      <div class="unit-reorder-btns">
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/move"
+              hx-post="/roster/unit/{{ entry.entry_id }}/move"
+              hx-target="#roster-content" hx-swap="outerHTML" style="display:inline">
+          <input type="hidden" name="direction" value="up">
+          <button type="submit" class="btn btn-sm btn-reorder" title="Move up">↑</button>
+        </form>
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/move"
+              hx-post="/roster/unit/{{ entry.entry_id }}/move"
+              hx-target="#roster-content" hx-swap="outerHTML" style="display:inline">
+          <input type="hidden" name="direction" value="down">
+          <button type="submit" class="btn btn-sm btn-reorder" title="Move down">↓</button>
+        </form>
+      </div>
+
       <form method="post" action="/roster/unit/{{ entry.entry_id }}/remove"
             hx-post="/roster/unit/{{ entry.entry_id }}/remove"
-            hx-target="#roster-content"
-            hx-swap="outerHTML"
+            hx-target="#roster-content" hx-swap="outerHTML"
             style="display:inline">
         <button type="submit" class="btn btn-sm btn-danger" title="Remove unit">✕</button>
       </form>
     </div>
   </div>
 
+  <!-- ── Configure form: name · models · wargear ───────────────────────── -->
   <form method="post" action="/roster/unit/{{ entry.entry_id }}/configure"
         hx-post="/roster/unit/{{ entry.entry_id }}/configure"
         hx-target="#roster-content"
@@ -23,8 +45,16 @@
         hx-trigger="change">
 
     <div class="unit-config-row">
-      <label>
-        Models:
+      <label class="config-label">
+        Name
+        <input type="text"
+               name="custom_name"
+               value="{{ entry.custom_name_str }}"
+               placeholder="{{ entry.datasheet_name }}"
+               class="unit-custom-name-input">
+      </label>
+      <label class="config-label">
+        Models
         <input type="number"
                name="model_count"
                value="{{ entry.model_count }}"
@@ -64,4 +94,5 @@
     {% endfor %}
   </ul>
   {% endif %}
+
 </div>

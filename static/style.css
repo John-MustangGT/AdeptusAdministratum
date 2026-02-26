@@ -224,6 +224,40 @@ section h2 { font-size: 1.15rem; margin-bottom: 0.6rem; border-bottom: 1px solid
 .form-actions { margin-top: 0.5rem; }
 .btn-large { padding: 0.6rem 1.5rem; font-size: 1.05rem; }
 
+/* ----- Two-column roster layout ----- */
+.roster-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.unit-browser-panel {
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  /* subtle scrollbar so it doesn't look broken */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.roster-list-panel {
+  min-width: 0; /* prevent grid blowout */
+}
+
+/* Stack on narrow screens */
+@media (max-width: 860px) {
+  .roster-layout {
+    grid-template-columns: 1fr;
+  }
+  .unit-browser-panel {
+    position: static;
+    max-height: 45vh;
+  }
+}
+
 /* ----- Roster view ----- */
 .roster-header {
   display: flex;
@@ -375,9 +409,61 @@ section h2 { font-size: 1.15rem; margin-bottom: 0.6rem; border-bottom: 1px solid
 .unit-card-actions { display: flex; align-items: center; gap: 0.75rem; }
 .unit-points { font-size: 1.05rem; color: var(--accent); }
 
-.unit-config-row {
-  margin-bottom: 0.75rem;
+/* Custom unit name displayed in card header */
+.unit-custom-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-right: 0.4rem;
 }
+.unit-datasheet-link {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+.unit-datasheet-link.unit-name {
+  /* when no custom name, show the datasheet name as the primary label */
+  color: var(--accent);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* Reorder buttons */
+.unit-reorder-btns { display: inline-flex; gap: 0.2rem; }
+.btn-reorder {
+  border-color: var(--border);
+  color: var(--text-dim);
+  padding: 0.2rem 0.45rem;
+  font-size: 0.8rem;
+}
+.btn-reorder:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Config row: name + model count side by side */
+.unit-config-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  align-items: flex-end;
+}
+.config-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+.unit-custom-name-input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  width: 180px;
+}
+.unit-custom-name-input:focus { outline: none; border-color: var(--accent); }
 .model-count-input {
   width: 80px;
   background: var(--bg);
@@ -385,7 +471,6 @@ section h2 { font-size: 1.15rem; margin-bottom: 0.6rem; border-bottom: 1px solid
   border-radius: var(--radius);
   color: var(--text);
   padding: 0.25rem 0.5rem;
-  margin-left: 0.5rem;
 }
 
 /* ----- Wargear ----- */

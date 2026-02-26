@@ -67,6 +67,8 @@ struct RosterEntryViewOwned {
     entry_id: String,
     datasheet_id: String,
     datasheet_name: String,
+    /// Player's custom label for this unit instance (empty string = not set).
+    custom_name_str: String,
     battlefield_role: String,
     model_count: u32,
     unit_min: u32,
@@ -134,6 +136,7 @@ fn build_entry_view(entry: &RosterEntry, ds: &UnitDatasheet) -> RosterEntryViewO
         entry_id: entry.entry_id.clone(),
         datasheet_id: entry.datasheet_id.clone(),
         datasheet_name: ds.name.clone(),
+        custom_name_str: entry.custom_name.clone().unwrap_or_default(),
         battlefield_role: ds.battlefield_role.clone(),
         model_count: sel.model_count,
         unit_min: ds.unit_size.min,
@@ -376,6 +379,31 @@ pub async fn remove_unit_handler(
 }
 
 // ---------------------------------------------------------------------------
+// Reorder unit
+// ---------------------------------------------------------------------------
+
+#[derive(Deserialize)]
+pub struct MoveUnitForm {
+    direction: String,
+}
+
+pub async fn move_unit_handler(
+    State(state): State<AppState>,
+    session: Session,
+    Path(entry_id): Path<String>,
+    Form(form): Form<MoveUnitForm>,
+) -> impl IntoResponse {
+    let mut roster = load_roster(&session).await;
+    match form.direction.as_str() {
+        "up" => roster.move_unit_up(&entry_id),
+        "down" => roster.move_unit_down(&entry_id),
+        _ => {}
+    }
+    save_roster(&session, &roster).await;
+    render_roster_content(&roster, &state.store)
+}
+
+// ---------------------------------------------------------------------------
 // Configure unit (model count + wargear)
 // ---------------------------------------------------------------------------
 
@@ -385,6 +413,9 @@ pub struct ConfigureUnitForm {
     model_count: Option<u32>,
     #[serde(default, rename = "options")]
     chosen_options: Vec<String>,
+    /// Empty string means "clear custom name".
+    #[serde(default)]
+    custom_name: String,
 }
 
 pub async fn configure_unit_handler(
@@ -404,6 +435,11 @@ pub async fn configure_unit_handler(
         entry.selection.model_count = count;
     }
     entry.selection.chosen_options = form.chosen_options;
+    entry.custom_name = if form.custom_name.is_empty() {
+        None
+    } else {
+        Some(form.custom_name)
+    };
 
     save_roster(&session, &roster).await;
 
