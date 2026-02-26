@@ -6,7 +6,7 @@ description = "Self-hosted tabletop wargaming army list builder"
 license = "MIT"
 
 [[bin]]
-name = "administratio-militaris"
+name = "adrostra"
 path = "src/main.rs"
 
 [[bin]]

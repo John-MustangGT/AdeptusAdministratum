@@ -13,11 +13,11 @@ async fn main() -> anyhow::Result<()> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    // Load all datasheets from the data/ directory at startup.
-    let data_dir = Path::new("data");
+    // Load all datasheets from the tabularium/ directory at startup.
+    let data_dir = Path::new("tabularium");
     if !data_dir.exists() {
         tracing::warn!(
-            "data/ directory not found — no datasheets will be available. \
+            "tabularium/ directory not found — no datasheets will be available. \
              Run from the project root or set the working directory appropriately."
         );
     }

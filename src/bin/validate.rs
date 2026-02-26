@@ -11,10 +11,10 @@ use std::path::Path;
 use walkdir::WalkDir;
 
 fn main() {
-    let data_dir = Path::new("data");
+    let data_dir = Path::new("tabularium");
 
     if !data_dir.exists() {
-        eprintln!("ERROR: data/ directory not found. Run from the project root.");
+        eprintln!("ERROR: tabularium/ directory not found. Run from the project root.");
         std::process::exit(2);
     }
 
