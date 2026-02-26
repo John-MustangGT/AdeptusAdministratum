@@ -19,7 +19,15 @@ pub struct RosterEntry {
 /// An army roster (the user's list being built).
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct RosterList {
+    #[serde(default)]
     pub name: String,
+    /// e.g. "warhammer-40k-10e"
+    #[serde(default)]
+    pub game_system: String,
+    /// Primary faction name, e.g. "Space Marines"
+    #[serde(default)]
+    pub faction: String,
+    #[serde(default)]
     pub entries: Vec<RosterEntry>,
 }
 
@@ -33,11 +41,18 @@ pub struct EntryValidation {
 }
 
 impl RosterList {
-    pub fn new(name: impl Into<String>) -> Self {
+    pub fn new(name: impl Into<String>, game_system: impl Into<String>, faction: impl Into<String>) -> Self {
         Self {
             name: name.into(),
+            game_system: game_system.into(),
+            faction: faction.into(),
             entries: Vec::new(),
         }
+    }
+
+    /// True if the roster has been initialised (game system + faction chosen).
+    pub fn is_initialised(&self) -> bool {
+        !self.faction.is_empty()
     }
 
     pub fn add_unit(&mut self, datasheet_id: impl Into<String>, model_count: u32) -> String {

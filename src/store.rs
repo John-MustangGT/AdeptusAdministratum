@@ -67,6 +67,30 @@ impl DatasheetStore {
         factions
     }
 
+    /// Returns all units valid for a roster with the given game system and primary faction.
+    /// Includes the primary faction's units plus any units from factions listed as allies.
+    pub fn units_for_roster<'a>(&'a self, game_system: &str, faction: &str) -> Vec<&'a UnitDatasheet> {
+        // Collect allied faction names from primary-faction units.
+        let allied: std::collections::HashSet<&str> = self
+            .by_id
+            .values()
+            .filter(|ds| ds.game_system == game_system && ds.faction.primary == faction)
+            .flat_map(|ds| ds.faction.allies.iter().map(String::as_str))
+            .collect();
+
+        let mut v: Vec<_> = self
+            .by_id
+            .values()
+            .filter(|ds| {
+                ds.game_system == game_system
+                    && (ds.faction.primary == faction
+                        || allied.contains(ds.faction.primary.as_str()))
+            })
+            .collect();
+        v.sort_by(|a, b| a.name.cmp(&b.name));
+        v
+    }
+
     pub fn game_systems(&self) -> Vec<String> {
         let mut systems: Vec<String> = self
             .by_id

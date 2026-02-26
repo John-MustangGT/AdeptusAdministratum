@@ -21,6 +21,8 @@ pub fn build_router(state: AppState) -> Router {
         .route("/datasheets/:id", get(routes::datasheets::detail_handler))
         // Roster
         .route("/roster", get(routes::roster::view_handler))
+        .route("/roster/new", get(routes::roster::new_roster_form_handler))
+        .route("/roster/new", post(routes::roster::create_roster_handler))
         .route("/roster/unit/add", post(routes::roster::add_unit_handler))
         .route(
             "/roster/unit/:entry_id/remove",

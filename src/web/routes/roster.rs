@@ -9,15 +9,51 @@ use askama_axum::IntoResponse;
 use axum::{
     extract::{Path, State},
     http::StatusCode,
-    response::Response,
+    response::{Redirect, Response},
     Form,
 };
 use serde::Deserialize;
 use tower_sessions::Session;
 
 // ---------------------------------------------------------------------------
-// Owned view types for templates (avoids lifetime issues with borrowed refs)
+// Role ordering for the unit browser
 // ---------------------------------------------------------------------------
+
+const ROLE_ORDER: &[&str] = &[
+    "HQ",
+    "Troops",
+    "Battleline",
+    "Elites",
+    "Fast Attack",
+    "Heavy Support",
+    "Dedicated Transport",
+    "Flyer",
+    "Lord of War",
+    "Fortification",
+];
+
+fn role_sort_key(role: &str) -> usize {
+    ROLE_ORDER
+        .iter()
+        .position(|&r| r == role)
+        .unwrap_or(ROLE_ORDER.len())
+}
+
+// ---------------------------------------------------------------------------
+// View types
+// ---------------------------------------------------------------------------
+
+struct UnitPickerItem {
+    id: String,
+    name: String,
+    base_points: u32,
+    is_allied: bool,
+}
+
+struct UnitGroup {
+    role: String,
+    units: Vec<UnitPickerItem>,
+}
 
 struct OwnedOptionView {
     id: String,
@@ -41,6 +77,10 @@ struct RosterEntryViewOwned {
     points: u32,
 }
 
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
 fn enriched_selection(ds: &UnitDatasheet, selection: UnitSelection) -> UnitSelection {
     let mut sel = selection;
     if sel.active_keywords.is_empty() {
@@ -55,11 +95,7 @@ fn enriched_selection(ds: &UnitDatasheet, selection: UnitSelection) -> UnitSelec
     sel
 }
 
-fn build_entry_view(
-    entry: &RosterEntry,
-    ds: &UnitDatasheet,
-    _store: &DatasheetStore,
-) -> RosterEntryViewOwned {
+fn build_entry_view(entry: &RosterEntry, ds: &UnitDatasheet) -> RosterEntryViewOwned {
     let sel = enriched_selection(ds, entry.selection.clone());
     let issues_raw = validate_unit(ds, &sel).unwrap_or_default();
     let points = calculate_points(ds, &sel);
@@ -109,26 +145,109 @@ fn build_entry_view(
     }
 }
 
+fn build_unit_groups(store: &DatasheetStore, roster: &RosterList) -> Vec<UnitGroup> {
+    let primary = roster.faction.as_str();
+    let picker_units = store.units_for_roster(&roster.game_system, primary);
+
+    let mut groups_map: std::collections::HashMap<String, Vec<UnitPickerItem>> =
+        std::collections::HashMap::new();
+
+    for ds in picker_units {
+        groups_map
+            .entry(ds.battlefield_role.clone())
+            .or_default()
+            .push(UnitPickerItem {
+                id: ds.id.clone(),
+                name: ds.name.clone(),
+                base_points: ds.points.base,
+                is_allied: ds.faction.primary != primary,
+            });
+    }
+
+    let mut groups: Vec<UnitGroup> = groups_map
+        .into_iter()
+        .map(|(role, mut units)| {
+            units.sort_by(|a, b| a.name.cmp(&b.name));
+            UnitGroup { role, units }
+        })
+        .collect();
+
+    groups.sort_by_key(|g| role_sort_key(&g.role));
+    groups
+}
+
 // ---------------------------------------------------------------------------
-// Full roster view
+// New roster form
+// ---------------------------------------------------------------------------
+
+#[derive(Template)]
+#[template(path = "roster/new.html")]
+struct NewRosterTemplate {
+    /// Factions grouped by game system: Vec<(game_system, Vec<faction>)>
+    factions_by_system: Vec<(String, Vec<String>)>,
+}
+
+pub async fn new_roster_form_handler(State(state): State<AppState>) -> impl IntoResponse {
+    let factions_by_system: Vec<(String, Vec<String>)> = state
+        .store
+        .game_systems()
+        .into_iter()
+        .map(|gs| {
+            let mut facs: Vec<String> = state
+                .store
+                .all()
+                .iter()
+                .filter(|ds| ds.game_system == gs)
+                .map(|ds| ds.faction.primary.clone())
+                .collect::<std::collections::HashSet<_>>()
+                .into_iter()
+                .collect();
+            facs.sort();
+            (gs, facs)
+        })
+        .collect();
+
+    NewRosterTemplate { factions_by_system }
+}
+
+#[derive(Deserialize)]
+pub struct NewRosterForm {
+    roster_name: String,
+    game_system: String,
+    faction: String,
+}
+
+pub async fn create_roster_handler(
+    session: Session,
+    Form(form): Form<NewRosterForm>,
+) -> impl IntoResponse {
+    let roster = RosterList::new(form.roster_name, form.game_system, form.faction);
+    save_roster(&session, &roster).await;
+    Redirect::to("/roster")
+}
+
+// ---------------------------------------------------------------------------
+// Roster view
 // ---------------------------------------------------------------------------
 
 #[derive(Template)]
 #[template(path = "roster/view.html")]
 struct RosterViewTemplate {
     roster_name: String,
+    faction: String,
+    game_system: String,
     entries: Vec<RosterEntryViewOwned>,
     total_points: u32,
     has_errors: bool,
-    all_datasheets: Vec<(String, String)>,
+    unit_groups: Vec<UnitGroup>,
 }
 
-pub async fn view_handler(
-    State(state): State<AppState>,
-    session: Session,
-) -> impl IntoResponse {
+pub async fn view_handler(State(state): State<AppState>, session: Session) -> Response {
     let roster = load_roster(&session).await;
-    render_roster_view(&roster, &state.store)
+    if !roster.is_initialised() {
+        return Redirect::to("/roster/new").into_response();
+    }
+    render_roster_view(&roster, &state.store).into_response()
 }
 
 fn render_roster_view(roster: &RosterList, store: &DatasheetStore) -> RosterViewTemplate {
@@ -138,7 +257,7 @@ fn render_roster_view(roster: &RosterList, store: &DatasheetStore) -> RosterView
         .filter_map(|entry| {
             store
                 .get(&entry.datasheet_id)
-                .map(|ds| build_entry_view(entry, ds, store))
+                .map(|ds| build_entry_view(entry, ds))
         })
         .collect();
 
@@ -147,18 +266,16 @@ fn render_roster_view(roster: &RosterList, store: &DatasheetStore) -> RosterView
         .iter()
         .any(|e| e.issues.iter().any(|(cls, _)| cls == "error"));
 
-    let all_datasheets = store
-        .all()
-        .iter()
-        .map(|ds| (ds.id.clone(), ds.name.clone()))
-        .collect();
+    let unit_groups = build_unit_groups(store, roster);
 
     RosterViewTemplate {
         roster_name: roster.name.clone(),
+        faction: roster.faction.clone(),
+        game_system: roster.game_system.clone(),
         entries,
         total_points,
         has_errors,
-        all_datasheets,
+        unit_groups,
     }
 }
 
@@ -204,14 +321,13 @@ pub async fn remove_unit_handler(
 }
 
 // ---------------------------------------------------------------------------
-// Configure unit (model count + wargear) — returns updated unit card partial
+// Configure unit (model count + wargear)
 // ---------------------------------------------------------------------------
 
 #[derive(Deserialize, Default)]
 pub struct ConfigureUnitForm {
     #[serde(default)]
     model_count: Option<u32>,
-    /// Repeated field: one value per checked wargear option.
     #[serde(default, rename = "options")]
     chosen_options: Vec<String>,
 }
@@ -248,8 +364,12 @@ pub async fn configure_unit_handler(
         None => return (StatusCode::INTERNAL_SERVER_ERROR, "Datasheet gone").into_response(),
     };
 
-    let entry = roster.entries.iter().find(|e| e.entry_id == entry_id).unwrap();
-    let view = build_entry_view(entry, ds, &state.store);
+    let entry = roster
+        .entries
+        .iter()
+        .find(|e| e.entry_id == entry_id)
+        .unwrap();
+    let view = build_entry_view(entry, ds);
 
     UnitCardTemplate { entry: view }.into_response()
 }

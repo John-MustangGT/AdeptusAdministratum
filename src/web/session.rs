@@ -11,7 +11,7 @@ pub async fn load_roster(session: &Session) -> RosterList {
         .await
         .ok()
         .flatten()
-        .unwrap_or_else(|| RosterList::new("My Army"))
+        .unwrap_or_default()
 }
 
 pub async fn save_roster(session: &Session, roster: &RosterList) {
