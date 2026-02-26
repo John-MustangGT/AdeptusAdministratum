@@ -80,7 +80,10 @@
   "transport": {
     "capacity": 10,
     "restrictions": [
-      { "type": "keyword_excluded", "keywords": ["JUMP PACK", "MOUNTED", "BEAST", "VEHICLE"] }
+      { "rule": "must_not_have_keyword", "keyword": "JUMP PACK" },
+      { "rule": "must_not_have_keyword", "keyword": "MOUNTED" },
+      { "rule": "must_not_have_keyword", "keyword": "BEAST" },
+      { "rule": "must_not_have_keyword", "keyword": "VEHICLE" }
     ]
   },
   "keywords": {

@@ -9,6 +9,10 @@ license = "MIT"
 name = "administratio-militaris"
 path = "src/main.rs"
 
+[[bin]]
+name = "validate"
+path = "src/bin/validate.rs"
+
 [lib]
 name = "administratio_militaris"
 path = "src/lib.rs"
