@@ -7,7 +7,8 @@
             hx-post="/roster/rename"
             hx-target="#roster-content"
             hx-swap="outerHTML"
-            hx-trigger="change">
+            hx-trigger="change delay:200ms"
+            hx-sync="body:queue">
         <input type="text" name="roster_name" value="{{ roster_name }}"
                class="roster-name-input" aria-label="Roster name">
       </form>
@@ -50,7 +51,8 @@
               <form method="post" action="/roster/unit/add"
                     hx-post="/roster/unit/add"
                     hx-target="#roster-content"
-                    hx-swap="outerHTML">
+                    hx-swap="outerHTML"
+                    hx-sync="body:queue">
                 <input type="hidden" name="datasheet_id" value="{{ unit.id }}">
                 <button type="submit" class="btn btn-sm btn-add">+ Add</button>
               </form>
