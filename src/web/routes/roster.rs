@@ -387,12 +387,6 @@ pub struct ConfigureUnitForm {
     chosen_options: Vec<String>,
 }
 
-#[derive(Template)]
-#[template(path = "roster/_unit_card.html")]
-struct UnitCardTemplate {
-    entry: RosterEntryViewOwned,
-}
-
 pub async fn configure_unit_handler(
     State(state): State<AppState>,
     session: Session,
@@ -411,22 +405,10 @@ pub async fn configure_unit_handler(
     }
     entry.selection.chosen_options = form.chosen_options;
 
-    let datasheet_id = entry.datasheet_id.clone();
     save_roster(&session, &roster).await;
 
-    let ds = match state.store.get(&datasheet_id) {
-        Some(d) => d,
-        None => return (StatusCode::INTERNAL_SERVER_ERROR, "Datasheet gone").into_response(),
-    };
-
-    let entry = roster
-        .entries
-        .iter()
-        .find(|e| e.entry_id == entry_id)
-        .unwrap();
-    let view = build_entry_view(entry, ds);
-
-    UnitCardTemplate { entry: view }.into_response()
+    // Return the full content partial so the roster header total also updates.
+    render_roster_content(&roster, &state.store).into_response()
 }
 
 // ---------------------------------------------------------------------------

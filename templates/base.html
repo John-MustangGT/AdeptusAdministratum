@@ -25,5 +25,24 @@
   <footer>
     <p>Self-hosted army list builder &mdash; <a href="/roster/export.json">Export Roster JSON</a></p>
   </footer>
+
+  <script>
+    // Preserve open/closed state of id'd <details> elements across every HTMX swap.
+    // Works for both the role-group browser panels and the per-unit wargear panel.
+    (function () {
+      var saved = {};
+      document.body.addEventListener('htmx:beforeSwap', function () {
+        saved = {};
+        document.querySelectorAll('details[id]').forEach(function (d) {
+          saved[d.id] = d.open;
+        });
+      });
+      document.body.addEventListener('htmx:afterSettle', function () {
+        document.querySelectorAll('details[id]').forEach(function (d) {
+          if (saved[d.id]) d.setAttribute('open', '');
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -28,7 +28,7 @@
     <p class="empty-state">No units found for {{ faction }}. Check your tabularium/ directory.</p>
     {% else %}
     {% for group in unit_groups %}
-    <details class="unit-group">
+    <details class="unit-group" id="role-group-{{ group.role }}">
       <summary class="unit-group-summary">
         <span class="unit-group-role">{{ group.role }}</span>
         <span class="unit-group-count">{{ group.units.len() }}</span>

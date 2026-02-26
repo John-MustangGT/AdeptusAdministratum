@@ -18,7 +18,7 @@
 
   <form method="post" action="/roster/unit/{{ entry.entry_id }}/configure"
         hx-post="/roster/unit/{{ entry.entry_id }}/configure"
-        hx-target="#unit-{{ entry.entry_id }}"
+        hx-target="#roster-content"
         hx-swap="outerHTML"
         hx-trigger="change">
 
@@ -36,7 +36,7 @@
     </div>
 
     {% if !entry.options.is_empty() %}
-    <details class="wargear-details">
+    <details class="wargear-details" id="wargear-{{ entry.entry_id }}">
       <summary>Wargear Options</summary>
       <div class="wargear-list">
         {% for opt in entry.options %}
