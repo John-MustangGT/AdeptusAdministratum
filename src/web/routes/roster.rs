@@ -227,9 +227,10 @@ pub async fn create_roster_handler(
 }
 
 // ---------------------------------------------------------------------------
-// Roster view
+// Roster view templates
 // ---------------------------------------------------------------------------
 
+/// Full page (extends base.html) — returned by the initial GET /roster load.
 #[derive(Template)]
 #[template(path = "roster/view.html")]
 struct RosterViewTemplate {
@@ -242,15 +243,35 @@ struct RosterViewTemplate {
     unit_groups: Vec<UnitGroup>,
 }
 
-pub async fn view_handler(State(state): State<AppState>, session: Session) -> Response {
-    let roster = load_roster(&session).await;
-    if !roster.is_initialised() {
-        return Redirect::to("/roster/new").into_response();
-    }
-    render_roster_view(&roster, &state.store).into_response()
+/// Partial (just the #roster-content div) — returned by all HTMX mutation
+/// handlers so that the nav/header is never duplicated on swap.
+#[derive(Template)]
+#[template(path = "roster/_roster_content.html")]
+struct RosterContentTemplate {
+    roster_name: String,
+    faction: String,
+    game_system: String,
+    entries: Vec<RosterEntryViewOwned>,
+    total_points: u32,
+    has_errors: bool,
+    unit_groups: Vec<UnitGroup>,
 }
 
-fn render_roster_view(roster: &RosterList, store: &DatasheetStore) -> RosterViewTemplate {
+// ---------------------------------------------------------------------------
+// Shared data-building logic
+// ---------------------------------------------------------------------------
+
+struct RosterViewData {
+    roster_name: String,
+    faction: String,
+    game_system: String,
+    entries: Vec<RosterEntryViewOwned>,
+    total_points: u32,
+    has_errors: bool,
+    unit_groups: Vec<UnitGroup>,
+}
+
+fn collect_roster_data(roster: &RosterList, store: &DatasheetStore) -> RosterViewData {
     let entries: Vec<RosterEntryViewOwned> = roster
         .entries
         .iter()
@@ -268,7 +289,7 @@ fn render_roster_view(roster: &RosterList, store: &DatasheetStore) -> RosterView
 
     let unit_groups = build_unit_groups(store, roster);
 
-    RosterViewTemplate {
+    RosterViewData {
         roster_name: roster.name.clone(),
         faction: roster.faction.clone(),
         game_system: roster.game_system.clone(),
@@ -277,6 +298,40 @@ fn render_roster_view(roster: &RosterList, store: &DatasheetStore) -> RosterView
         has_errors,
         unit_groups,
     }
+}
+
+fn render_roster_view(roster: &RosterList, store: &DatasheetStore) -> RosterViewTemplate {
+    let d = collect_roster_data(roster, store);
+    RosterViewTemplate {
+        roster_name: d.roster_name,
+        faction: d.faction,
+        game_system: d.game_system,
+        entries: d.entries,
+        total_points: d.total_points,
+        has_errors: d.has_errors,
+        unit_groups: d.unit_groups,
+    }
+}
+
+fn render_roster_content(roster: &RosterList, store: &DatasheetStore) -> RosterContentTemplate {
+    let d = collect_roster_data(roster, store);
+    RosterContentTemplate {
+        roster_name: d.roster_name,
+        faction: d.faction,
+        game_system: d.game_system,
+        entries: d.entries,
+        total_points: d.total_points,
+        has_errors: d.has_errors,
+        unit_groups: d.unit_groups,
+    }
+}
+
+pub async fn view_handler(State(state): State<AppState>, session: Session) -> Response {
+    let roster = load_roster(&session).await;
+    if !roster.is_initialised() {
+        return Redirect::to("/roster/new").into_response();
+    }
+    render_roster_view(&roster, &state.store).into_response()
 }
 
 // ---------------------------------------------------------------------------
@@ -302,7 +357,7 @@ pub async fn add_unit_handler(
     roster.add_unit(&form.datasheet_id, ds.unit_size.min);
     save_roster(&session, &roster).await;
 
-    render_roster_view(&roster, &state.store).into_response()
+    render_roster_content(&roster, &state.store).into_response()
 }
 
 // ---------------------------------------------------------------------------
@@ -317,7 +372,7 @@ pub async fn remove_unit_handler(
     let mut roster = load_roster(&session).await;
     roster.remove_unit(&entry_id);
     save_roster(&session, &roster).await;
-    render_roster_view(&roster, &state.store)
+    render_roster_content(&roster, &state.store)
 }
 
 // ---------------------------------------------------------------------------
@@ -391,5 +446,5 @@ pub async fn rename_handler(
     let mut roster = load_roster(&session).await;
     roster.name = form.roster_name;
     save_roster(&session, &roster).await;
-    render_roster_view(&roster, &state.store)
+    render_roster_content(&roster, &state.store)
 }

@@ -1,0 +1,71 @@
+<div id="roster-content">
+
+  <div class="roster-header">
+    <div class="roster-meta">
+      <form method="post" action="/roster/rename"
+            hx-post="/roster/rename"
+            hx-target="#roster-content"
+            hx-swap="outerHTML"
+            hx-trigger="change">
+        <input type="text" name="roster_name" value="{{ roster_name }}"
+               class="roster-name-input" aria-label="Roster name">
+      </form>
+      <span class="roster-faction-tag">{{ faction }} &middot; {{ game_system }}</span>
+    </div>
+    <div class="roster-totals">
+      <span class="total-points {% if has_errors %}has-errors{% endif %}">
+        {{ total_points }} pts
+        {% if has_errors %}<span class="error-badge" title="Roster has validation errors">⚠</span>{% endif %}
+      </span>
+      <a href="/roster/export.json" class="btn btn-sm">Export JSON</a>
+      <a href="/roster/new" class="btn btn-sm">New Roster</a>
+    </div>
+  </div>
+
+  <div class="unit-browser">
+    <h2 class="section-title">Add Units</h2>
+    {% if unit_groups.is_empty() %}
+    <p class="empty-state">No units found for {{ faction }}. Check your tabularium/ directory.</p>
+    {% else %}
+    {% for group in unit_groups %}
+    <details class="unit-group">
+      <summary class="unit-group-summary">
+        <span class="unit-group-role">{{ group.role }}</span>
+        <span class="unit-group-count">{{ group.units.len() }}</span>
+      </summary>
+      <ul class="unit-picker-list">
+        {% for unit in group.units %}
+        <li class="unit-picker-row">
+          <span class="unit-picker-name">
+            {{ unit.name }}
+            {% if unit.is_allied %}<span class="allied-badge">Allied</span>{% endif %}
+          </span>
+          <span class="unit-picker-pts">{{ unit.base_points }}&thinsp;pts</span>
+          <form method="post" action="/roster/unit/add"
+                hx-post="/roster/unit/add"
+                hx-target="#roster-content"
+                hx-swap="outerHTML">
+            <input type="hidden" name="datasheet_id" value="{{ unit.id }}">
+            <button type="submit" class="btn btn-sm btn-add">+ Add</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+  {% if entries.is_empty() %}
+  <div class="empty-roster">
+    <p>No units yet — add some from the browser above.</p>
+  </div>
+  {% else %}
+  <div class="unit-list">
+    {% for entry in entries %}
+    {% include "roster/_unit_card.html" %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+</div>
