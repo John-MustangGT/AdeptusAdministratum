@@ -43,6 +43,30 @@
         });
       });
     })();
+
+    // Inject current DOM configure state into every roster mutation request
+    // (Add / Remove / Move).  This prevents stale session data from resetting
+    // wargear selections when a mutation fires before configure has saved.
+    document.body.addEventListener('htmx:configRequest', function (evt) {
+      if (!evt.detail.elt.classList.contains('roster-mutation-form')) return;
+      var states = [];
+      document.querySelectorAll('form.unit-configure-form').forEach(function (form) {
+        var entryId = form.dataset.entryId;
+        if (!entryId) return;
+        var fd = new FormData(form);
+        var mc = parseInt(fd.get('model_count') || '1', 10);
+        if (isNaN(mc) || mc < 1) mc = 1;
+        states.push({
+          entry_id:      entryId,
+          model_count:   mc,
+          chosen_options: fd.getAll('options'),
+          custom_name:   fd.get('custom_name') || ''
+        });
+      });
+      if (states.length > 0) {
+        evt.detail.parameters['current_configure'] = JSON.stringify(states);
+      }
+    });
   </script>
 </body>
 </html>

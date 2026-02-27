@@ -52,7 +52,8 @@
                     hx-post="/roster/unit/add"
                     hx-target="#roster-content"
                     hx-swap="outerHTML"
-                    hx-sync="body:queue">
+                    hx-sync="body:queue"
+                    class="roster-mutation-form">
                 <input type="hidden" name="datasheet_id" value="{{ unit.id }}">
                 <button type="submit" class="btn btn-sm btn-add">+ Add</button>
               </form>

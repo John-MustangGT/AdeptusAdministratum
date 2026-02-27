@@ -148,6 +148,51 @@ fn build_entry_view(entry: &RosterEntry, ds: &UnitDatasheet) -> RosterEntryViewO
     }
 }
 
+/// Deserialised form of a single unit's current DOM configure state, injected
+/// by the `htmx:configRequest` JS hook in base.html for every roster mutation.
+#[derive(Deserialize, Default)]
+struct ConfigureStateEntry {
+    entry_id: String,
+    #[serde(default)]
+    model_count: u32,
+    #[serde(default)]
+    chosen_options: Vec<String>,
+    #[serde(default)]
+    custom_name: String,
+}
+
+/// Apply DOM-sourced configure state to the roster before a mutation.
+///
+/// This ensures that when the user clicks Add/Remove/Move, the server sees the
+/// latest wargear selections from the page rather than whatever was last flushed
+/// to the session — closing the race window where a pending configure hadn't
+/// yet fired (or was cancelled by the DOM swap).
+fn apply_current_configure(roster: &mut RosterList, json: &str) {
+    if json.is_empty() {
+        return;
+    }
+    let states: Vec<ConfigureStateEntry> = match serde_json::from_str(json) {
+        Ok(s) => s,
+        Err(e) => {
+            tracing::warn!("apply_current_configure: failed to parse JSON: {:?}", e);
+            return;
+        }
+    };
+    for state in states {
+        if let Some(entry) = roster.get_entry_mut(&state.entry_id) {
+            if state.model_count > 0 {
+                entry.selection.model_count = state.model_count;
+            }
+            entry.selection.chosen_options = state.chosen_options;
+            entry.custom_name = if state.custom_name.is_empty() {
+                None
+            } else {
+                Some(state.custom_name)
+            };
+        }
+    }
+}
+
 fn build_unit_groups(store: &DatasheetStore, roster: &RosterList) -> Vec<UnitGroup> {
     let primary = roster.faction.as_str();
     let picker_units = store.units_for_roster(&roster.game_system, primary);
@@ -344,6 +389,10 @@ pub async fn view_handler(State(state): State<AppState>, session: Session) -> Re
 #[derive(Deserialize)]
 pub struct AddUnitForm {
     datasheet_id: String,
+    /// JSON blob injected by the htmx:configRequest hook — current DOM state of
+    /// all configure forms at the moment the Add button was clicked.
+    #[serde(default)]
+    current_configure: String,
 }
 
 pub async fn add_unit_handler(
@@ -357,6 +406,7 @@ pub async fn add_unit_handler(
     };
 
     let mut roster = load_roster(&session).await;
+    apply_current_configure(&mut roster, &form.current_configure);
     roster.add_unit(&form.datasheet_id, ds.unit_size.min);
     save_roster(&session, &roster).await;
 
@@ -367,12 +417,22 @@ pub async fn add_unit_handler(
 // Remove unit
 // ---------------------------------------------------------------------------
 
+#[derive(Deserialize, Default)]
+pub struct RemoveUnitForm {
+    /// JSON blob injected by the htmx:configRequest hook — current DOM state of
+    /// all configure forms at the moment the Remove button was clicked.
+    #[serde(default)]
+    current_configure: String,
+}
+
 pub async fn remove_unit_handler(
     State(state): State<AppState>,
     session: Session,
     Path(entry_id): Path<String>,
+    Form(form): Form<RemoveUnitForm>,
 ) -> impl IntoResponse {
     let mut roster = load_roster(&session).await;
+    apply_current_configure(&mut roster, &form.current_configure);
     roster.remove_unit(&entry_id);
     save_roster(&session, &roster).await;
     render_roster_content(&roster, &state.store)
@@ -385,6 +445,10 @@ pub async fn remove_unit_handler(
 #[derive(Deserialize)]
 pub struct MoveUnitForm {
     direction: String,
+    /// JSON blob injected by the htmx:configRequest hook — current DOM state of
+    /// all configure forms at the moment the Move button was clicked.
+    #[serde(default)]
+    current_configure: String,
 }
 
 pub async fn move_unit_handler(
@@ -394,6 +458,7 @@ pub async fn move_unit_handler(
     Form(form): Form<MoveUnitForm>,
 ) -> impl IntoResponse {
     let mut roster = load_roster(&session).await;
+    apply_current_configure(&mut roster, &form.current_configure);
     match form.direction.as_str() {
         "up" => roster.move_unit_up(&entry_id),
         "down" => roster.move_unit_down(&entry_id),

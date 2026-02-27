@@ -17,14 +17,14 @@
         <form method="post" action="/roster/unit/{{ entry.entry_id }}/move"
               hx-post="/roster/unit/{{ entry.entry_id }}/move"
               hx-target="#roster-content" hx-swap="outerHTML"
-              hx-sync="body:queue" style="display:inline">
+              hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
           <input type="hidden" name="direction" value="up">
           <button type="submit" class="btn btn-sm btn-reorder" title="Move up">↑</button>
         </form>
         <form method="post" action="/roster/unit/{{ entry.entry_id }}/move"
               hx-post="/roster/unit/{{ entry.entry_id }}/move"
               hx-target="#roster-content" hx-swap="outerHTML"
-              hx-sync="body:queue" style="display:inline">
+              hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
           <input type="hidden" name="direction" value="down">
           <button type="submit" class="btn btn-sm btn-reorder" title="Move down">↓</button>
         </form>
@@ -33,7 +33,7 @@
       <form method="post" action="/roster/unit/{{ entry.entry_id }}/remove"
             hx-post="/roster/unit/{{ entry.entry_id }}/remove"
             hx-target="#roster-content" hx-swap="outerHTML"
-            hx-sync="body:queue" style="display:inline">
+            hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
         <button type="submit" class="btn btn-sm btn-danger" title="Remove unit">✕</button>
       </form>
     </div>
@@ -45,7 +45,8 @@
         hx-target="#roster-content"
         hx-swap="outerHTML"
         hx-trigger="change delay:200ms"
-        hx-sync="body:queue">
+        class="unit-configure-form"
+        data-entry-id="{{ entry.entry_id }}">
 
     <div class="unit-config-row">
       <label class="config-label">
