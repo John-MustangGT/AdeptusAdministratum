@@ -1,0 +1,96 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-rhino",
+  "name": "Rhino",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Dedicated Transport",
+  "points": { "base": 80, "per_additional_model": 0, "free_wargear_included": true },
+  "unit_size": { "min": 1, "max": 1, "step": 1 },
+  "profiles": [
+    {
+      "name": "Rhino",
+      "count": 1,
+      "stats": { "M": "12\"", "T": 9, "Sv": "3+", "W": 10, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "storm_bolter",
+        "name": "Storm Bolter",
+        "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["RAPID FIRE 2"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "armoured_tracks",
+        "name": "Armoured Tracks",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 6, "AP": 0, "D": 1 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "storm_bolter", "quantity": 1 },
+    { "weapon_id": "armoured_tracks", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "extra_storm_bolter",
+      "description": "The Rhino can be equipped with an additional storm bolter.",
+      "type": "add",
+      "replaces": [],
+      "adds": ["storm_bolter"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Smoke",
+      "description": "Once per battle, this model can use its smoke. When it does, until the start of your next turn, ranged attacks that target this model suffer a -1 penalty to the Hit roll.",
+      "type": "unit",
+      "timing": "any phase"
+    },
+    {
+      "name": "Self-Repair",
+      "description": "At the start of your Command Phase, this model regains up to D3 lost wounds.",
+      "type": "unit",
+      "timing": "command phase"
+    }
+  ],
+  "transport": {
+    "capacity": 10,
+    "restrictions": [
+      { "rule": "must_not_have_keyword", "keyword": "JUMP PACK" },
+      { "rule": "must_not_have_keyword", "keyword": "MOUNTED" },
+      { "rule": "must_not_have_keyword", "keyword": "BEAST" },
+      { "rule": "must_not_have_keyword", "keyword": "VEHICLE" }
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["VEHICLE", "DEDICATED TRANSPORT", "RHINO"],
+    "transport_keywords": []
+  },
+  "constraints": [],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual. Can transport up to 10 ADEPTUS ASTARTES INFANTRY models (not JUMP PACK, MOUNTED, BEAST, or VEHICLE). CHAPTER keyword replaced with army's specific chapter."
+}

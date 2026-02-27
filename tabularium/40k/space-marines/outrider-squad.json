@@ -1,0 +1,83 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-outrider-squad",
+  "name": "Outrider Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Fast Attack",
+  "points": { "base": 130, "per_additional_model": 43, "free_wargear_included": true },
+  "unit_size": { "min": 3, "max": 6, "step": 3 },
+  "profiles": [
+    {
+      "name": "Outrider Sergeant",
+      "count": 1,
+      "stats": { "M": "12\"", "T": 5, "Sv": "3+", "W": 4, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Outrider",
+      "count": "remainder",
+      "stats": { "M": "12\"", "T": 5, "Sv": "3+", "W": 3, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "twin_auto_bolt_rifle",
+        "name": "Twin Auto Bolt Rifle",
+        "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["RAPID FIRE 2"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "astartes_chainsword",
+        "name": "Astartes Chainsword",
+        "stats": { "range": "Melee", "A": "5", "WS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "twin_auto_bolt_rifle", "quantity": 1 },
+    { "weapon_id": "astartes_chainsword", "quantity": 1 }
+  ],
+  "wargear_options": [],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Turbo-boost",
+      "description": "Each time this unit Advances, do not make an Advance roll. Instead, until the end of the phase, add 6\" to the Move characteristic of models in this unit.",
+      "type": "unit",
+      "timing": "movement phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["MOUNTED", "OUTRIDER SQUAD"],
+    "transport_keywords": []
+  },
+  "constraints": [
+    {
+      "id": "outrider-unit-size",
+      "type": "unit_size",
+      "description": "Outrider Squad must contain 3 or 6 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [3, 6] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual. MOUNTED unit — cannot embark on most DEDICATED TRANSPORT units. CHAPTER keyword replaced with army's specific chapter."
+}

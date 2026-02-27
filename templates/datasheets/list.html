@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Datasheets — AdRostra{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Datasheets</h1>
+
+  <form class="faction-filter" method="get" action="/datasheets">
+    <label for="faction-select">Filter by faction:</label>
+    <select id="faction-select" name="faction" onchange="this.form.submit()">
+      <option value="">All Factions</option>
+      {% for f in factions %}
+      <option value="{{ f }}"
+        {% if active_faction.is_some() && active_faction.as_deref() == Some(f.as_str()) %}selected{% endif %}>
+        {{ f }}
+      </option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+{% if units.is_empty() %}
+<p class="empty-state">No datasheets found. Add JSON files to the <code>data/</code> directory.</p>
+{% else %}
+<table class="datasheet-list">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Faction</th>
+      <th>Role</th>
+      <th>Base Pts</th>
+      <th>Size</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for unit in units %}
+    <tr>
+      <td><a href="/datasheets/{{ unit.id }}">{{ unit.name }}</a></td>
+      <td>{{ unit.faction }}</td>
+      <td><span class="role-badge">{{ unit.battlefield_role }}</span></td>
+      <td>{{ unit.base_points }}</td>
+      <td>{{ unit.unit_min }}&ndash;{{ unit.unit_max }}</td>
+      <td>
+        <form method="post" action="/roster/unit/add"
+              hx-post="/roster/unit/add"
+              hx-target="#roster-content"
+              hx-swap="outerHTML">
+          <input type="hidden" name="datasheet_id" value="{{ unit.id }}">
+          <button type="submit" class="btn btn-sm">+ Add to Roster</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

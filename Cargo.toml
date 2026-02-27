@@ -1,0 +1,46 @@
+[package]
+name = "administratio-militaris"
+version = "0.1.0"
+edition = "2021"
+description = "Self-hosted tabletop wargaming army list builder"
+license = "MIT"
+default-run = "adrostra"
+
+[[bin]]
+name = "adrostra"
+path = "src/main.rs"
+
+[[bin]]
+name = "validate"
+path = "src/bin/validate.rs"
+
+[lib]
+name = "administratio_militaris"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+
+# Web server
+axum = { version = "0.7", features = ["macros", "form"] }
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.5", features = ["fs", "trace"] }
+
+# Templating
+askama = { version = "0.12", features = ["with-axum"] }
+askama_axum = "0.4"
+
+# Session management
+tower-sessions = "0.12"
+
+# Utilities
+uuid = { version = "1", features = ["v4"] }
+walkdir = "2"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+# None yet; unit tests live in-module

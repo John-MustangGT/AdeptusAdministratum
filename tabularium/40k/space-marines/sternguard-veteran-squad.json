@@ -1,0 +1,215 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-sternguard-veteran-squad",
+  "name": "Sternguard Veteran Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Elites",
+  "points": { "base": 95, "per_additional_model": 19, "free_wargear_included": true },
+  "unit_size": { "min": 5, "max": 10, "step": 5 },
+  "profiles": [
+    {
+      "name": "Veteran Sergeant",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 3, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Sternguard Veteran",
+      "count": "remainder",
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 2, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "special_issue_bolt_rifle",
+        "name": "Special Issue Bolt Rifle",
+        "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": -2, "D": 2 },
+        "abilities": ["DEVASTATING WOUNDS", "RAPID FIRE 1"]
+      },
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "heavy_bolt_pistol",
+        "name": "Heavy Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "3+", "S": 5, "AP": -1, "D": 1 },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "combi_weapon",
+        "name": "Combi-weapon",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Boltgun",
+            "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+            "abilities": ["RAPID FIRE 1"]
+          },
+          {
+            "name": "Combi-attachment",
+            "stats": { "range": "24\"", "A": "1", "BS": "3+", "S": 9, "AP": -2, "D": "D3" },
+            "abilities": ["ANTI-INFANTRY 4+", "DEVASTATING WOUNDS", "RAPID FIRE 1"]
+          }
+        ]
+      }
+    ],
+    "melee": [
+      {
+        "id": "close_combat_weapon",
+        "name": "Close Combat Weapon",
+        "stats": { "range": "Melee", "A": "3", "WS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_sword",
+        "name": "Power Sword",
+        "stats": { "range": "Melee", "A": "4", "WS": "3+", "S": 5, "AP": -2, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_fist",
+        "name": "Power Fist",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": []
+      },
+      {
+        "id": "thunder_hammer",
+        "name": "Thunder Hammer",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": ["DEVASTATING WOUNDS"]
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "special_issue_bolt_rifle",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Sternguard Veteran" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Sternguard Veteran" }
+    },
+    {
+      "weapon_id": "special_issue_bolt_rifle",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Veteran Sergeant" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Veteran Sergeant" }
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "veteran_heavy_bolt_pistol",
+      "description": "Any Sternguard Veteran can replace their special issue bolt rifle with a heavy bolt pistol and close combat weapon.",
+      "type": "replace",
+      "replaces": ["special_issue_bolt_rifle"],
+      "adds": ["heavy_bolt_pistol"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": []
+    },
+    {
+      "id": "sergeant_combi_weapon",
+      "description": "The Veteran Sergeant can replace their special issue bolt rifle with a combi-weapon.",
+      "type": "replace",
+      "replaces": ["special_issue_bolt_rifle"],
+      "adds": ["combi_weapon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": []
+    },
+    {
+      "id": "sergeant_bolt_pistol",
+      "description": "The Veteran Sergeant can replace their special issue bolt rifle with a bolt pistol.",
+      "type": "replace",
+      "replaces": ["special_issue_bolt_rifle"],
+      "adds": ["bolt_pistol"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_combi_weapon"]
+    },
+    {
+      "id": "sergeant_power_sword",
+      "description": "The Veteran Sergeant can replace their close combat weapon with a power sword.",
+      "type": "replace",
+      "replaces": ["close_combat_weapon"],
+      "adds": ["power_sword"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_fist", "sergeant_thunder_hammer"]
+    },
+    {
+      "id": "sergeant_power_fist",
+      "description": "The Veteran Sergeant can replace their close combat weapon with a power fist.",
+      "type": "replace",
+      "replaces": ["close_combat_weapon"],
+      "adds": ["power_fist"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_sword", "sergeant_thunder_hammer"]
+    },
+    {
+      "id": "sergeant_thunder_hammer",
+      "description": "The Veteran Sergeant can replace their close combat weapon with a thunder hammer.",
+      "type": "replace",
+      "replaces": ["close_combat_weapon"],
+      "adds": ["thunder_hammer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_sword", "sergeant_power_fist"]
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Sternguard Training",
+      "description": "Each time a model in this unit makes an attack with a special issue bolt rifle, a Critical Hit is scored on a Hit roll of 5+ (in addition to 6s).",
+      "type": "unit",
+      "timing": "passive"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["INFANTRY", "STERNGUARD VETERAN SQUAD"],
+    "transport_keywords": ["INFANTRY"]
+  },
+  "constraints": [
+    {
+      "id": "sternguard-unit-size",
+      "type": "unit_size",
+      "description": "Sternguard Veteran Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [5, 10] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (95 pts per 5 models). Special issue bolt rifles are DEVASTATING WOUNDS meaning Critical Hits auto-wound. CHAPTER keyword replaced with army's specific chapter."
+}
