@@ -79,7 +79,8 @@
                  name="options"
                  value="{{ opt.id }}"
                  {% if opt.checked %}checked{% endif %}
-                 {% if opt.disabled %}disabled{% endif %}>
+                 {% if opt.disabled %}disabled{% endif %}
+                 data-excl="{{ opt.mutually_exclusive_ids }}">
           {{ opt.description }}
           {% if opt.points_cost != 0 %}
             <span class="pts-delta">{% if opt.points_cost > 0 %}+{% endif %}{{ opt.points_cost }}pts</span>

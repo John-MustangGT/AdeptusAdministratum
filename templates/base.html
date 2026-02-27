@@ -44,6 +44,31 @@
       });
     })();
 
+    // Live mutual-exclusion for wargear checkboxes.
+    // Disables conflicting options the instant the user checks something,
+    // without waiting for the configure form's 200ms debounce to fire.
+    function refreshMutualExclusion(form) {
+      var checkedIds = new Set();
+      form.querySelectorAll('input[type=checkbox][name=options]:checked').forEach(function (c) {
+        checkedIds.add(c.value);
+      });
+      form.querySelectorAll('input[type=checkbox][name=options]').forEach(function (c) {
+        if (c.checked) return; // never disable a currently-checked box
+        var excl = c.dataset.excl ? c.dataset.excl.split(',').filter(Boolean) : [];
+        var blocked = excl.some(function (id) { return checkedIds.has(id); });
+        c.disabled = blocked;
+        var lbl = c.closest('label');
+        if (lbl) lbl.classList.toggle('disabled', blocked);
+      });
+    }
+    document.body.addEventListener('change', function (evt) {
+      var cb = evt.target;
+      if (cb.type !== 'checkbox' || cb.name !== 'options') return;
+      var form = cb.closest('form.unit-configure-form');
+      if (!form) return;
+      refreshMutualExclusion(form);
+    });
+
     // Inject current DOM configure state into every roster mutation request
     // (Add / Remove / Move).  This prevents stale session data from resetting
     // wargear selections when a mutation fires before configure has saved.

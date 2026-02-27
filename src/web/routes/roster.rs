@@ -61,6 +61,10 @@ struct OwnedOptionView {
     points_cost: i32,
     checked: bool,
     disabled: bool,
+    /// Comma-separated IDs of mutually exclusive options, used by the
+    /// client-side live-exclusion JS to grey out conflicting checkboxes
+    /// immediately (before the configure debounce fires).
+    mutually_exclusive_ids: String,
 }
 
 struct RosterEntryViewOwned {
@@ -128,6 +132,7 @@ fn build_entry_view(entry: &RosterEntry, ds: &UnitDatasheet) -> RosterEntryViewO
                 points_cost: opt.points_cost,
                 checked,
                 disabled,
+                mutually_exclusive_ids: opt.mutually_exclusive_with.join(","),
             }
         })
         .collect();
