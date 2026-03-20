@@ -17,6 +17,12 @@ pub struct RosterEntry {
     /// Optional player-given name for this specific unit (e.g. "Sgt. Valdris").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub custom_name: Option<String>,
+    /// Entry ID of the CHARACTER unit attached to lead this unit.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub assigned_leader_entry_id: Option<String>,
+    /// Entry ID of the TRANSPORT unit this unit has embarked into.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub assigned_transport_entry_id: Option<String>,
 }
 
 /// An army roster (the user's list being built).
@@ -68,12 +74,39 @@ impl RosterList {
                 ..Default::default()
             },
             custom_name: None,
+            assigned_leader_entry_id: None,
+            assigned_transport_entry_id: None,
         });
         entry_id
     }
 
     pub fn remove_unit(&mut self, entry_id: &str) {
         self.entries.retain(|e| e.entry_id != entry_id);
+        // Clear any references to the removed entry from other units.
+        for entry in &mut self.entries {
+            if entry.assigned_leader_entry_id.as_deref() == Some(entry_id) {
+                entry.assigned_leader_entry_id = None;
+            }
+            if entry.assigned_transport_entry_id.as_deref() == Some(entry_id) {
+                entry.assigned_transport_entry_id = None;
+            }
+        }
+    }
+
+    /// Set or clear the leader attached to a unit entry.
+    /// Pass `None` to unlink the current leader.
+    pub fn assign_leader(&mut self, unit_entry_id: &str, leader_entry_id: Option<&str>) {
+        if let Some(entry) = self.get_entry_mut(unit_entry_id) {
+            entry.assigned_leader_entry_id = leader_entry_id.map(String::from);
+        }
+    }
+
+    /// Set or clear the transport a unit entry is embarked into.
+    /// Pass `None` to unlink the current transport.
+    pub fn assign_transport(&mut self, unit_entry_id: &str, transport_entry_id: Option<&str>) {
+        if let Some(entry) = self.get_entry_mut(unit_entry_id) {
+            entry.assigned_transport_entry_id = transport_entry_id.map(String::from);
+        }
     }
 
     pub fn get_entry_mut(&mut self, entry_id: &str) -> Option<&mut RosterEntry> {

@@ -36,6 +36,14 @@ pub fn build_router(state: AppState) -> Router {
             "/roster/unit/:entry_id/configure",
             post(routes::roster::configure_unit_handler),
         )
+        .route(
+            "/roster/unit/:entry_id/assign-leader",
+            post(routes::roster::assign_leader_handler),
+        )
+        .route(
+            "/roster/unit/:entry_id/assign-transport",
+            post(routes::roster::assign_transport_handler),
+        )
         .route("/roster/rename", post(routes::roster::rename_handler))
         // Export
         .route("/roster/export.json", get(routes::export::handler))

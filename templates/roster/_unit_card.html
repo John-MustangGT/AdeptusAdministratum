@@ -92,6 +92,103 @@
     {% endif %}
   </form>
 
+  {# ── Linking: leader + transport assignment ──────────────────────────── #}
+  {% let show_links = !entry.assigned_leader_name.is_empty()
+      || !entry.assigned_transport_name.is_empty()
+      || !entry.available_leaders.is_empty()
+      || !entry.available_transports.is_empty()
+      || !entry.units_leading.is_empty()
+      || !entry.units_transporting.is_empty() %}
+  {% if show_links %}
+  <div class="unit-links">
+
+    {# ── Leader assignment (this unit is being led) ── #}
+    {% if !entry.assigned_leader_name.is_empty() || !entry.available_leaders.is_empty() %}
+    <div class="link-row">
+      <span class="link-label">Leader</span>
+      {% if !entry.assigned_leader_name.is_empty() %}
+        <span class="link-chip">{{ entry.assigned_leader_name }}</span>
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/assign-leader"
+              hx-post="/roster/unit/{{ entry.entry_id }}/assign-leader"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
+          <input type="hidden" name="leader_entry_id" value="">
+          <button type="submit" class="btn btn-sm btn-unlink" title="Unlink leader">✕</button>
+        </form>
+      {% else %}
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/assign-leader"
+              hx-post="/roster/unit/{{ entry.entry_id }}/assign-leader"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form"
+              hx-trigger="change">
+          <select name="leader_entry_id" class="link-select">
+            <option value="">— assign leader —</option>
+            {% for (lid, lname) in entry.available_leaders %}
+            <option value="{{ lid }}">{{ lname }}</option>
+            {% endfor %}
+          </select>
+        </form>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {# ── Transport assignment (this unit is embarking) ── #}
+    {% if !entry.assigned_transport_name.is_empty() || !entry.available_transports.is_empty() %}
+    <div class="link-row">
+      <span class="link-label">Transport</span>
+      {% if !entry.assigned_transport_name.is_empty() %}
+        <span class="link-chip">{{ entry.assigned_transport_name }}</span>
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/assign-transport"
+              hx-post="/roster/unit/{{ entry.entry_id }}/assign-transport"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
+          <input type="hidden" name="transport_entry_id" value="">
+          <button type="submit" class="btn btn-sm btn-unlink" title="Unlink transport">✕</button>
+        </form>
+      {% else %}
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/assign-transport"
+              hx-post="/roster/unit/{{ entry.entry_id }}/assign-transport"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form"
+              hx-trigger="change">
+          <select name="transport_entry_id" class="link-select">
+            <option value="">— assign transport —</option>
+            {% for (tid, tname) in entry.available_transports %}
+            <option value="{{ tid }}">{{ tname }}</option>
+            {% endfor %}
+          </select>
+        </form>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {# ── Reverse: character is leading these units ── #}
+    {% if !entry.units_leading.is_empty() %}
+    <div class="link-row link-info-row">
+      <span class="link-label">Leading</span>
+      <span class="link-info-text">
+        {% for uname in entry.units_leading %}
+        <span class="link-chip link-chip-dim">{{ uname }}</span>
+        {% endfor %}
+      </span>
+    </div>
+    {% endif %}
+
+    {# ── Reverse: transport is carrying these units ── #}
+    {% if !entry.units_transporting.is_empty() %}
+    <div class="link-row link-info-row">
+      <span class="link-label">Carrying</span>
+      <span class="link-info-text">
+        {% for uname in entry.units_transporting %}
+        <span class="link-chip link-chip-dim">{{ uname }}</span>
+        {% endfor %}
+      </span>
+    </div>
+    {% endif %}
+
+  </div>
+  {% endif %}
+
   {% if !entry.issues.is_empty() %}
   <ul class="issue-list">
     {% for (cls, msg) in entry.issues %}

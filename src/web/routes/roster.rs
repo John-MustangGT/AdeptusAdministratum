@@ -1,4 +1,4 @@
-use crate::datasheet::{Severity, UnitDatasheet};
+use crate::datasheet::{Severity, TransportRule, UnitDatasheet};
 use crate::roster::{RosterEntry, RosterList};
 use crate::store::DatasheetStore;
 use crate::validation::{calculate_points, validate_unit, UnitSelection};
@@ -81,6 +81,19 @@ struct RosterEntryViewOwned {
     options: Vec<OwnedOptionView>,
     issues: Vec<(String, String)>,
     points: u32,
+    // ── Linking ────────────────────────────────────────────────────────────
+    /// Display name of the CHARACTER currently leading this unit. Empty = none assigned.
+    assigned_leader_name: String,
+    /// Display name of the TRANSPORT this unit is currently embarked in. Empty = none assigned.
+    assigned_transport_name: String,
+    /// Other roster entries (entry_id, display_name) that are eligible to lead this unit.
+    available_leaders: Vec<(String, String)>,
+    /// Other roster entries (entry_id, display_name) whose transport can carry this unit.
+    available_transports: Vec<(String, String)>,
+    /// Display names of units this entry is currently leading (CHARACTER → squads).
+    units_leading: Vec<String>,
+    /// Display names of units this entry is currently carrying (TRANSPORT → passengers).
+    units_transporting: Vec<String>,
 }
 
 // ---------------------------------------------------------------------------
@@ -101,7 +114,43 @@ fn enriched_selection(ds: &UnitDatasheet, selection: UnitSelection) -> UnitSelec
     sel
 }
 
-fn build_entry_view(entry: &RosterEntry, ds: &UnitDatasheet) -> RosterEntryViewOwned {
+fn display_name(entry: &RosterEntry, ds: &UnitDatasheet) -> String {
+    entry.custom_name.clone().unwrap_or_else(|| ds.name.clone())
+}
+
+/// Returns `true` if a unit with the given keywords can board `transport_ds`.
+fn can_board_transport(transport_ds: &UnitDatasheet, unit_keywords: &[String]) -> bool {
+    let transport = match &transport_ds.transport {
+        Some(t) => t,
+        None => return false,
+    };
+    for restriction in &transport.restrictions {
+        match restriction.rule {
+            TransportRule::MustHaveKeyword => {
+                if let Some(kw) = &restriction.keyword {
+                    if !unit_keywords.iter().any(|k| k.eq_ignore_ascii_case(kw)) {
+                        return false;
+                    }
+                }
+            }
+            TransportRule::MustNotHaveKeyword => {
+                if let Some(kw) = &restriction.keyword {
+                    if unit_keywords.iter().any(|k| k.eq_ignore_ascii_case(kw)) {
+                        return false;
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+    true
+}
+
+fn build_entry_view(
+    entry: &RosterEntry,
+    ds: &UnitDatasheet,
+    all_pairs: &[(&RosterEntry, &UnitDatasheet)],
+) -> RosterEntryViewOwned {
     let sel = enriched_selection(ds, entry.selection.clone());
     let issues_raw = validate_unit(ds, &sel).unwrap_or_default();
     let points = calculate_points(ds, &sel);
@@ -137,6 +186,90 @@ fn build_entry_view(entry: &RosterEntry, ds: &UnitDatasheet) -> RosterEntryViewO
         })
         .collect();
 
+    // All keywords for this unit (unit + faction).
+    let unit_keywords: Vec<String> = ds
+        .keywords
+        .unit
+        .iter()
+        .chain(ds.keywords.faction.iter())
+        .cloned()
+        .collect();
+
+    // Available leaders: other roster entries whose Leader.can_lead includes this datasheet.
+    let available_leaders: Vec<(String, String)> = all_pairs
+        .iter()
+        .filter(|(other_entry, other_ds)| {
+            other_entry.entry_id != entry.entry_id
+                && other_ds
+                    .leader
+                    .as_ref()
+                    .map_or(false, |l| l.can_lead.contains(&entry.datasheet_id))
+                // Don't offer a leader that is already leading another unit.
+                && !all_pairs.iter().any(|(e, _)| {
+                    e.entry_id != entry.entry_id
+                        && e.assigned_leader_entry_id.as_deref()
+                            == Some(&other_entry.entry_id)
+                })
+        })
+        .map(|(other_entry, other_ds)| {
+            (other_entry.entry_id.clone(), display_name(other_entry, other_ds))
+        })
+        .collect();
+
+    // Available transports: other roster entries that are transports and can carry this unit.
+    let available_transports: Vec<(String, String)> = all_pairs
+        .iter()
+        .filter(|(other_entry, other_ds)| {
+            other_entry.entry_id != entry.entry_id
+                && can_board_transport(other_ds, &unit_keywords)
+        })
+        .map(|(other_entry, other_ds)| {
+            (other_entry.entry_id.clone(), display_name(other_entry, other_ds))
+        })
+        .collect();
+
+    // Resolved assigned leader name (empty string = none assigned).
+    let assigned_leader_name = entry
+        .assigned_leader_entry_id
+        .as_ref()
+        .and_then(|lid| {
+            all_pairs
+                .iter()
+                .find(|(e, _)| &e.entry_id == lid)
+                .map(|(e, ds)| display_name(e, ds))
+        })
+        .unwrap_or_default();
+
+    // Resolved assigned transport name (empty string = none assigned).
+    let assigned_transport_name = entry
+        .assigned_transport_entry_id
+        .as_ref()
+        .and_then(|tid| {
+            all_pairs
+                .iter()
+                .find(|(e, _)| &e.entry_id == tid)
+                .map(|(e, ds)| display_name(e, ds))
+        })
+        .unwrap_or_default();
+
+    // Units that have selected this entry as their leader.
+    let units_leading: Vec<String> = all_pairs
+        .iter()
+        .filter(|(other_entry, _)| {
+            other_entry.assigned_leader_entry_id.as_deref() == Some(&entry.entry_id)
+        })
+        .map(|(other_entry, other_ds)| display_name(other_entry, other_ds))
+        .collect();
+
+    // Units that have selected this entry as their transport.
+    let units_transporting: Vec<String> = all_pairs
+        .iter()
+        .filter(|(other_entry, _)| {
+            other_entry.assigned_transport_entry_id.as_deref() == Some(&entry.entry_id)
+        })
+        .map(|(other_entry, other_ds)| display_name(other_entry, other_ds))
+        .collect();
+
     RosterEntryViewOwned {
         entry_id: entry.entry_id.clone(),
         datasheet_id: entry.datasheet_id.clone(),
@@ -150,6 +283,12 @@ fn build_entry_view(entry: &RosterEntry, ds: &UnitDatasheet) -> RosterEntryViewO
         options,
         issues,
         points,
+        assigned_leader_name,
+        assigned_transport_name,
+        available_leaders,
+        available_transports,
+        units_leading,
+        units_transporting,
     }
 }
 
@@ -325,14 +464,16 @@ struct RosterViewData {
 }
 
 fn collect_roster_data(roster: &RosterList, store: &DatasheetStore) -> RosterViewData {
-    let entries: Vec<RosterEntryViewOwned> = roster
+    // Resolve all (entry, datasheet) pairs up-front so linking logic can cross-reference.
+    let all_pairs: Vec<(&RosterEntry, &UnitDatasheet)> = roster
         .entries
         .iter()
-        .filter_map(|entry| {
-            store
-                .get(&entry.datasheet_id)
-                .map(|ds| build_entry_view(entry, ds))
-        })
+        .filter_map(|e| store.get(&e.datasheet_id).map(|ds| (e, ds)))
+        .collect();
+
+    let entries: Vec<RosterEntryViewOwned> = all_pairs
+        .iter()
+        .map(|(entry, ds)| build_entry_view(entry, ds, &all_pairs))
         .collect();
 
     let total_points: u32 = entries.iter().map(|e| e.points).sum();
@@ -533,6 +674,68 @@ pub async fn rename_handler(
 ) -> impl IntoResponse {
     let mut roster = load_roster(&session).await;
     roster.name = form.roster_name;
+    save_roster(&session, &roster).await;
+    render_roster_content(&roster, &state.store)
+}
+
+// ---------------------------------------------------------------------------
+// Assign leader
+// ---------------------------------------------------------------------------
+
+#[derive(Deserialize)]
+pub struct AssignLeaderForm {
+    /// Entry ID of the leader to attach, or empty string to unlink.
+    #[serde(default)]
+    leader_entry_id: String,
+    #[serde(default)]
+    current_configure: String,
+}
+
+pub async fn assign_leader_handler(
+    State(state): State<AppState>,
+    session: Session,
+    Path(entry_id): Path<String>,
+    Form(form): Form<AssignLeaderForm>,
+) -> impl IntoResponse {
+    let mut roster = load_roster(&session).await;
+    apply_current_configure(&mut roster, &form.current_configure);
+    let leader_id = if form.leader_entry_id.is_empty() {
+        None
+    } else {
+        Some(form.leader_entry_id.as_str())
+    };
+    roster.assign_leader(&entry_id, leader_id);
+    save_roster(&session, &roster).await;
+    render_roster_content(&roster, &state.store)
+}
+
+// ---------------------------------------------------------------------------
+// Assign transport
+// ---------------------------------------------------------------------------
+
+#[derive(Deserialize)]
+pub struct AssignTransportForm {
+    /// Entry ID of the transport to embark into, or empty string to unlink.
+    #[serde(default)]
+    transport_entry_id: String,
+    #[serde(default)]
+    current_configure: String,
+}
+
+pub async fn assign_transport_handler(
+    State(state): State<AppState>,
+    session: Session,
+    Path(entry_id): Path<String>,
+    Form(form): Form<AssignTransportForm>,
+) -> impl IntoResponse {
+    let mut roster = load_roster(&session).await;
+    apply_current_configure(&mut roster, &form.current_configure);
+    let transport_id = if form.transport_entry_id.is_empty() {
+        None
+    } else {
+        Some(form.transport_entry_id.as_str())
+    };
+    roster.assign_transport(&entry_id, transport_id);
     save_roster(&session, &roster).await;
     render_roster_content(&roster, &state.store)
 }

@@ -502,6 +502,72 @@ section h2 { font-size: 1.15rem; margin-bottom: 0.6rem; border-bottom: 1px solid
 .wargear-option input[type="checkbox"] { accent-color: var(--accent); }
 .pts-delta { color: var(--text-dim); font-size: 0.8rem; margin-left: 0.25rem; }
 
+/* ----- Unit linking (leader / transport) ----- */
+.unit-links {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.link-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  min-width: 62px;
+  flex-shrink: 0;
+}
+
+.link-chip {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  background: #1c2230;
+  border: 1px solid #3a4a6a;
+  color: #8aadde;
+}
+
+.link-chip-dim {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+
+.link-select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 0.2rem 0.45rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.link-select:focus { outline: none; border-color: var(--accent); }
+.link-select:hover { border-color: var(--accent-dim); }
+
+.link-info-row { opacity: 0.85; }
+.link-info-text { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+.btn-unlink {
+  border-color: var(--border);
+  color: var(--text-dim);
+  padding: 0.15rem 0.4rem;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+.btn-unlink:hover { border-color: var(--red); color: var(--red); }
+
 /* ----- Validation issues ----- */
 .issue-list {
   list-style: none;
