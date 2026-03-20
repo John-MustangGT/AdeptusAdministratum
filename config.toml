@@ -1,0 +1,8 @@
+[server]
+# Address the server binds to. Use "0.0.0.0" to listen on all interfaces.
+host = "127.0.0.1"
+port = 3000
+
+[data]
+# Directory containing game system datasheets.
+tabularium_dir = "tabularium"
