@@ -1,0 +1,197 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-immolator",
+  "name": "Immolator",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Dedicated Transport",
+  "points": {
+    "base": 115,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Immolator",
+      "count": 1,
+      "stats": {
+        "M": "10\"",
+        "T": 9,
+        "Sv": "2+",
+        "W": 11,
+        "Ld": "6+",
+        "OC": 3
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "immolation_flamer",
+        "name": "Immolation Flamer",
+        "stats": {
+          "range": "12\"",
+          "A": "2D6",
+          "BS": "N/A",
+          "S": 6,
+          "AP": -1,
+          "D": 2
+        },
+        "abilities": ["IGNORES COVER", "TORRENT", "TWIN-LINKED"]
+      },
+      {
+        "id": "twin_heavy_bolter",
+        "name": "Twin Heavy Bolter",
+        "stats": {
+          "range": "36\"",
+          "A": "3",
+          "BS": "3+",
+          "S": 5,
+          "AP": -1,
+          "D": 2
+        },
+        "abilities": ["HEAVY", "SUSTAINED HITS 1", "TWIN-LINKED"]
+      },
+      {
+        "id": "twin_multi_melta",
+        "name": "Twin Multi-melta",
+        "stats": {
+          "range": "18\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 9,
+          "AP": -4,
+          "D": "D6"
+        },
+        "abilities": ["HEAVY", "MELTA 2", "TWIN-LINKED"]
+      },
+      {
+        "id": "hunter_killer_missile",
+        "name": "Hunter-killer Missile",
+        "stats": {
+          "range": "48\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 14,
+          "AP": -3,
+          "D": "D6"
+        },
+        "abilities": ["ONE SHOT"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "armoured_tracks",
+        "name": "Armoured Tracks",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "4+",
+          "S": 6,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "immolation_flamer", "quantity": 1 },
+    { "weapon_id": "armoured_tracks", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "immolator_twin_heavy_bolter",
+      "description": "The Immolator can replace its immolation flamer with a twin heavy bolter.",
+      "type": "replace",
+      "replaces": ["immolation_flamer"],
+      "adds": ["twin_heavy_bolter"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["immolator_twin_multi_melta"]
+    },
+    {
+      "id": "immolator_twin_multi_melta",
+      "description": "The Immolator can replace its immolation flamer with a twin multi-melta.",
+      "type": "replace",
+      "replaces": ["immolation_flamer"],
+      "adds": ["twin_multi_melta"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["immolator_twin_heavy_bolter"]
+    },
+    {
+      "id": "immolator_hunter_killer",
+      "description": "The Immolator can be equipped with a hunter-killer missile.",
+      "type": "add",
+      "adds": ["hunter_killer_missile"],
+      "points_cost": 5,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Invulnerable Save",
+      "description": "This model has a 5+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Smoke",
+      "description": "Once per battle, at the start of your Shooting phase, this model can use its Smoke. Until the start of your next turn, each time a ranged attack is allocated to this model, subtract 1 from the Hit roll.",
+      "type": "unit",
+      "timing": "shooting phase"
+    },
+    {
+      "name": "Assault Vehicle",
+      "description": "Units can disembark from this Transport after it has made a Normal Move, but they cannot then Advance.",
+      "type": "unit",
+      "timing": "movement phase"
+    }
+  ],
+  "transport": {
+    "capacity": 6,
+    "restrictions": [
+      { "rule": "must_have_keyword", "keyword": "INFANTRY" },
+      { "rule": "must_not_have_keyword", "keyword": "JUMP PACK" },
+      { "rule": "must_not_have_keyword", "keyword": "BEAST" },
+      { "rule": "must_not_have_keyword", "keyword": "MOUNTED" },
+      { "rule": "must_not_have_keyword", "keyword": "VEHICLE" }
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["VEHICLE", "TRANSPORT", "IMMOLATOR"],
+    "transport_keywords": ["INFANTRY"]
+  },
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 106
+    }
+  ]
+}

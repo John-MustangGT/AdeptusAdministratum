@@ -1,0 +1,175 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-exorcist",
+  "name": "Exorcist",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Heavy Support",
+  "points": {
+    "base": 190,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Exorcist",
+      "count": 1,
+      "stats": {
+        "M": "10\"",
+        "T": 9,
+        "Sv": "2+",
+        "W": 14,
+        "Ld": "6+",
+        "OC": 3
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "exorcist_missile_launcher",
+        "name": "Exorcist Missile Launcher",
+        "stats": {
+          "range": "48\"",
+          "A": "2D6",
+          "BS": "4+",
+          "S": 8,
+          "AP": -2,
+          "D": "D3"
+        },
+        "abilities": ["BLAST", "HEAVY", "INDIRECT FIRE"]
+      },
+      {
+        "id": "exorcist_conflagration_rockets",
+        "name": "Exorcist Conflagration Rockets",
+        "stats": {
+          "range": "48\"",
+          "A": "2D6",
+          "BS": "4+",
+          "S": 5,
+          "AP": -1,
+          "D": 2
+        },
+        "abilities": ["ANTI-INFANTRY 4+", "BLAST", "HEAVY", "INDIRECT FIRE"]
+      },
+      {
+        "id": "exorcist_heavy_bolter",
+        "name": "Heavy Bolter",
+        "stats": {
+          "range": "36\"",
+          "A": "3",
+          "BS": "3+",
+          "S": 5,
+          "AP": -1,
+          "D": 2
+        },
+        "abilities": ["HEAVY", "SUSTAINED HITS 1"]
+      },
+      {
+        "id": "hunter_killer_missile",
+        "name": "Hunter-killer Missile",
+        "stats": {
+          "range": "48\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 14,
+          "AP": -3,
+          "D": "D6"
+        },
+        "abilities": ["ONE SHOT"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "armoured_tracks",
+        "name": "Armoured Tracks",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "4+",
+          "S": 6,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "exorcist_missile_launcher", "quantity": 1 },
+    { "weapon_id": "exorcist_heavy_bolter", "quantity": 1 },
+    { "weapon_id": "armoured_tracks", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "exorcist_conflagration_upgrade",
+      "description": "The Exorcist can replace its exorcist missile launcher with exorcist conflagration rockets.",
+      "type": "replace",
+      "replaces": ["exorcist_missile_launcher"],
+      "adds": ["exorcist_conflagration_rockets"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    },
+    {
+      "id": "exorcist_hunter_killer",
+      "description": "The Exorcist can be equipped with a hunter-killer missile.",
+      "type": "add",
+      "adds": ["hunter_killer_missile"],
+      "points_cost": 5,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Invulnerable Save",
+      "description": "This model has a 5+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Smoke",
+      "description": "Once per battle, at the start of your Shooting phase, this model can use its Smoke. Until the start of your next turn, each time a ranged attack is allocated to this model, subtract 1 from the Hit roll.",
+      "type": "unit",
+      "timing": "shooting phase"
+    },
+    {
+      "name": "Vessel of the Faithful",
+      "description": "Each time this model is selected to shoot, you can re-roll one of the dice when making the Attacks characteristic roll for the exorcist missile launcher or exorcist conflagration rockets.",
+      "type": "unit",
+      "timing": "shooting phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["VEHICLE", "EXORCIST"]
+  },
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 102
+    }
+  ]
+}

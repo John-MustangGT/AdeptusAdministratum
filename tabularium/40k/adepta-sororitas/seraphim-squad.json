@@ -1,0 +1,230 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-seraphim-squad",
+  "name": "Seraphim Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Fast Attack",
+  "points": {
+    "base": 80,
+    "per_additional_model": 0,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 5,
+    "max": 10,
+    "step": 5
+  },
+  "profiles": [
+    {
+      "name": "Seraphim Superior",
+      "count": 1,
+      "stats": {
+        "M": "12\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 2,
+        "Ld": "6+",
+        "OC": 1
+      }
+    },
+    {
+      "name": "Seraphim",
+      "count": "remainder",
+      "stats": {
+        "M": "12\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 1,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "hand_flamer",
+        "name": "Hand Flamer",
+        "stats": {
+          "range": "12\"",
+          "A": "D6",
+          "BS": "N/A",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["IGNORES COVER", "PISTOL", "TORRENT"]
+      },
+      {
+        "id": "inferno_pistol",
+        "name": "Inferno Pistol",
+        "stats": {
+          "range": "6\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 8,
+          "AP": -4,
+          "D": "D3"
+        },
+        "abilities": ["MELTA 2", "PISTOL"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "close_combat_weapon",
+        "name": "Close Combat Weapon",
+        "stats": {
+          "range": "Melee",
+          "A": "2",
+          "WS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "power_weapon",
+        "name": "Power Weapon",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 4,
+          "AP": -2,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 2,
+      "applies_to": { "profile_name": "Seraphim" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Seraphim" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 2,
+      "applies_to": { "profile_name": "Seraphim Superior" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Seraphim Superior" }
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "seraphim_hand_flamers",
+      "description": "Any Seraphim can replace both her bolt pistols with two hand flamers.",
+      "type": "replace",
+      "replaces": ["bolt_pistol", "bolt_pistol"],
+      "adds": ["hand_flamer", "hand_flamer"],
+      "points_cost": 0,
+      "cost_per": "model",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": ["seraphim_inferno_pistols"]
+    },
+    {
+      "id": "seraphim_inferno_pistols",
+      "description": "Any Seraphim can replace both her bolt pistols with two inferno pistols.",
+      "type": "replace",
+      "replaces": ["bolt_pistol", "bolt_pistol"],
+      "adds": ["inferno_pistol", "inferno_pistol"],
+      "points_cost": 0,
+      "cost_per": "model",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": ["seraphim_hand_flamers"]
+    },
+    {
+      "id": "seraphim_superior_power_weapon",
+      "description": "The Seraphim Superior can replace one of her close combat weapons with a power weapon.",
+      "type": "replace",
+      "replaces": ["close_combat_weapon"],
+      "adds": ["power_weapon"],
+      "points_cost": 5,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "FLY",
+      "description": "This unit can move over models and terrain features as if they were not there when making a Normal Move, Advance, or charge move.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Swooping Dive",
+      "description": "Each time this unit makes a charge move, until the end of the turn, add 1 to the Attacks characteristic of models in this unit.",
+      "type": "unit",
+      "timing": "charge phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["INFANTRY", "JUMP PACK", "FLY", "SERAPHIM SQUAD"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-valid",
+      "type": "unit_size",
+      "description": "Seraphim Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [5, 10]
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 88
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-dominion-squad",
+  "name": "Dominion Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Fast Attack",
+  "points": {
+    "base": 75,
+    "per_additional_model": 0,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 5,
+    "max": 10,
+    "step": 5
+  },
+  "profiles": [
+    {
+      "name": "Dominion Superior",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 2,
+        "Ld": "6+",
+        "OC": 1
+      }
+    },
+    {
+      "name": "Dominion",
+      "count": "remainder",
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 1,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "boltgun",
+        "name": "Boltgun",
+        "stats": {
+          "range": "24\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["RAPID FIRE 2"]
+      },
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "storm_bolter",
+        "name": "Storm Bolter",
+        "stats": {
+          "range": "24\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["RAPID FIRE 2"]
+      },
+      {
+        "id": "plasma_gun",
+        "name": "Plasma Gun",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "3+",
+              "S": 7,
+              "AP": -2,
+              "D": 1
+            },
+            "abilities": ["RAPID FIRE 1"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "3+",
+              "S": 8,
+              "AP": -3,
+              "D": 2
+            },
+            "abilities": ["HAZARDOUS", "RAPID FIRE 1"]
+          }
+        ]
+      },
+      {
+        "id": "meltagun",
+        "name": "Meltagun",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 9,
+          "AP": -4,
+          "D": "D6"
+        },
+        "abilities": ["MELTA 2"]
+      },
+      {
+        "id": "flamer",
+        "name": "Flamer",
+        "stats": {
+          "range": "12\"",
+          "A": "D6",
+          "BS": "N/A",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["IGNORES COVER", "TORRENT"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "close_combat_weapon",
+        "name": "Close Combat Weapon",
+        "stats": {
+          "range": "Melee",
+          "A": "2",
+          "WS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "chainsword",
+        "name": "Chainsword",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "3+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "boltgun",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Dominion" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Dominion" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Dominion" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Dominion Superior" }
+    },
+    {
+      "weapon_id": "chainsword",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Dominion Superior" }
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "dominion_superior_storm_bolter",
+      "description": "The Dominion Superior can replace her bolt pistol with a storm bolter.",
+      "type": "replace",
+      "replaces": ["bolt_pistol"],
+      "adds": ["storm_bolter"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    },
+    {
+      "id": "dominion_special_plasma",
+      "description": "Any Dominion can replace her boltgun with a plasma gun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["plasma_gun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["dominion_special_melta", "dominion_special_flamer"]
+    },
+    {
+      "id": "dominion_special_melta",
+      "description": "Any Dominion can replace her boltgun with a meltagun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["meltagun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["dominion_special_plasma", "dominion_special_flamer"]
+    },
+    {
+      "id": "dominion_special_flamer",
+      "description": "Any Dominion can replace her boltgun with a flamer (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["flamer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["dominion_special_plasma", "dominion_special_melta"]
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Scouts 6\"",
+      "description": "Before the first battle round begins, this unit can make a Normal Move of up to 6\" (they cannot end this move within Engagement Range of any enemy units).",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Vanguard",
+      "description": "Each time this unit makes a ranged attack against a target it can see, re-roll a Hit roll of 1.",
+      "type": "unit",
+      "timing": "shooting phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["INFANTRY", "SCOUTS 6\"", "DOMINION SQUAD"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-valid",
+      "type": "unit_size",
+      "description": "Dominion Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [5, 10]
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 86
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-paragon-warsuits",
+  "name": "Paragon Warsuits",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Elites",
+  "points": {
+    "base": 160,
+    "per_additional_model": 55,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 3,
+    "max": 6,
+    "step": 3
+  },
+  "profiles": [
+    {
+      "name": "Paragon Superior",
+      "count": 1,
+      "stats": {
+        "M": "8\"",
+        "T": 5,
+        "Sv": "3+",
+        "W": 6,
+        "Ld": "6+",
+        "OC": 1
+      }
+    },
+    {
+      "name": "Paragon",
+      "count": "remainder",
+      "stats": {
+        "M": "8\"",
+        "T": 5,
+        "Sv": "3+",
+        "W": 5,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "paragon_grenade_launcher",
+        "name": "Paragon Grenade Launcher",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Frag grenade",
+            "stats": {
+              "range": "24\"",
+              "A": "D3",
+              "BS": "3+",
+              "S": 3,
+              "AP": 0,
+              "D": 1
+            },
+            "abilities": ["BLAST"]
+          },
+          {
+            "name": "Krak grenade",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "3+",
+              "S": 6,
+              "AP": -1,
+              "D": "D3"
+            },
+            "abilities": []
+          }
+        ]
+      },
+      {
+        "id": "paragon_multi_melta",
+        "name": "Paragon Multi-melta",
+        "stats": {
+          "range": "18\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 9,
+          "AP": -4,
+          "D": "D6"
+        },
+        "abilities": ["HEAVY", "MELTA 2"]
+      },
+      {
+        "id": "paragon_heavy_bolter",
+        "name": "Paragon Heavy Bolter",
+        "stats": {
+          "range": "36\"",
+          "A": "3",
+          "BS": "3+",
+          "S": 5,
+          "AP": -1,
+          "D": 2
+        },
+        "abilities": ["HEAVY", "SUSTAINED HITS 1"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "paragon_war_blade",
+        "name": "Paragon War Blade",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "3+",
+          "S": 5,
+          "AP": -2,
+          "D": 2
+        },
+        "abilities": []
+      },
+      {
+        "id": "paragon_war_mace",
+        "name": "Paragon War Mace",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "3+",
+          "S": 7,
+          "AP": -1,
+          "D": 2
+        },
+        "abilities": ["ANTI-DAEMON 4+"]
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "paragon_grenade_launcher", "quantity": 1 },
+    { "weapon_id": "paragon_war_blade", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "paragon_multi_melta_upgrade",
+      "description": "Any Paragon Warsuit can replace its paragon grenade launcher with a paragon multi-melta.",
+      "type": "replace",
+      "replaces": ["paragon_grenade_launcher"],
+      "adds": ["paragon_multi_melta"],
+      "points_cost": 0,
+      "cost_per": "model",
+      "limits": { "max_per_unit": 6 },
+      "mutually_exclusive_with": ["paragon_heavy_bolter_upgrade"]
+    },
+    {
+      "id": "paragon_heavy_bolter_upgrade",
+      "description": "Any Paragon Warsuit can replace its paragon grenade launcher with a paragon heavy bolter.",
+      "type": "replace",
+      "replaces": ["paragon_grenade_launcher"],
+      "adds": ["paragon_heavy_bolter"],
+      "points_cost": 0,
+      "cost_per": "model",
+      "limits": { "max_per_unit": 6 },
+      "mutually_exclusive_with": ["paragon_multi_melta_upgrade"]
+    },
+    {
+      "id": "paragon_war_mace_upgrade",
+      "description": "Any Paragon Warsuit can replace its paragon war blade with a paragon war mace.",
+      "type": "replace",
+      "replaces": ["paragon_war_blade"],
+      "adds": ["paragon_war_mace"],
+      "points_cost": 0,
+      "cost_per": "model",
+      "limits": { "max_per_unit": 6 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Invulnerable Save",
+      "description": "This unit has a 4+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Righteous Advance",
+      "description": "Each time this unit makes an Advance move, it can still shoot in the Shooting phase.",
+      "type": "unit",
+      "timing": "movement phase"
+    },
+    {
+      "name": "Consecrated Armour",
+      "description": "Each time an attack is allocated to a model in this unit, subtract 1 from the Damage characteristic of that attack (to a minimum of 1).",
+      "type": "unit",
+      "timing": "passive"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["VEHICLE", "WALKER", "PARAGON WARSUITS"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-multiples-of-3",
+      "type": "unit_size",
+      "description": "Paragon Warsuits must be taken in multiples of 3 (3 or 6 models).",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [3, 6]
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 100
+    }
+  ]
+}

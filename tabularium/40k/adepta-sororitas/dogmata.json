@@ -1,0 +1,125 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-dogmata",
+  "name": "Dogmata",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "HQ",
+  "points": {
+    "base": 60,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Dogmata",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 4,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "boltgun",
+        "name": "Boltgun",
+        "stats": {
+          "range": "24\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["RAPID FIRE 2"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "mace_of_the_righteous",
+        "name": "Mace of the Righteous",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "3+",
+          "S": 5,
+          "AP": -1,
+          "D": 2
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "boltgun", "quantity": 1 },
+    { "weapon_id": "mace_of_the_righteous", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Hymn of Hate",
+      "description": "In your Command phase, this model can chant one of the following hymns: Refrain of Blazing Piety or Chant of Abhorrence. Until the start of your next Command phase, that hymn is in effect.",
+      "type": "unit",
+      "timing": "command phase"
+    },
+    {
+      "name": "Instrument of the Emperor's Will",
+      "description": "While this model is leading a unit, each time a model in that unit makes an attack, re-roll a Wound roll of 1.",
+      "type": "leader",
+      "timing": "passive"
+    }
+  ],
+  "leader": {
+    "can_lead": [
+      "40k-battle-sisters-squad",
+      "40k-as-celestians",
+      "40k-as-celestian-sacresants",
+      "40k-as-dominion-squad",
+      "40k-as-retributor-squad",
+      "40k-as-seraphim-squad",
+      "40k-as-zephyrim"
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["CHARACTER", "INFANTRY", "DOGMATA"]
+  },
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 74
+    }
+  ]
+}

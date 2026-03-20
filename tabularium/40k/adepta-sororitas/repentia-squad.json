@@ -1,0 +1,167 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-repentia-squad",
+  "name": "Repentia Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Elites",
+  "points": {
+    "base": 75,
+    "per_additional_model": 0,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 5,
+    "max": 10,
+    "step": 5
+  },
+  "profiles": [
+    {
+      "name": "Repentia Superior",
+      "count": 1,
+      "stats": {
+        "M": "7\"",
+        "T": 3,
+        "Sv": "6+",
+        "W": 2,
+        "Ld": "6+",
+        "OC": 1
+      }
+    },
+    {
+      "name": "Sister Repentia",
+      "count": "remainder",
+      "stats": {
+        "M": "7\"",
+        "T": 3,
+        "Sv": "6+",
+        "W": 1,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "neural_whips",
+        "name": "Neural Whips (shooting)",
+        "stats": {
+          "range": "6\"",
+          "A": "3",
+          "BS": "3+",
+          "S": 3,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["PISTOL"],
+        "notes": "Repentia Superior only"
+      }
+    ],
+    "melee": [
+      {
+        "id": "penitent_eviscerator",
+        "name": "Penitent Eviscerator",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "3+",
+          "S": 6,
+          "AP": -2,
+          "D": 2
+        },
+        "abilities": ["TWIN-LINKED"]
+      },
+      {
+        "id": "neural_whips_melee",
+        "name": "Neural Whips (melee)",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 3,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["ANTI-INFANTRY 4+"],
+        "notes": "Repentia Superior only"
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "penitent_eviscerator",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Sister Repentia" }
+    },
+    {
+      "weapon_id": "neural_whips",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Repentia Superior" }
+    },
+    {
+      "weapon_id": "neural_whips_melee",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Repentia Superior" }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Desperate for Redemption",
+      "description": "Each time this unit is selected to fight, add 1 to the Attacks characteristic of Sister Repentia models in this unit until the end of the phase.",
+      "type": "unit",
+      "timing": "fight phase"
+    },
+    {
+      "name": "Sacrosanct Flesh",
+      "description": "Each time a Sister Repentia model is destroyed, roll one D6: on a 4+, that model is not removed from play. Instead, that model can fight (if it has not already done so this phase) before being removed.",
+      "type": "unit",
+      "timing": "fight phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["INFANTRY", "REPENTIA SQUAD"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-valid",
+      "type": "unit_size",
+      "description": "Repentia Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [5, 10]
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 94
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-zephyrim",
+  "name": "Zephyrim",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Fast Attack",
+  "points": {
+    "base": 90,
+    "per_additional_model": 0,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 5,
+    "max": 10,
+    "step": 5
+  },
+  "profiles": [
+    {
+      "name": "Zephyrim Superior",
+      "count": 1,
+      "stats": {
+        "M": "12\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 2,
+        "Ld": "6+",
+        "OC": 1
+      }
+    },
+    {
+      "name": "Zephyrim",
+      "count": "remainder",
+      "stats": {
+        "M": "12\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 1,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "power_sword",
+        "name": "Power Sword",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 4,
+          "AP": -2,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "zephyrim_pennant",
+        "name": "Zephyrim Pennant (melee)",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["ANTI-INFANTRY 4+"]
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1
+    },
+    {
+      "weapon_id": "power_sword",
+      "quantity": 1
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "zephyrim_superior_pennant",
+      "description": "The Zephyrim Superior can be equipped with a Zephyrim Pennant in addition to her other weapons.",
+      "type": "add",
+      "adds": ["zephyrim_pennant"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "FLY",
+      "description": "This unit can move over models and terrain features as if they were not there when making a Normal Move, Advance, or charge move.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Blademasters of the Sororitas",
+      "description": "Each time a model in this unit makes a melee attack, on an unmodified wound roll of 6, that attack has the DEVASTATING WOUNDS ability.",
+      "type": "unit",
+      "timing": "fight phase"
+    },
+    {
+      "name": "Death Dive",
+      "description": "Each time this unit finishes a charge move, roll one D6 for each enemy unit within Engagement Range of this unit: on a 2+, that enemy unit suffers D3 mortal wounds.",
+      "type": "unit",
+      "timing": "charge phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["INFANTRY", "JUMP PACK", "FLY", "ZEPHYRIM"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-valid",
+      "type": "unit_size",
+      "description": "Zephyrim must contain 5 or 10 models.",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [5, 10]
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 90
+    }
+  ]
+}

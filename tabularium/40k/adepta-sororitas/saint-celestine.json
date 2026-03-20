@@ -1,0 +1,183 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-saint-celestine",
+  "name": "Saint Celestine",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "HQ",
+  "points": {
+    "base": 200,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1,
+    "notes": "This unit consists of Saint Celestine and 2 Geminae Superia."
+  },
+  "profiles": [
+    {
+      "name": "Saint Celestine",
+      "count": 1,
+      "stats": {
+        "M": "12\"",
+        "T": 3,
+        "Sv": "2+",
+        "W": 5,
+        "Ld": "6+",
+        "OC": 1
+      }
+    },
+    {
+      "name": "Geminae Superia",
+      "count": 2,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 2,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "ardent_blade",
+        "name": "The Ardent Blade",
+        "stats": {
+          "range": "Melee",
+          "A": "6",
+          "WS": "2+",
+          "S": 4,
+          "AP": -3,
+          "D": 2
+        },
+        "abilities": ["ANTI-DAEMON 4+", "DEVASTATING WOUNDS"]
+      },
+      {
+        "id": "geminae_power_sword",
+        "name": "Geminae Power Sword",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 4,
+          "AP": -2,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "ardent_blade",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Saint Celestine" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Geminae Superia" }
+    },
+    {
+      "weapon_id": "geminae_power_sword",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Geminae Superia" }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Invulnerable Save",
+      "description": "Saint Celestine has a 4+ invulnerable save. The Geminae Superia have a 5+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "FLY",
+      "description": "Saint Celestine can move over models and terrain features as if they were not there when making a Normal Move, Advance, or charge move.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "The Miraculous",
+      "description": "Once per battle, at the end of any phase, if Saint Celestine was destroyed this phase, roll one D6: on a 2+, set her back up on the battlefield as close as possible to where she was destroyed and not within Engagement Range of any enemy models, with D3 wounds remaining.",
+      "type": "unit",
+      "timing": "any phase"
+    },
+    {
+      "name": "Living Saint",
+      "description": "While this model is on the battlefield, at the start of each of your Command phases, gain D3 Miracle dice. In addition, while this model is leading a unit, models in that unit have the Feel No Pain 5+ ability.",
+      "type": "unit",
+      "timing": "command phase"
+    },
+    {
+      "name": "Healing Light",
+      "description": "Once per turn, one model in this unit's bodyguard can use this ability. Select one friendly ADEPTA SORORITAS INFANTRY unit within 6\" of this unit. That unit regains up to D3 lost wounds (to a single model).",
+      "type": "unit",
+      "timing": "any phase"
+    }
+  ],
+  "leader": {
+    "can_lead": [
+      "40k-battle-sisters-squad",
+      "40k-as-celestians",
+      "40k-as-celestian-sacresants",
+      "40k-as-seraphim-squad",
+      "40k-as-zephyrim"
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["CHARACTER", "EPIC HERO", "INFANTRY", "FLY", "SAINT CELESTINE"]
+  },
+  "constraints": [
+    {
+      "id": "epic-hero-unique",
+      "type": "army_unique",
+      "description": "Saint Celestine is an Epic Hero and cannot be included more than once in your army.",
+      "severity": "error"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 64
+    }
+  ],
+  "notes": "Saint Celestine and her Geminae Superia are a single unit. If the Geminae Superia are destroyed, Saint Celestine continues as a single model unit."
+}

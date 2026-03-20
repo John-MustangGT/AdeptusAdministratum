@@ -1,0 +1,106 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-arco-flagellants",
+  "name": "Arco-flagellants",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Elites",
+  "points": {
+    "base": 45,
+    "per_additional_model": 15,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 3,
+    "max": 12,
+    "step": 3
+  },
+  "profiles": [
+    {
+      "name": "Arco-flagellant",
+      "count": "remainder",
+      "stats": {
+        "M": "7\"",
+        "T": 3,
+        "Sv": "6+",
+        "W": 1,
+        "Ld": "8+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [],
+    "melee": [
+      {
+        "id": "arco_flails",
+        "name": "Arco-flails",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "4+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["SUSTAINED HITS 1"]
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "arco_flails", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Arcoflagellation",
+      "description": "Each time this unit is selected to fight, until the end of the phase, add 1 to the Attacks characteristic of models in this unit.",
+      "type": "unit",
+      "timing": "fight phase"
+    },
+    {
+      "name": "Fanatical Fury",
+      "description": "Each time a model in this unit makes a melee attack, on an unmodified wound roll of 6, that attack has the DEVASTATING WOUNDS ability.",
+      "type": "unit",
+      "timing": "fight phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["INFANTRY", "ARCO-FLAGELLANTS"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-multiples-of-3",
+      "type": "unit_size",
+      "description": "Arco-flagellants must be taken in multiples of 3 (3, 6, 9, or 12 models).",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [3, 6, 9, 12]
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 84
+    }
+  ]
+}

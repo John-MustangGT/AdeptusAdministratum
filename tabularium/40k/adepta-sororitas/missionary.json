@@ -1,0 +1,153 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-missionary",
+  "name": "Missionary",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "HQ",
+  "points": {
+    "base": 40,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Missionary",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "5+",
+        "W": 3,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "autopistol",
+        "name": "Autopistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "autogun_butt",
+        "name": "Autogun Butt",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "chainsword",
+        "name": "Chainsword",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "eviscerator",
+        "name": "Eviscerator",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "4+",
+          "S": 6,
+          "AP": -2,
+          "D": 2
+        },
+        "abilities": ["ANTI-DAEMON 4+"]
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "autopistol", "quantity": 1 },
+    { "weapon_id": "chainsword", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "missionary_eviscerator",
+      "description": "The Missionary can replace his chainsword with an eviscerator.",
+      "type": "replace",
+      "replaces": ["chainsword"],
+      "adds": ["eviscerator"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Zealous Devotion",
+      "description": "While this model is leading a unit, models in that unit have the Desperate Alliance rule and can re-roll Charge rolls.",
+      "type": "leader",
+      "timing": "passive"
+    },
+    {
+      "name": "Inspiring Preacher",
+      "description": "In your Command phase, this model can deliver a sermon. Until the start of your next Command phase, friendly ADEPTA SORORITAS INFANTRY units within 6\" of this model are eligible to perform a Heroic Intervention even if there are no enemy units within range.",
+      "type": "unit",
+      "timing": "command phase"
+    }
+  ],
+  "leader": {
+    "can_lead": [
+      "40k-battle-sisters-squad",
+      "40k-as-arco-flagellants",
+      "40k-as-repentia-squad"
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["CHARACTER", "INFANTRY", "MISSIONARY"]
+  },
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 77
+    }
+  ]
+}

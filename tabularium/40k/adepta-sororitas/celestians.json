@@ -1,0 +1,369 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-celestians",
+  "name": "Celestians",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Elites",
+  "points": {
+    "base": 75,
+    "per_additional_model": 0,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 5,
+    "max": 10,
+    "step": 5
+  },
+  "profiles": [
+    {
+      "name": "Celestian Superior",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 3,
+        "Ld": "6+",
+        "OC": 2
+      }
+    },
+    {
+      "name": "Celestian",
+      "count": "remainder",
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 2,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "boltgun",
+        "name": "Boltgun",
+        "stats": {
+          "range": "24\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["RAPID FIRE 2"]
+      },
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "plasma_gun",
+        "name": "Plasma Gun",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "3+",
+              "S": 7,
+              "AP": -2,
+              "D": 1
+            },
+            "abilities": ["RAPID FIRE 1"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "3+",
+              "S": 8,
+              "AP": -3,
+              "D": 2
+            },
+            "abilities": ["HAZARDOUS", "RAPID FIRE 1"]
+          }
+        ]
+      },
+      {
+        "id": "meltagun",
+        "name": "Meltagun",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 9,
+          "AP": -4,
+          "D": "D6"
+        },
+        "abilities": ["MELTA 2"]
+      },
+      {
+        "id": "flamer",
+        "name": "Flamer",
+        "stats": {
+          "range": "12\"",
+          "A": "D6",
+          "BS": "N/A",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["IGNORES COVER", "TORRENT"]
+      },
+      {
+        "id": "storm_bolter",
+        "name": "Storm Bolter",
+        "stats": {
+          "range": "24\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["RAPID FIRE 2"]
+      },
+      {
+        "id": "combi_weapon",
+        "name": "Combi-weapon",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Boltgun",
+            "stats": {
+              "range": "24\"",
+              "A": "2",
+              "BS": "4+",
+              "S": 4,
+              "AP": 0,
+              "D": 1
+            },
+            "abilities": ["RAPID FIRE 2"]
+          },
+          {
+            "name": "Combi-attachment",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "4+",
+              "S": 9,
+              "AP": -2,
+              "D": "D3"
+            },
+            "abilities": ["ANTI-INFANTRY 4+", "DEVASTATING WOUNDS", "RAPID FIRE 1"]
+          }
+        ]
+      }
+    ],
+    "melee": [
+      {
+        "id": "close_combat_weapon",
+        "name": "Close Combat Weapon",
+        "stats": {
+          "range": "Melee",
+          "A": "2",
+          "WS": "3+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "chainsword",
+        "name": "Chainsword",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "3+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "power_weapon",
+        "name": "Power Weapon",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 4,
+          "AP": -2,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "boltgun",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Celestian" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Celestian" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Celestian" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Celestian Superior" }
+    },
+    {
+      "weapon_id": "chainsword",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Celestian Superior" }
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "celestian_superior_storm_bolter",
+      "description": "The Celestian Superior can replace her bolt pistol with a storm bolter.",
+      "type": "replace",
+      "replaces": ["bolt_pistol"],
+      "adds": ["storm_bolter"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["celestian_superior_combi_weapon"]
+    },
+    {
+      "id": "celestian_superior_combi_weapon",
+      "description": "The Celestian Superior can replace her bolt pistol with a combi-weapon.",
+      "type": "replace",
+      "replaces": ["bolt_pistol"],
+      "adds": ["combi_weapon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["celestian_superior_storm_bolter"]
+    },
+    {
+      "id": "celestian_superior_power_weapon",
+      "description": "The Celestian Superior can replace her chainsword with a power weapon.",
+      "type": "replace",
+      "replaces": ["chainsword"],
+      "adds": ["power_weapon"],
+      "points_cost": 5,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    },
+    {
+      "id": "celestian_special_plasma",
+      "description": "Any Celestian can replace her boltgun with a plasma gun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["plasma_gun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["celestian_special_melta", "celestian_special_flamer"]
+    },
+    {
+      "id": "celestian_special_melta",
+      "description": "Any Celestian can replace her boltgun with a meltagun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["meltagun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["celestian_special_plasma", "celestian_special_flamer"]
+    },
+    {
+      "id": "celestian_special_flamer",
+      "description": "Any Celestian can replace her boltgun with a flamer (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["flamer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 2, "one_per_n_models": 5 },
+      "mutually_exclusive_with": ["celestian_special_plasma", "celestian_special_melta"]
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Bodyguard",
+      "description": "While this unit contains 5 or more models, each time an attack targets a friendly CHARACTER within this unit, the attack is allocated to a Celestian model in the unit instead.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Veteran Warriors",
+      "description": "Each time a model in this unit makes an attack, re-roll a Hit roll of 1.",
+      "type": "unit",
+      "timing": "passive"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["INFANTRY", "CELESTIANS"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-valid",
+      "type": "unit_size",
+      "description": "Celestians must contain 5 or 10 models.",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [5, 10]
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 80
+    }
+  ]
+}
