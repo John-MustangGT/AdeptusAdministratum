@@ -1,0 +1,568 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-battle-sisters-squad",
+  "name": "Battle Sisters Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Troops",
+  "points": {
+    "base": 90,
+    "per_additional_model": 0,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 5,
+    "max": 10,
+    "step": 5
+  },
+  "profiles": [
+    {
+      "name": "Sister Superior",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 2,
+        "Ld": "6+",
+        "OC": 2
+      }
+    },
+    {
+      "name": "Battle Sister",
+      "count": "remainder",
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 1,
+        "Ld": "6+",
+        "OC": 2
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "boltgun",
+        "name": "Boltgun",
+        "stats": {
+          "range": "24\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["RAPID FIRE 2"]
+      },
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "plasma_gun",
+        "name": "Plasma Gun",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "3+",
+              "S": 7,
+              "AP": -2,
+              "D": 1
+            },
+            "abilities": ["RAPID FIRE 1"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "3+",
+              "S": 8,
+              "AP": -3,
+              "D": 2
+            },
+            "abilities": ["HAZARDOUS", "RAPID FIRE 1"]
+          }
+        ]
+      },
+      {
+        "id": "meltagun",
+        "name": "Meltagun",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 9,
+          "AP": -4,
+          "D": "D6"
+        },
+        "abilities": ["MELTA 2"]
+      },
+      {
+        "id": "flamer",
+        "name": "Flamer",
+        "stats": {
+          "range": "12\"",
+          "A": "D6",
+          "BS": "N/A",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["IGNORES COVER", "TORRENT"]
+      },
+      {
+        "id": "storm_bolter",
+        "name": "Storm Bolter",
+        "stats": {
+          "range": "24\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["RAPID FIRE 2"]
+      },
+      {
+        "id": "combi_weapon",
+        "name": "Combi-weapon",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Boltgun",
+            "stats": {
+              "range": "24\"",
+              "A": "2",
+              "BS": "4+",
+              "S": 4,
+              "AP": 0,
+              "D": 1
+            },
+            "abilities": ["RAPID FIRE 2"]
+          },
+          {
+            "name": "Combi-attachment",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "4+",
+              "S": 9,
+              "AP": -2,
+              "D": "D3"
+            },
+            "abilities": ["ANTI-INFANTRY 4+", "DEVASTATING WOUNDS", "RAPID FIRE 1"]
+          }
+        ]
+      },
+      {
+        "id": "condemnor_boltgun",
+        "name": "Condemnor Boltgun",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Boltgun",
+            "stats": {
+              "range": "24\"",
+              "A": "2",
+              "BS": "3+",
+              "S": 4,
+              "AP": 0,
+              "D": 1
+            },
+            "abilities": ["RAPID FIRE 2"]
+          },
+          {
+            "name": "Stake Crossbow",
+            "stats": {
+              "range": "24\"",
+              "A": "1",
+              "BS": "3+",
+              "S": 4,
+              "AP": 0,
+              "D": 1
+            },
+            "abilities": ["ANTI-PSYKER 2+", "DEVASTATING WOUNDS"]
+          }
+        ]
+      }
+    ],
+    "melee": [
+      {
+        "id": "close_combat_weapon",
+        "name": "Close Combat Weapon",
+        "stats": {
+          "range": "Melee",
+          "A": "2",
+          "WS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "chainsword",
+        "name": "Chainsword",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "3+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "power_weapon",
+        "name": "Power Weapon",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 4,
+          "AP": -2,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "brazier_of_holy_fire",
+        "name": "Brazier of Holy Fire",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 4,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["ANTI-DAEMON 4+"]
+      },
+      {
+        "id": "simulacrum_combat",
+        "name": "Simulacrum Imperialis (melee)",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "boltgun",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Battle Sister" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Battle Sister" }
+    },
+    {
+      "weapon_id": "close_combat_weapon",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Battle Sister" }
+    },
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Sister Superior" }
+    },
+    {
+      "weapon_id": "chainsword",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Sister Superior" }
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "sister_superior_boltgun",
+      "description": "The Sister Superior can replace her chainsword with a boltgun.",
+      "type": "replace",
+      "replaces": ["chainsword"],
+      "adds": ["boltgun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 1
+      },
+      "mutually_exclusive_with": [
+        "sister_superior_storm_bolter",
+        "sister_superior_combi_weapon",
+        "sister_superior_condemnor",
+        "sister_superior_power_weapon",
+        "sister_superior_brazier"
+      ]
+    },
+    {
+      "id": "sister_superior_storm_bolter",
+      "description": "The Sister Superior can replace her chainsword with a storm bolter.",
+      "type": "replace",
+      "replaces": ["chainsword"],
+      "adds": ["storm_bolter"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 1
+      },
+      "mutually_exclusive_with": [
+        "sister_superior_boltgun",
+        "sister_superior_combi_weapon",
+        "sister_superior_condemnor",
+        "sister_superior_power_weapon",
+        "sister_superior_brazier"
+      ]
+    },
+    {
+      "id": "sister_superior_combi_weapon",
+      "description": "The Sister Superior can replace her chainsword with a combi-weapon.",
+      "type": "replace",
+      "replaces": ["chainsword"],
+      "adds": ["combi_weapon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 1
+      },
+      "mutually_exclusive_with": [
+        "sister_superior_boltgun",
+        "sister_superior_storm_bolter",
+        "sister_superior_condemnor",
+        "sister_superior_power_weapon",
+        "sister_superior_brazier"
+      ]
+    },
+    {
+      "id": "sister_superior_condemnor",
+      "description": "The Sister Superior can replace her bolt pistol and chainsword with a condemnor boltgun.",
+      "type": "replace",
+      "replaces": ["bolt_pistol", "chainsword"],
+      "adds": ["condemnor_boltgun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 1
+      },
+      "mutually_exclusive_with": [
+        "sister_superior_boltgun",
+        "sister_superior_storm_bolter",
+        "sister_superior_combi_weapon",
+        "sister_superior_power_weapon",
+        "sister_superior_brazier"
+      ]
+    },
+    {
+      "id": "sister_superior_power_weapon",
+      "description": "The Sister Superior can replace her chainsword with a power weapon.",
+      "type": "replace",
+      "replaces": ["chainsword"],
+      "adds": ["power_weapon"],
+      "points_cost": 5,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 1
+      },
+      "mutually_exclusive_with": [
+        "sister_superior_boltgun",
+        "sister_superior_storm_bolter",
+        "sister_superior_combi_weapon",
+        "sister_superior_condemnor",
+        "sister_superior_brazier"
+      ]
+    },
+    {
+      "id": "sister_superior_brazier",
+      "description": "The Sister Superior can replace her chainsword with a brazier of holy fire.",
+      "type": "replace",
+      "replaces": ["chainsword"],
+      "adds": ["brazier_of_holy_fire"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 1
+      },
+      "mutually_exclusive_with": [
+        "sister_superior_boltgun",
+        "sister_superior_storm_bolter",
+        "sister_superior_combi_weapon",
+        "sister_superior_condemnor",
+        "sister_superior_power_weapon"
+      ]
+    },
+    {
+      "id": "special_weapon_plasma",
+      "description": "Any Battle Sister can replace her boltgun with a plasma gun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["plasma_gun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 2,
+        "one_per_n_models": 5
+      },
+      "mutually_exclusive_with": [
+        "special_weapon_melta",
+        "special_weapon_flamer"
+      ]
+    },
+    {
+      "id": "special_weapon_melta",
+      "description": "Any Battle Sister can replace her boltgun with a meltagun (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["meltagun"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 2,
+        "one_per_n_models": 5
+      },
+      "mutually_exclusive_with": [
+        "special_weapon_plasma",
+        "special_weapon_flamer"
+      ]
+    },
+    {
+      "id": "special_weapon_flamer",
+      "description": "Any Battle Sister can replace her boltgun with a flamer (1 per 5 models).",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["flamer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 2,
+        "one_per_n_models": 5
+      },
+      "mutually_exclusive_with": [
+        "special_weapon_plasma",
+        "special_weapon_melta"
+      ]
+    },
+    {
+      "id": "simulacrum_imperialis",
+      "description": "One Battle Sister (not the Sister Superior) can carry a Simulacrum Imperialis.",
+      "type": "add",
+      "adds": ["simulacrum_combat"],
+      "points_cost": 5,
+      "cost_per": "selection",
+      "limits": {
+        "max_per_unit": 1
+      },
+      "is_unique": false,
+      "grants_keyword": "SIMULACRUM"
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Simulacrum Imperialis",
+      "description": "While this unit contains a model with the SIMULACRUM keyword, each time you use an Act of Faith on this unit, gain D6 Miracle dice instead of D3.",
+      "type": "wargear",
+      "timing": "passive",
+      "condition": {
+        "type": "has_keyword",
+        "keyword": "SIMULACRUM"
+      }
+    }
+  ],
+  "keywords": {
+    "faction": [
+      "IMPERIUM",
+      "ADEPTA SORORITAS",
+      "ADEPTUS MINISTORUM"
+    ],
+    "unit": [
+      "INFANTRY",
+      "BATTLELINE",
+      "BATTLE SISTERS SQUAD"
+    ],
+    "transport_keywords": ["INFANTRY"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-valid",
+      "type": "unit_size",
+      "description": "Battle Sisters Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [5, 10]
+      }
+    },
+    {
+      "id": "special-weapons-per-five",
+      "type": "model_count_per_wargear",
+      "description": "Only 1 special weapon (plasma gun, meltagun, or flamer) is allowed per 5 models in the unit.",
+      "severity": "error",
+      "params": {
+        "option_ids": ["special_weapon_plasma", "special_weapon_melta", "special_weapon_flamer"],
+        "count_method": "sum_selections",
+        "limit_formula": "floor(unit_size / 5)"
+      }
+    },
+    {
+      "id": "simulacrum-one-per-unit",
+      "type": "wargear_limit",
+      "description": "Only one Battle Sister may carry the Simulacrum Imperialis per unit.",
+      "severity": "error",
+      "params": {
+        "option_id": "simulacrum_imperialis",
+        "max": 1
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 72
+    }
+  ],
+  "notes": "When a Battle Sisters Squad is led by a CHARACTER, the leader's profile is also added to the unit. The unit's OC is calculated per model."
+}

@@ -1,0 +1,116 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-dialogus",
+  "name": "Dialogus",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "HQ",
+  "points": {
+    "base": 35,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Dialogus",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "4+",
+        "W": 3,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "dialogus_staff",
+        "name": "Dialogus Staff",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "bolt_pistol", "quantity": 1 },
+    { "weapon_id": "dialogus_staff", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Amplifying Cry",
+      "description": "While this model is leading a unit, when an Act of Faith is used on that unit, you can re-roll the dice to determine how many Miracle dice are gained.",
+      "type": "leader",
+      "timing": "passive"
+    }
+  ],
+  "leader": {
+    "can_lead": [
+      "40k-battle-sisters-squad",
+      "40k-as-celestians",
+      "40k-as-dominion-squad",
+      "40k-as-retributor-squad"
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["CHARACTER", "INFANTRY", "DIALOGUS"]
+  },
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 75
+    }
+  ]
+}

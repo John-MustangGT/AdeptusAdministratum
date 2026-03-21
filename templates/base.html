@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}AdRostra{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/htmx.min.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a class="brand" href="/">⚙ AdRostra</a>
+      <ul>
+        <li><a href="/datasheets">Datasheets</a></li>
+        <li><a href="/roster">My Roster</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>Self-hosted army list builder &mdash; <a href="/roster/export.json">Export Roster JSON</a></p>
+  </footer>
+
+  <script>
+    // Preserve open/closed state of id'd <details> elements across every HTMX swap.
+    // Works for both the role-group browser panels and the per-unit wargear panel.
+    (function () {
+      var saved = {};
+      document.body.addEventListener('htmx:beforeSwap', function () {
+        saved = {};
+        document.querySelectorAll('details[id]').forEach(function (d) {
+          saved[d.id] = d.open;
+        });
+      });
+      document.body.addEventListener('htmx:afterSettle', function () {
+        document.querySelectorAll('details[id]').forEach(function (d) {
+          if (saved[d.id]) d.setAttribute('open', '');
+        });
+        initWargearQtyInputs();
+      });
+    })();
+
+    // ── Weapon qty inputs ──────────────────────────────────────────────────
+    // Qty spinners are display-only inputs (no `name`).  Their values are
+    // mirrored to hidden `name="options"` inputs so the configure form sends
+    // the correct repeated values to the server.
+
+    function syncWargearQty(input) {
+      var optId = input.dataset.optionId;
+      var qty   = Math.max(0, parseInt(input.value, 10) || 0);
+      var form  = input.closest('form.unit-configure-form');
+      if (!form) return;
+      // Remove stale hidden inputs for this option.
+      form.querySelectorAll('input[type="hidden"][name="options"][data-qty-opt="' + optId + '"]')
+          .forEach(function (el) { el.remove(); });
+      // Re-add qty copies.
+      for (var i = 0; i < qty; i++) {
+        var h       = document.createElement('input');
+        h.type      = 'hidden';
+        h.name      = 'options';
+        h.value     = optId;
+        h.dataset.qtyOpt = optId;
+        form.appendChild(h);
+      }
+    }
+
+    function refreshBaseWeaponDisplays(form) {
+      form.querySelectorAll('.weapon-group-row').forEach(function (row) {
+        var base = row.querySelector('[data-base-max]');
+        if (!base) return;
+        var baseMax    = parseInt(base.dataset.baseMax, 10) || 0;
+        var totalSwaps = 0;
+        row.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+          totalSwaps += Math.max(0, parseInt(inp.value, 10) || 0);
+        });
+        base.textContent = Math.max(0, baseMax - totalSwaps);
+      });
+    }
+
+    function refreshQtyMutualExclusion(form) {
+      var activeIds = new Set();
+      form.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+        if ((parseInt(inp.value, 10) || 0) > 0) activeIds.add(inp.dataset.optionId);
+      });
+      form.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+        var excl    = inp.dataset.excl ? inp.dataset.excl.split(',').filter(Boolean) : [];
+        var blocked = excl.some(function (id) { return activeIds.has(id); });
+        if (blocked && !activeIds.has(inp.dataset.optionId)) {
+          inp.disabled = true;
+          if ((parseInt(inp.value, 10) || 0) !== 0) {
+            inp.value = '0';
+            syncWargearQty(inp);
+          }
+        } else {
+          inp.disabled = false;
+        }
+      });
+    }
+
+    function initWargearQtyInputs() {
+      document.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+        syncWargearQty(inp);
+      });
+      document.querySelectorAll('form.unit-configure-form').forEach(function (form) {
+        refreshQtyMutualExclusion(form);
+        refreshBaseWeaponDisplays(form);
+      });
+    }
+
+    // Run once on initial page load.
+    initWargearQtyInputs();
+
+    // Live update: fires on every keystroke for immediate base-count feedback.
+    document.body.addEventListener('input', function (evt) {
+      if (!evt.target.classList.contains('weapon-qty-input')) return;
+      var form = evt.target.closest('form.unit-configure-form');
+      if (!form) return;
+      refreshBaseWeaponDisplays(form);
+    });
+
+    // Commit update: fires when value is committed (blur / Enter / spinner click).
+    document.body.addEventListener('change', function (evt) {
+      if (!evt.target.classList.contains('weapon-qty-input')) return;
+      var form = evt.target.closest('form.unit-configure-form');
+      if (!form) return;
+      syncWargearQty(evt.target);
+      refreshQtyMutualExclusion(form);
+      refreshBaseWeaponDisplays(form);
+      // The form's own hx-trigger="change delay:200ms" will also fire here,
+      // submitting the configure request with the updated hidden inputs.
+    });
+
+    // Live mutual-exclusion for wargear checkboxes.
+    // Disables conflicting options the instant the user checks something,
+    // without waiting for the configure form's 200ms debounce to fire.
+    function refreshMutualExclusion(form) {
+      var checkedIds = new Set();
+      form.querySelectorAll('input[type=checkbox][name=options]:checked').forEach(function (c) {
+        checkedIds.add(c.value);
+      });
+      form.querySelectorAll('input[type=checkbox][name=options]').forEach(function (c) {
+        if (c.checked) return; // never disable a currently-checked box
+        var excl = c.dataset.excl ? c.dataset.excl.split(',').filter(Boolean) : [];
+        var blocked = excl.some(function (id) { return checkedIds.has(id); });
+        c.disabled = blocked;
+        var lbl = c.closest('label');
+        if (lbl) lbl.classList.toggle('disabled', blocked);
+      });
+    }
+    document.body.addEventListener('change', function (evt) {
+      var cb = evt.target;
+      if (cb.type !== 'checkbox' || cb.name !== 'options') return;
+      var form = cb.closest('form.unit-configure-form');
+      if (!form) return;
+      refreshMutualExclusion(form);
+    });
+
+    // Inject current DOM configure state into every roster mutation request
+    // (Add / Remove / Move).  This prevents stale session data from resetting
+    // wargear selections when a mutation fires before configure has saved.
+    document.body.addEventListener('htmx:configRequest', function (evt) {
+      if (!evt.detail.elt.classList.contains('roster-mutation-form')) return;
+      var states = [];
+      document.querySelectorAll('form.unit-configure-form').forEach(function (form) {
+        var entryId = form.dataset.entryId;
+        if (!entryId) return;
+        var fd = new FormData(form);
+        var mc = parseInt(fd.get('model_count') || '1', 10);
+        if (isNaN(mc) || mc < 1) mc = 1;
+        states.push({
+          entry_id:      entryId,
+          model_count:   mc,
+          chosen_options: fd.getAll('options'),
+          custom_name:   fd.get('custom_name') || ''
+        });
+      });
+      if (states.length > 0) {
+        evt.detail.parameters['current_configure'] = JSON.stringify(states);
+      }
+    });
+  </script>
+</body>
+</html>

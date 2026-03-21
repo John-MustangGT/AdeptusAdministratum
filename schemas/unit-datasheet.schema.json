@@ -1,0 +1,661 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://adeptus-administratum/schemas/unit-datasheet.schema.json",
+  "title": "UnitDatasheet",
+  "description": "A declarative unit datasheet schema supporting multiple tabletop wargaming systems.",
+  "type": "object",
+  "required": ["id", "name", "game_system", "faction", "battlefield_role", "points", "unit_size", "profiles", "keywords"],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "id": {
+      "type": "string",
+      "description": "Globally unique identifier for this datasheet. Recommend kebab-case + game prefix, e.g. '40k-battle-sisters-squad'.",
+      "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+    },
+
+    "name": {
+      "type": "string",
+      "description": "Display name of the unit.",
+      "minLength": 1
+    },
+
+    "game_system": {
+      "type": "string",
+      "description": "Game system this datasheet belongs to.",
+      "examples": ["warhammer-40k-10e", "one-page-rules", "age-of-sigmar-4e", "custom"]
+    },
+
+    "version": {
+      "type": "string",
+      "description": "Datasheet version/publication. Useful for tracking errata.",
+      "examples": ["1.0", "2024-q3-errata"]
+    },
+
+    "faction": {
+      "type": "object",
+      "description": "Faction and sub-faction membership.",
+      "required": ["primary"],
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": "string",
+          "description": "Top-level faction (e.g. 'Adepta Sororitas', 'Space Marines')."
+        },
+        "sub_factions": {
+          "type": "array",
+          "description": "Orders, chapters, dynasties, etc.",
+          "items": { "type": "string" }
+        },
+        "allies": {
+          "type": "array",
+          "description": "Factions this unit can ally with under standard rules.",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "battlefield_role": {
+      "type": "string",
+      "description": "Force organization slot / battlefield role.",
+      "examples": ["Troops", "Elite", "Fast Attack", "Heavy Support", "HQ", "Lord of War", "Dedicated Transport", "Flyer"]
+    },
+
+    "points": {
+      "type": "object",
+      "description": "Points costs for the unit.",
+      "required": ["base"],
+      "additionalProperties": false,
+      "properties": {
+        "base": {
+          "type": "integer",
+          "description": "Base cost for the minimum-size unit with default loadout.",
+          "minimum": 0
+        },
+        "per_additional_model": {
+          "type": "integer",
+          "description": "Additional points per model beyond the minimum unit size.",
+          "minimum": 0
+        },
+        "free_wargear_included": {
+          "type": "boolean",
+          "description": "If true, base wargear costs are already included in the base points.",
+          "default": true
+        }
+      }
+    },
+
+    "unit_size": {
+      "type": "object",
+      "description": "Legal model counts for this unit.",
+      "required": ["min", "max"],
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "type": "integer",
+          "description": "Minimum number of models.",
+          "minimum": 1
+        },
+        "max": {
+          "type": "integer",
+          "description": "Maximum number of models.",
+          "minimum": 1
+        },
+        "step": {
+          "type": "integer",
+          "description": "Models must be added in multiples of this value beyond min. Defaults to 1.",
+          "minimum": 1,
+          "default": 1
+        },
+        "fixed_sizes": {
+          "type": "array",
+          "description": "If present, only these exact model counts are legal (overrides min/max/step).",
+          "items": { "type": "integer", "minimum": 1 },
+          "minItems": 1
+        }
+      }
+    },
+
+    "profiles": {
+      "type": "array",
+      "description": "One or more stat profiles (some units have multiple model types with different stats).",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "stats"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Profile name. For single-profile units use the unit name. For mixed units use the model type name."
+          },
+          "count": {
+            "description": "Number of models using this profile. Integer, or 'remainder' to mean all models not covered by other profiles.",
+            "oneOf": [
+              { "type": "integer", "minimum": 1 },
+              { "type": "string", "enum": ["remainder"] }
+            ]
+          },
+          "stats": {
+            "type": "object",
+            "description": "Free-form stat block. Keys are stat names, values are the stat value. Use string for values like '3+', '2+/4++'.",
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "integer" },
+                { "type": "number" }
+              ]
+            },
+            "examples": [
+              {
+                "M": "6\"",
+                "T": 3,
+                "Sv": "3+",
+                "W": 1,
+                "Ld": "6+",
+                "OC": 2
+              }
+            ]
+          },
+          "stat_schema": {
+            "type": "string",
+            "description": "Optional reference to a game-system stat schema for validation.",
+            "examples": ["warhammer-40k-10e-infantry", "one-page-rules-standard"]
+          }
+        }
+      }
+    },
+
+    "weapons": {
+      "type": "object",
+      "description": "All weapons available to this unit, grouped by type.",
+      "additionalProperties": false,
+      "properties": {
+        "ranged": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/weapon" }
+        },
+        "melee": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/weapon" }
+        }
+      }
+    },
+
+    "default_loadout": {
+      "type": "array",
+      "description": "Weapons and wargear every model in the minimum unit comes equipped with by default.",
+      "items": { "$ref": "#/$defs/loadout_entry" }
+    },
+
+    "wargear_options": {
+      "type": "array",
+      "description": "Upgrade options available during list building.",
+      "items": { "$ref": "#/$defs/wargear_option" }
+    },
+
+    "abilities": {
+      "type": "array",
+      "description": "Special rules and abilities the unit possesses.",
+      "items": { "$ref": "#/$defs/ability" }
+    },
+
+    "keywords": {
+      "type": "object",
+      "description": "Keyword categories for rule targeting.",
+      "required": ["unit"],
+      "additionalProperties": false,
+      "properties": {
+        "faction": {
+          "type": "array",
+          "description": "Faction keywords (e.g. ['IMPERIUM', 'ADEPTA SORORITAS']).",
+          "items": { "type": "string" }
+        },
+        "unit": {
+          "type": "array",
+          "description": "Unit-type keywords (e.g. ['INFANTRY', 'BATTLE SISTERS SQUAD']).",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "transport_keywords": {
+          "type": "array",
+          "description": "Keywords relevant for transport capacity rules (e.g. ['INFANTRY']).",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "leader": {
+      "type": "object",
+      "description": "Leader mechanic: which units this model can lead and any bodyguard restrictions.",
+      "additionalProperties": false,
+      "properties": {
+        "can_lead": {
+          "type": "array",
+          "description": "Unit keyword identifiers this leader can attach to.",
+          "items": { "type": "string" }
+        },
+        "leader_abilities": {
+          "type": "array",
+          "description": "Abilities that only apply when this model is leading a unit.",
+          "items": { "$ref": "#/$defs/ability" }
+        },
+        "bodyguard_for": {
+          "type": "array",
+          "description": "Leader keyword IDs that this unit acts as a dedicated bodyguard for.",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "transport": {
+      "type": "object",
+      "description": "Transport capacity and boarding restrictions.",
+      "additionalProperties": false,
+      "properties": {
+        "capacity": {
+          "type": "integer",
+          "description": "Maximum number of models that can embark.",
+          "minimum": 1
+        },
+        "restrictions": {
+          "type": "array",
+          "description": "Keyword restrictions on who can embark.",
+          "items": {
+            "type": "object",
+            "required": ["rule"],
+            "additionalProperties": false,
+            "properties": {
+              "rule": {
+                "type": "string",
+                "enum": ["must_have_keyword", "must_not_have_keyword", "counts_as", "max_models_with_keyword"]
+              },
+              "keyword": { "type": "string" },
+              "count_multiplier": {
+                "type": "integer",
+                "description": "For 'counts_as': how many capacity slots a model with this keyword uses.",
+                "minimum": 1
+              },
+              "limit": {
+                "type": "integer",
+                "description": "For 'max_models_with_keyword': the maximum allowed.",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "constraints": {
+      "type": "array",
+      "description": "Declarative validation rules checked during list building.",
+      "items": { "$ref": "#/$defs/constraint" }
+    },
+
+    "detachment_rules": {
+      "type": "array",
+      "description": "Abilities or modifiers that only activate within specific detachments.",
+      "items": {
+        "type": "object",
+        "required": ["detachment", "abilities"],
+        "additionalProperties": false,
+        "properties": {
+          "detachment": {
+            "type": "string",
+            "description": "Detachment name or ID."
+          },
+          "abilities": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/ability" }
+          }
+        }
+      }
+    },
+
+    "notes": {
+      "type": "string",
+      "description": "Free-text notes, errata clarifications, or lore snippets."
+    },
+
+    "sources": {
+      "type": "array",
+      "description": "Publication sources for this datasheet.",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "page": { "type": "integer" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    }
+  },
+
+  "$defs": {
+
+    "weapon": {
+      "type": "object",
+      "required": ["id", "name", "stats"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique weapon ID within this datasheet.",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "name": { "type": "string" },
+        "stats": {
+          "type": "object",
+          "description": "Game-system stat block for this weapon. Keys vary by system.",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "integer" },
+              { "type": "number" }
+            ]
+          },
+          "examples": [
+            { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": -1, "D": 1 }
+          ]
+        },
+        "abilities": {
+          "type": "array",
+          "description": "Weapon special rules / keywords (e.g. ['RAPID FIRE 1', 'PISTOL']).",
+          "items": { "type": "string" }
+        },
+        "quantity_per_model": {
+          "type": "integer",
+          "description": "How many of this weapon each model carrying it has.",
+          "minimum": 1,
+          "default": 1
+        },
+        "profiles": {
+          "type": "array",
+          "description": "For weapons with multiple modes (e.g. heavy/assault modes), list sub-profiles here.",
+          "items": {
+            "type": "object",
+            "required": ["name", "stats"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "stats": {
+                "type": "object",
+                "additionalProperties": {
+                  "oneOf": [
+                    { "type": "string" },
+                    { "type": "integer" },
+                    { "type": "number" }
+                  ]
+                }
+              },
+              "abilities": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "loadout_entry": {
+      "type": "object",
+      "required": ["weapon_id", "quantity"],
+      "additionalProperties": false,
+      "properties": {
+        "weapon_id": {
+          "type": "string",
+          "description": "References a weapon id defined in the weapons block."
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Number of this weapon per model.",
+          "minimum": 1
+        },
+        "applies_to": {
+          "type": "object",
+          "description": "Which models in the unit carry this weapon. Omit to mean all models.",
+          "additionalProperties": false,
+          "properties": {
+            "model_count": {
+              "type": "integer",
+              "description": "Only the first N models carry this weapon."
+            },
+            "profile_name": {
+              "type": "string",
+              "description": "Only models using this stat profile carry this weapon."
+            }
+          }
+        }
+      }
+    },
+
+    "wargear_option": {
+      "type": "object",
+      "required": ["id", "description", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique option ID within this datasheet.",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the option (e.g. 'Replace boltgun with plasma gun')."
+        },
+        "type": {
+          "type": "string",
+          "description": "Category of option.",
+          "enum": ["replace", "add", "remove", "upgrade"]
+        },
+        "replaces": {
+          "type": "array",
+          "description": "Weapon IDs being removed when this option is taken.",
+          "items": { "type": "string" }
+        },
+        "adds": {
+          "type": "array",
+          "description": "Weapon IDs being granted when this option is taken.",
+          "items": { "type": "string" }
+        },
+        "points_cost": {
+          "type": "integer",
+          "description": "Additional points cost per model or per selection (see cost_per).",
+          "default": 0
+        },
+        "cost_per": {
+          "type": "string",
+          "description": "Whether points_cost applies per-model or per-selection.",
+          "enum": ["model", "selection"],
+          "default": "selection"
+        },
+        "limits": {
+          "type": "object",
+          "description": "Constraints on how many times this option can be taken.",
+          "additionalProperties": false,
+          "properties": {
+            "max_per_unit": {
+              "type": "integer",
+              "description": "Maximum number of times this option can be selected in one unit.",
+              "minimum": 1
+            },
+            "max_per_army": {
+              "type": "integer",
+              "description": "Maximum number of times this option can appear across the whole army.",
+              "minimum": 1
+            },
+            "one_per_n_models": {
+              "type": "integer",
+              "description": "One selection allowed per N models in the unit (rounded down).",
+              "minimum": 1
+            },
+            "requires_min_unit_size": {
+              "type": "integer",
+              "description": "Unit must have at least this many models for this option to be available.",
+              "minimum": 1
+            }
+          }
+        },
+        "mutually_exclusive_with": {
+          "type": "array",
+          "description": "Option IDs that cannot be taken alongside this option in the same unit.",
+          "items": { "type": "string" }
+        },
+        "requires": {
+          "type": "object",
+          "description": "Prerequisites that must be met for this option to be available.",
+          "additionalProperties": false,
+          "properties": {
+            "option_ids": {
+              "type": "array",
+              "description": "Other option IDs that must already be selected.",
+              "items": { "type": "string" }
+            },
+            "keywords": {
+              "type": "array",
+              "description": "Unit keywords that must be present.",
+              "items": { "type": "string" }
+            },
+            "min_unit_size": {
+              "type": "integer",
+              "description": "Minimum model count required.",
+              "minimum": 1
+            }
+          }
+        },
+        "is_unique": {
+          "type": "boolean",
+          "description": "If true, only one instance of this wargear item may exist in the entire army.",
+          "default": false
+        },
+        "grants_keyword": {
+          "type": "string",
+          "description": "Optional keyword added to the unit when this option is taken."
+        }
+      }
+    },
+
+    "ability": {
+      "type": "object",
+      "required": ["name", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "type": {
+          "type": "string",
+          "description": "Ability category for filtering/display.",
+          "enum": ["core", "faction", "unit", "aura", "leader", "psychic", "prayer", "stratagem", "detachment", "wargear"]
+        },
+        "timing": {
+          "type": "string",
+          "description": "When this ability is used.",
+          "examples": ["passive", "command phase", "shooting phase", "fight phase", "any phase"]
+        },
+        "range": {
+          "type": "string",
+          "description": "For aura abilities, the range (e.g. '6\"')."
+        },
+        "affects": {
+          "type": "array",
+          "description": "Keywords identifying which units are affected by this ability.",
+          "items": { "type": "string" }
+        },
+        "condition": {
+          "$ref": "#/$defs/condition",
+          "description": "Optional condition under which this ability is active."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Arbitrary tags for filtering/searching.",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "constraint": {
+      "type": "object",
+      "required": ["id", "type", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique constraint identifier.",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable error message shown when this constraint is violated."
+        },
+        "type": {
+          "type": "string",
+          "description": "Constraint category driving validation logic.",
+          "enum": [
+            "unit_size",
+            "wargear_limit",
+            "army_unique",
+            "conditional",
+            "requires_keyword",
+            "excludes_keyword",
+            "model_count_per_wargear",
+            "max_duplicates_in_army",
+            "force_org_slot"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "description": "Whether violating this is an error or just a warning.",
+          "enum": ["error", "warning"],
+          "default": "error"
+        },
+        "params": {
+          "type": "object",
+          "description": "Constraint-type-specific parameters.",
+          "additionalProperties": true
+        },
+        "condition": {
+          "$ref": "#/$defs/condition",
+          "description": "If present, this constraint only applies when the condition is true."
+        }
+      }
+    },
+
+    "condition": {
+      "type": "object",
+      "description": "A declarative condition used in constraints and abilities.",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "has_keyword",
+            "has_wargear_option",
+            "unit_size_gte",
+            "unit_size_lte",
+            "has_ability",
+            "army_includes_unit",
+            "all_of",
+            "any_of",
+            "none_of"
+          ]
+        },
+        "keyword": { "type": "string" },
+        "option_id": { "type": "string" },
+        "unit_id": { "type": "string" },
+        "ability_name": { "type": "string" },
+        "value": { "type": "integer" },
+        "conditions": {
+          "type": "array",
+          "description": "Sub-conditions for all_of / any_of / none_of.",
+          "items": { "$ref": "#/$defs/condition" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-hellblaster-squad",
+  "name": "Hellblaster Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Heavy Support",
+  "points": { "base": 150, "per_additional_model": 25, "free_wargear_included": true },
+  "unit_size": { "min": 5, "max": 10, "step": 5 },
+  "profiles": [
+    {
+      "name": "Hellblaster Sergeant",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 3, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Hellblaster",
+      "count": "remainder",
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 2, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "plasma_incinerator",
+        "name": "Plasma Incinerator",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 7, "AP": -2, "D": 2 },
+            "abilities": ["RAPID FIRE 2"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 8, "AP": -3, "D": 3 },
+            "abilities": ["HAZARDOUS", "RAPID FIRE 2"]
+          }
+        ]
+      }
+    ],
+    "melee": [
+      {
+        "id": "astartes_chainsword",
+        "name": "Astartes Chainsword",
+        "stats": { "range": "Melee", "A": "5", "WS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_sword",
+        "name": "Power Sword",
+        "stats": { "range": "Melee", "A": "4", "WS": "3+", "S": 5, "AP": -2, "D": 1 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "plasma_incinerator", "quantity": 1 },
+    { "weapon_id": "astartes_chainsword", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "sergeant_power_sword",
+      "description": "The Sergeant can replace their astartes chainsword with a power sword.",
+      "type": "replace",
+      "replaces": ["astartes_chainsword"],
+      "adds": ["power_sword"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Hellblaster Fury",
+      "description": "Each time a model in this unit makes a ranged attack with a plasma incinerator (supercharge), an unmodified hit roll of 6 scores a Critical Hit.",
+      "type": "unit",
+      "timing": "shooting phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["INFANTRY", "PRIMARIS", "HELLBLASTER SQUAD"],
+    "transport_keywords": ["INFANTRY"]
+  },
+  "constraints": [
+    {
+      "id": "hellblaster-unit-size",
+      "type": "unit_size",
+      "description": "Hellblaster Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [5, 10] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (150 pts per 5 models). Hellblaster Fury ability wording — verify against current index card. CHAPTER keyword replaced with army's specific chapter."
+}

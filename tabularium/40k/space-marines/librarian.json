@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-librarian",
+  "name": "Librarian",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "HQ",
+  "points": { "base": 75, "free_wargear_included": true },
+  "unit_size": { "min": 1, "max": 1, "step": 1 },
+  "profiles": [
+    {
+      "name": "Librarian",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 4, "Ld": "6+", "OC": 1 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "2+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "smite",
+        "name": "Smite",
+        "stats": { "range": "18\"", "A": "D3", "BS": "auto", "S": 5, "AP": -1, "D": "D3" },
+        "abilities": ["PSYCHIC", "DEVASTATING WOUNDS"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "force_weapon",
+        "name": "Force Weapon",
+        "stats": { "range": "Melee", "A": "5", "WS": "2+", "S": 6, "AP": -1, "D": "D3" },
+        "abilities": ["PSYCHIC"]
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "bolt_pistol", "quantity": 1 },
+    { "weapon_id": "force_weapon", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Psychic Hood",
+      "description": "Each time an enemy PSYKER within 12\" of this model attempts to use a Psychic power, roll one D6: on a 4+, that power is denied and has no effect.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Psyker",
+      "description": "This model can use the Smite psychic attack (listed as a ranged weapon) during your Shooting phase. This weapon always hits automatically.",
+      "type": "unit",
+      "timing": "shooting phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["CHARACTER", "INFANTRY", "PSYKER", "LIBRARIAN"]
+  },
+  "leader": {
+    "can_lead": [
+      "40k-sm-intercessor-squad",
+      "40k-sm-tactical-squad",
+      "40k-sm-assault-intercessor-squad",
+      "40k-sm-sternguard-veteran-squad",
+      "40k-sm-hellblaster-squad"
+    ],
+    "leader_abilities": [
+      {
+        "name": "Mind Fortress",
+        "description": "While this model is leading a unit, models in that unit have the Feel No Pain 5+ ability against Psychic attacks.",
+        "type": "leader",
+        "timing": "passive"
+      }
+    ]
+  },
+  "constraints": [
+    {
+      "id": "librarian-unit-size",
+      "type": "unit_size",
+      "description": "The Librarian is a single model.",
+      "severity": "error",
+      "params": { "allowed_sizes": [1] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual. Smite always hits automatically (BS auto). The CHAPTER keyword is replaced with the army's specific chapter."
+}

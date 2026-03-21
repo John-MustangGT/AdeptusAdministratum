@@ -1,0 +1,158 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-junith-eruita",
+  "name": "Junith Eruita",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "HQ",
+  "points": {
+    "base": 175,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Junith Eruita",
+      "count": 1,
+      "stats": {
+        "M": "12\"",
+        "T": 7,
+        "Sv": "3+",
+        "W": 8,
+        "Ld": "6+",
+        "OC": 3
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "rod_of_office_ranged",
+        "name": "Rod of Office (shooting)",
+        "stats": {
+          "range": "12\"",
+          "A": "2D6",
+          "BS": "N/A",
+          "S": 5,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["IGNORES COVER", "TORRENT"]
+      },
+      {
+        "id": "twin_inferno_pistols",
+        "name": "Twin Inferno Pistols",
+        "stats": {
+          "range": "6\"",
+          "A": "2",
+          "BS": "3+",
+          "S": 8,
+          "AP": -4,
+          "D": "D3"
+        },
+        "abilities": ["MELTA 2", "PISTOL", "TWIN-LINKED"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "rod_of_office_melee",
+        "name": "Rod of Office (melee)",
+        "stats": {
+          "range": "Melee",
+          "A": "5",
+          "WS": "2+",
+          "S": 6,
+          "AP": -2,
+          "D": 2
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "rod_of_office_ranged", "quantity": 1 },
+    { "weapon_id": "twin_inferno_pistols", "quantity": 1 },
+    { "weapon_id": "rod_of_office_melee", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Invulnerable Save",
+      "description": "This model has a 4+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "FLY",
+      "description": "This model can move over models and terrain features as if they were not there when making a Normal Move, Advance, or charge move.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Vessel of the Emperor's Grace",
+      "description": "At the start of your Command phase, if Junith Eruita is on the battlefield, gain D3 Miracle dice.",
+      "type": "unit",
+      "timing": "command phase"
+    },
+    {
+      "name": "Beacon of Faith",
+      "description": "While this model is leading a unit, each time an Act of Faith is used on a unit within 6\" of this model, you can add 1 to the dice result.",
+      "type": "leader",
+      "timing": "passive"
+    },
+    {
+      "name": "Pulpit of Saint Holline's Basilica",
+      "description": "Friendly ADEPTA SORORITAS INFANTRY units within 6\" of this model do not need to take Battleshock tests.",
+      "type": "aura",
+      "timing": "passive",
+      "range": "6\""
+    }
+  ],
+  "leader": {
+    "can_lead": [
+      "40k-battle-sisters-squad",
+      "40k-as-celestians",
+      "40k-as-dominion-squad",
+      "40k-as-retributor-squad"
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["CHARACTER", "EPIC HERO", "VEHICLE", "FLY", "WALKER", "JUNITH ERUITA"]
+  },
+  "constraints": [
+    {
+      "id": "epic-hero-unique",
+      "type": "army_unique",
+      "description": "Junith Eruita is an Epic Hero and cannot be included more than once in your army.",
+      "severity": "error"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 66
+    }
+  ],
+  "notes": "Junith Eruita rides the Pulpit of Saint Holline's Basilica, a hovering devotional platform, giving her the VEHICLE keyword despite being infantry-scale."
+}

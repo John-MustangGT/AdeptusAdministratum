@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git ls-tree:*)",
+      "Bash(dir:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create --title \"Add unit datasheet JSON schema, Battle Sisters Squad example, and Rust validator\" --body \"$\\(cat <<''EOF''\n## Summary\n\n- **`schemas/unit-datasheet.schema.json`** — JSON Schema \\(draft 2020-12\\) that declaratively covers everything in a wargaming unit datasheet: flexible per-game stat profiles, ranged/melee weapons with multi-mode sub-profiles, wargear options \\(replace/add/remove/upgrade\\) with per-unit/per-army/per-N-model limits and mutual exclusion, ability definitions, transport/leader mechanics, and composable constraint + condition expressions.\n- **`data/40k/adepta-sororitas/battle-sisters-squad.json`** — Complete Warhammer 40K 10th Edition Battle Sisters Squad datasheet validating against the schema: full weapon roster, special-weapon per-5-model rules, Simulacrum Imperialis wargear option \\(with `grants_keyword`\\), Sister Superior upgrade options, and declarative constraint objects.\n- **`src/datasheet.rs`** — Serde-derived Rust types that mirror every field of the schema; uses `serde_json::Value` for free-form stat blocks so the code stays game-system agnostic.\n- **`src/validation.rs`** — Declarative validator that interprets the JSON constraint/option fields rather than hard-coding game logic. Covers: unit size \\(fixed sizes / step / min-max\\), wargear `max_per_unit` / `one_per_n_models` / `max_per_army` / `is_unique`, mutual exclusion pairs, and the `model_count_per_wargear` constraint with an inline formula parser. Includes a `calculate_points` helper and a full suite of unit tests.\n- **`src/main.rs`** — CLI demo that loads the Battle Sisters datasheet at compile time and runs both a valid and an invalid selection through the validator.\n- **`Cargo.toml`** — Rust package manifest \\(`serde`, `serde_json`, `thiserror`\\).\n- **`.gitignore`** — Replaced Go template with Rust-appropriate ignores.\n\n## Test plan\n\n- [ ] `cargo test` — all unit tests in `validation.rs` pass \\(valid sizes, invalid sizes, special-weapon limits, mutual exclusion, Simulacrum once/twice, points calculations\\).\n- [ ] `cargo run` — CLI demo prints valid selection as \"OK\" and invalid 3-meltagun selection with the correct constraint ID.\n- [ ] Validate `battle-sisters-squad.json` against `schemas/unit-datasheet.schema.json` with any JSON Schema validator \\(e.g. `ajv`\\).\n- [ ] Review schema `$defs` coverage for any planned game systems beyond 40K.\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\nEOF\n\\)\")",
+      "Bash(command -v gh:*)",
+      "Bash(winget list:*)"
+    ]
+  }
+}

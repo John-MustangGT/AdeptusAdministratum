@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}AdRostra — Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Army List Builder</h1>
+  <p>Browse datasheets, build your roster, and validate your army list.</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="/roster">Open My Roster</a>
+    <a class="btn" href="/datasheets">Browse Datasheets</a>
+  </div>
+</section>
+
+<section class="faction-grid">
+  <h2>Factions</h2>
+  <ul class="grid">
+    {% for faction in factions %}
+    <li>
+      <a href="/datasheets?faction={{ faction|urlencode }}">{{ faction }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% if game_systems.len() > 1 %}
+<section>
+  <h2>Game Systems</h2>
+  <ul>
+    {% for gs in game_systems %}
+    <li>{{ gs }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,122 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-hospitaller",
+  "name": "Hospitaller",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "HQ",
+  "points": {
+    "base": 45,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Hospitaller",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 3,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "chirurgeon_tools",
+        "name": "Chirurgeon's Tools",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "4+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "bolt_pistol", "quantity": 1 },
+    { "weapon_id": "chirurgeon_tools", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Hand of the Healer",
+      "description": "At the end of your Movement phase, this model can attempt to heal one friendly ADEPTA SORORITAS INFANTRY model within 3\". If it does, that model regains up to D3 lost wounds.",
+      "type": "unit",
+      "timing": "movement phase"
+    },
+    {
+      "name": "Restore to Life",
+      "description": "While this model is leading a unit, once per battle, at the end of your Movement phase, one destroyed model (excluding CHARACTER models) can be returned to that unit with 1 wound remaining.",
+      "type": "leader",
+      "timing": "movement phase"
+    }
+  ],
+  "leader": {
+    "can_lead": [
+      "40k-battle-sisters-squad",
+      "40k-as-celestians",
+      "40k-as-dominion-squad",
+      "40k-as-retributor-squad"
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["CHARACTER", "INFANTRY", "HOSPITALLER"]
+  },
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 76
+    }
+  ]
+}

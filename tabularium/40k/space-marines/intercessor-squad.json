@@ -1,0 +1,221 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-intercessor-squad",
+  "name": "Intercessor Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Troops",
+  "points": { "base": 85, "per_additional_model": 17, "free_wargear_included": true },
+  "unit_size": { "min": 5, "max": 10, "step": 5 },
+  "profiles": [
+    {
+      "name": "Intercessor Sergeant",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 3, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Intercessor",
+      "count": "remainder",
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 2, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_rifle",
+        "name": "Bolt Rifle",
+        "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": -1, "D": 1 },
+        "abilities": ["ASSAULT"]
+      },
+      {
+        "id": "auto_bolt_rifle",
+        "name": "Auto Bolt Rifle",
+        "stats": { "range": "24\"", "A": "3", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["ASSAULT", "RAPID FIRE 1"]
+      },
+      {
+        "id": "stalker_bolt_rifle",
+        "name": "Stalker Bolt Rifle",
+        "stats": { "range": "36\"", "A": "2", "BS": "3+", "S": 4, "AP": -2, "D": 2 },
+        "abilities": ["HEAVY"]
+      },
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "hand_flamer",
+        "name": "Hand Flamer",
+        "stats": { "range": "12\"", "A": "D6", "BS": "auto", "S": 3, "AP": 0, "D": 1 },
+        "abilities": ["IGNORES COVER", "PISTOL", "TORRENT"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "bolt_rifle_butt",
+        "name": "Bolt Rifle (Butt)",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_sword",
+        "name": "Power Sword",
+        "stats": { "range": "Melee", "A": "4", "WS": "3+", "S": 5, "AP": -2, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_fist",
+        "name": "Power Fist",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": []
+      },
+      {
+        "id": "thunder_hammer",
+        "name": "Thunder Hammer",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": ["DEVASTATING WOUNDS"]
+      },
+      {
+        "id": "chainsword",
+        "name": "Chainsword",
+        "stats": { "range": "Melee", "A": "5", "WS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "bolt_rifle",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Intercessor" }
+    },
+    {
+      "weapon_id": "bolt_rifle",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Intercessor Sergeant" }
+    },
+    {
+      "weapon_id": "bolt_rifle_butt",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Intercessor" }
+    },
+    {
+      "weapon_id": "bolt_rifle_butt",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Intercessor Sergeant" }
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "squad_auto_bolt_rifle",
+      "description": "All Intercessors can replace their bolt rifles with auto bolt rifles (whole squad must use the same rifle type).",
+      "type": "replace",
+      "replaces": ["bolt_rifle"],
+      "adds": ["auto_bolt_rifle"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": ["squad_stalker_bolt_rifle"]
+    },
+    {
+      "id": "squad_stalker_bolt_rifle",
+      "description": "All Intercessors can replace their bolt rifles with stalker bolt rifles (whole squad must use the same rifle type).",
+      "type": "replace",
+      "replaces": ["bolt_rifle"],
+      "adds": ["stalker_bolt_rifle"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": ["squad_auto_bolt_rifle"]
+    },
+    {
+      "id": "sergeant_hand_flamer",
+      "description": "The Intercessor Sergeant can replace their bolt rifle with a hand flamer.",
+      "type": "replace",
+      "replaces": ["bolt_rifle"],
+      "adds": ["hand_flamer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_chainsword_pistol"]
+    },
+    {
+      "id": "sergeant_power_sword",
+      "description": "The Intercessor Sergeant can replace their bolt rifle butt with a power sword.",
+      "type": "replace",
+      "replaces": ["bolt_rifle_butt"],
+      "adds": ["power_sword"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_fist", "sergeant_thunder_hammer", "sergeant_chainsword_pistol"]
+    },
+    {
+      "id": "sergeant_power_fist",
+      "description": "The Intercessor Sergeant can replace their bolt rifle butt with a power fist.",
+      "type": "replace",
+      "replaces": ["bolt_rifle_butt"],
+      "adds": ["power_fist"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_sword", "sergeant_thunder_hammer", "sergeant_chainsword_pistol"]
+    },
+    {
+      "id": "sergeant_thunder_hammer",
+      "description": "The Intercessor Sergeant can replace their bolt rifle butt with a thunder hammer.",
+      "type": "replace",
+      "replaces": ["bolt_rifle_butt"],
+      "adds": ["thunder_hammer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_sword", "sergeant_power_fist", "sergeant_chainsword_pistol"]
+    },
+    {
+      "id": "sergeant_chainsword_pistol",
+      "description": "The Intercessor Sergeant can replace their bolt rifle with a bolt pistol and chainsword.",
+      "type": "replace",
+      "replaces": ["bolt_rifle"],
+      "adds": ["bolt_pistol", "chainsword"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_hand_flamer", "sergeant_power_sword", "sergeant_power_fist", "sergeant_thunder_hammer"]
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["INFANTRY", "BATTLELINE", "INTERCESSOR SQUAD"],
+    "transport_keywords": ["INFANTRY"]
+  },
+  "constraints": [
+    {
+      "id": "intercessor-unit-size",
+      "type": "unit_size",
+      "description": "Intercessor Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [5, 10] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (85 pts per 5 models). All models in the unit must be equipped with the same bolt rifle type. CHAPTER keyword replaced with army's specific chapter."
+}

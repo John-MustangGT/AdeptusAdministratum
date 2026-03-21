@@ -1,0 +1,148 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-morvenn-vahl",
+  "name": "Morvenn Vahl, Abbess Sanctorum",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "HQ",
+  "points": {
+    "base": 200,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Morvenn Vahl",
+      "count": 1,
+      "stats": {
+        "M": "8\"",
+        "T": 6,
+        "Sv": "2+",
+        "W": 7,
+        "Ld": "6+",
+        "OC": 1
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "spear_of_the_faithful_ranged",
+        "name": "Spear of the Faithful (ranged)",
+        "stats": {
+          "range": "18\"",
+          "A": "3",
+          "BS": "2+",
+          "S": 8,
+          "AP": -2,
+          "D": 3
+        },
+        "abilities": ["ASSAULT"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "spear_of_the_faithful_melee",
+        "name": "Spear of the Faithful (melee)",
+        "stats": {
+          "range": "Melee",
+          "A": "6",
+          "WS": "2+",
+          "S": 8,
+          "AP": -2,
+          "D": 3
+        },
+        "abilities": ["LANCE"]
+      },
+      {
+        "id": "arc_of_judgement",
+        "name": "Arc of Judgement",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "2+",
+          "S": 6,
+          "AP": -1,
+          "D": 2
+        },
+        "abilities": ["DEVASTATING WOUNDS"]
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "spear_of_the_faithful_ranged", "quantity": 1 },
+    { "weapon_id": "spear_of_the_faithful_melee", "quantity": 1 },
+    { "weapon_id": "arc_of_judgement", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Invulnerable Save",
+      "description": "This model has a 4+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Abbess Sanctorum",
+      "description": "Each time this model is selected to fight, it makes attacks with all of its melee weapons. This model is always considered to have charged.",
+      "type": "unit",
+      "timing": "fight phase"
+    },
+    {
+      "name": "Supreme Commander",
+      "description": "While this model is leading a unit, you can re-roll one Act of Faith dice roll per phase for that unit. In addition, add 1 to the Attacks characteristic of models in the unit.",
+      "type": "leader",
+      "timing": "passive"
+    },
+    {
+      "name": "Wrath of the Righteous",
+      "description": "Once per battle, in your Shooting phase or the Fight phase, this model can activate Wrath of the Righteous. Until the end of the phase, each time this model makes an attack, it inflicts Mortal Wounds on the target unit equal to the Damage characteristic of that attack on an unmodified wound roll of 2+.",
+      "type": "unit",
+      "timing": "any phase"
+    }
+  ],
+  "leader": {
+    "can_lead": [
+      "40k-as-celestian-sacresants",
+      "40k-as-paragon-warsuits"
+    ]
+  },
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["CHARACTER", "EPIC HERO", "INFANTRY", "MORVENN VAHL"]
+  },
+  "constraints": [
+    {
+      "id": "epic-hero-unique",
+      "type": "army_unique",
+      "description": "Morvenn Vahl is an Epic Hero and cannot be included more than once in your army.",
+      "severity": "error"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 62
+    }
+  ]
+}

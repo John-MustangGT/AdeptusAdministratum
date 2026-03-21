@@ -1,0 +1,121 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-triumph-of-saint-katherine",
+  "name": "Triumph of Saint Katherine",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "HQ",
+  "points": {
+    "base": 200,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Triumph of Saint Katherine",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "4+",
+        "W": 8,
+        "Ld": "6+",
+        "OC": 3
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [],
+    "melee": [
+      {
+        "id": "reliquary_of_saint_katherine",
+        "name": "Reliquary of Saint Katherine",
+        "stats": {
+          "range": "Melee",
+          "A": "6",
+          "WS": "3+",
+          "S": 4,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["ANTI-DAEMON 4+"]
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "reliquary_of_saint_katherine", "quantity": 1 }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Invulnerable Save",
+      "description": "This model has a 4+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Blessings of the Faithful",
+      "description": "At the start of your Command phase, gain D6 Miracle dice instead of D3 if this model is on the battlefield.",
+      "type": "unit",
+      "timing": "command phase"
+    },
+    {
+      "name": "Shield of Faith",
+      "description": "Friendly ADEPTA SORORITAS units within 6\" of this model have a 6+ invulnerable save (or improve their invulnerable save by 1 if it is already 6+).",
+      "type": "aura",
+      "timing": "passive",
+      "range": "6\""
+    },
+    {
+      "name": "Living Relic",
+      "description": "Each time this model is selected as the target of an Act of Faith, you can change the result of one Act of Faith dice to any number.",
+      "type": "unit",
+      "timing": "any phase"
+    },
+    {
+      "name": "Sacred Rites",
+      "description": "Once per battle, in your Command phase, this model can perform a Sacred Rite. Select one of the following: grant all friendly ADEPTA SORORITAS units within 6\" the Scouts 6\" ability until the end of the turn, or add 1 to all Acts of Faith dice rolls until the start of your next Command phase.",
+      "type": "unit",
+      "timing": "command phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["CHARACTER", "EPIC HERO", "INFANTRY", "TRIUMPH OF SAINT KATHERINE"]
+  },
+  "constraints": [
+    {
+      "id": "epic-hero-unique",
+      "type": "army_unique",
+      "description": "The Triumph of Saint Katherine is an Epic Hero and cannot be included more than once in your army.",
+      "severity": "error"
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 60
+    }
+  ],
+  "notes": "The Triumph of Saint Katherine is a massive devotional processional carried by six Order Pronatus bearers. It does not have a Leader ability and cannot attach to other units."
+}

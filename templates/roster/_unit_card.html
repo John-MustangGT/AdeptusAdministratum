@@ -1,0 +1,227 @@
+<div id="unit-{{ entry.entry_id }}" class="unit-card">
+
+  <!-- ── Header: display name + points + action buttons ───────────────── -->
+  <div class="unit-card-header">
+    <div class="unit-card-title">
+      {% if !entry.custom_name_str.is_empty() %}
+      <span class="unit-custom-name">{{ entry.custom_name_str }}</span>
+      {% endif %}
+      <a href="/datasheets/{{ entry.datasheet_id }}"
+         class="unit-datasheet-link{% if entry.custom_name_str.is_empty() %} unit-name{% endif %}">{{ entry.datasheet_name }}</a>
+      <span class="role-badge">{{ entry.battlefield_role }}</span>
+    </div>
+    <div class="unit-card-actions">
+      <strong class="unit-points">{{ entry.points }} pts</strong>
+
+      <div class="unit-reorder-btns">
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/move"
+              hx-post="/roster/unit/{{ entry.entry_id }}/move"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
+          <input type="hidden" name="direction" value="up">
+          <button type="submit" class="btn btn-sm btn-reorder" title="Move up">↑</button>
+        </form>
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/move"
+              hx-post="/roster/unit/{{ entry.entry_id }}/move"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
+          <input type="hidden" name="direction" value="down">
+          <button type="submit" class="btn btn-sm btn-reorder" title="Move down">↓</button>
+        </form>
+      </div>
+
+      <form method="post" action="/roster/unit/{{ entry.entry_id }}/remove"
+            hx-post="/roster/unit/{{ entry.entry_id }}/remove"
+            hx-target="#roster-content" hx-swap="outerHTML"
+            hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
+        <button type="submit" class="btn btn-sm btn-danger" title="Remove unit">✕</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Configure form: name · models · wargear ───────────────────────── -->
+  <form method="post" action="/roster/unit/{{ entry.entry_id }}/configure"
+        hx-post="/roster/unit/{{ entry.entry_id }}/configure"
+        hx-target="#roster-content"
+        hx-swap="outerHTML"
+        hx-trigger="change delay:200ms"
+        class="unit-configure-form"
+        data-entry-id="{{ entry.entry_id }}">
+
+    <div class="unit-config-row">
+      <label class="config-label">
+        Name
+        <input type="text"
+               name="custom_name"
+               value="{{ entry.custom_name_str }}"
+               placeholder="{{ entry.datasheet_name }}"
+               class="unit-custom-name-input">
+      </label>
+      <label class="config-label">
+        Models
+        <input type="number"
+               name="model_count"
+               value="{{ entry.model_count }}"
+               min="{{ entry.unit_min }}"
+               max="{{ entry.unit_max }}"
+               step="{{ entry.unit_step }}"
+               class="model-count-input">
+      </label>
+    </div>
+
+    {# ── Weapon breakdown: qty spinners for replace-type options with >1 allowed ── #}
+    {% if !entry.weapon_groups.is_empty() %}
+    <div class="weapon-breakdown">
+      {% for group in entry.weapon_groups %}
+      <div class="weapon-group-row">
+        {% for slot in group.slots %}
+        <div class="weapon-slot">
+          {% if slot.option_id.is_empty() %}
+          <span class="weapon-slot-count weapon-slot-base"
+                data-base-max="{{ slot.max_qty }}">{{ slot.count }}</span>
+          {% else %}
+          <input class="weapon-slot-count weapon-qty-input"
+                 data-option-id="{{ slot.option_id }}"
+                 data-excl="{{ slot.mutually_exclusive_ids }}"
+                 value="{{ slot.count }}"
+                 min="0"
+                 max="{{ slot.max_qty }}"
+                 type="number">
+          {% endif %}
+          <span class="weapon-slot-name">{{ slot.weapon_name }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if !entry.options.is_empty() %}
+    <details class="wargear-details" id="wargear-{{ entry.entry_id }}">
+      <summary>Wargear Options</summary>
+      <div class="wargear-list">
+        {% for opt in entry.options %}
+        <label class="wargear-option{% if opt.disabled %} disabled{% endif %}">
+          <input type="checkbox"
+                 name="options"
+                 value="{{ opt.id }}"
+                 {% if opt.checked %}checked{% endif %}
+                 {% if opt.disabled %}disabled{% endif %}
+                 data-excl="{{ opt.mutually_exclusive_ids }}">
+          {{ opt.description }}
+          {% if opt.points_cost != 0 %}
+            <span class="pts-delta">{% if opt.points_cost > 0 %}+{% endif %}{{ opt.points_cost }}pts</span>
+          {% endif %}
+        </label>
+        {% endfor %}
+      </div>
+    </details>
+    {% endif %}
+  </form>
+
+  {# ── Linking: leader + transport assignment ──────────────────────────── #}
+  {% let show_links = !entry.assigned_leader_name.is_empty()
+      || !entry.assigned_transport_name.is_empty()
+      || !entry.available_leaders.is_empty()
+      || !entry.available_transports.is_empty()
+      || !entry.units_leading.is_empty()
+      || !entry.units_transporting.is_empty() %}
+  {% if show_links %}
+  <div class="unit-links">
+
+    {# ── Leader assignment (this unit is being led) ── #}
+    {% if !entry.assigned_leader_name.is_empty() || !entry.available_leaders.is_empty() %}
+    <div class="link-row">
+      <span class="link-label">Leader</span>
+      {% if !entry.assigned_leader_name.is_empty() %}
+        <span class="link-chip">{{ entry.assigned_leader_name }}</span>
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/assign-leader"
+              hx-post="/roster/unit/{{ entry.entry_id }}/assign-leader"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
+          <input type="hidden" name="leader_entry_id" value="">
+          <button type="submit" class="btn btn-sm btn-unlink" title="Unlink leader">✕</button>
+        </form>
+      {% else %}
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/assign-leader"
+              hx-post="/roster/unit/{{ entry.entry_id }}/assign-leader"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form"
+              hx-trigger="change">
+          <select name="leader_entry_id" class="link-select">
+            <option value="">— assign leader —</option>
+            {% for (lid, lname) in entry.available_leaders %}
+            <option value="{{ lid }}">{{ lname }}</option>
+            {% endfor %}
+          </select>
+        </form>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {# ── Transport assignment (this unit is embarking) ── #}
+    {% if !entry.assigned_transport_name.is_empty() || !entry.available_transports.is_empty() %}
+    <div class="link-row">
+      <span class="link-label">Transport</span>
+      {% if !entry.assigned_transport_name.is_empty() %}
+        <span class="link-chip">{{ entry.assigned_transport_name }}</span>
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/assign-transport"
+              hx-post="/roster/unit/{{ entry.entry_id }}/assign-transport"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form" style="display:inline">
+          <input type="hidden" name="transport_entry_id" value="">
+          <button type="submit" class="btn btn-sm btn-unlink" title="Unlink transport">✕</button>
+        </form>
+      {% else %}
+        <form method="post" action="/roster/unit/{{ entry.entry_id }}/assign-transport"
+              hx-post="/roster/unit/{{ entry.entry_id }}/assign-transport"
+              hx-target="#roster-content" hx-swap="outerHTML"
+              hx-sync="body:queue" class="roster-mutation-form"
+              hx-trigger="change">
+          <select name="transport_entry_id" class="link-select">
+            <option value="">— assign transport —</option>
+            {% for (tid, tname) in entry.available_transports %}
+            <option value="{{ tid }}">{{ tname }}</option>
+            {% endfor %}
+          </select>
+        </form>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {# ── Reverse: character is leading these units ── #}
+    {% if !entry.units_leading.is_empty() %}
+    <div class="link-row link-info-row">
+      <span class="link-label">Leading</span>
+      <span class="link-info-text">
+        {% for uname in entry.units_leading %}
+        <span class="link-chip link-chip-dim">{{ uname }}</span>
+        {% endfor %}
+      </span>
+    </div>
+    {% endif %}
+
+    {# ── Reverse: transport is carrying these units ── #}
+    {% if !entry.units_transporting.is_empty() %}
+    <div class="link-row link-info-row">
+      <span class="link-label">Carrying</span>
+      <span class="link-info-text">
+        {% for uname in entry.units_transporting %}
+        <span class="link-chip link-chip-dim">{{ uname }}</span>
+        {% endfor %}
+      </span>
+    </div>
+    {% endif %}
+
+  </div>
+  {% endif %}
+
+  {% if !entry.issues.is_empty() %}
+  <ul class="issue-list">
+    {% for (cls, msg) in entry.issues %}
+    <li class="issue issue-{{ cls }}">{{ msg }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+</div>

@@ -1,0 +1,200 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-celestian-sacresants",
+  "name": "Celestian Sacresants",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Elites",
+  "points": {
+    "base": 90,
+    "per_additional_model": 0,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 5,
+    "max": 10,
+    "step": 5
+  },
+  "profiles": [
+    {
+      "name": "Sacresant Superior",
+      "count": 1,
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 3,
+        "Ld": "6+",
+        "OC": 2
+      }
+    },
+    {
+      "name": "Celestian Sacresant",
+      "count": "remainder",
+      "stats": {
+        "M": "6\"",
+        "T": 3,
+        "Sv": "3+",
+        "W": 2,
+        "Ld": "6+",
+        "OC": 2
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": {
+          "range": "12\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["PISTOL"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "anointed_halberd",
+        "name": "Anointed Halberd",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 5,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "spear_of_the_faithful_sacresant",
+        "name": "Spear of the Faithful",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 5,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["LANCE"]
+      },
+      {
+        "id": "sacresant_shield",
+        "name": "Sacresant Shield",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "3+",
+          "S": 3,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      },
+      {
+        "id": "blessed_mace",
+        "name": "Blessed Mace",
+        "stats": {
+          "range": "Melee",
+          "A": "4",
+          "WS": "3+",
+          "S": 4,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["ANTI-DAEMON 4+"]
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "bolt_pistol",
+      "quantity": 1
+    },
+    {
+      "weapon_id": "anointed_halberd",
+      "quantity": 1
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "sacresant_shields",
+      "description": "All models in the unit can replace their anointed halberds with a blessed mace and sacresant shield.",
+      "type": "replace",
+      "replaces": ["anointed_halberd"],
+      "adds": ["blessed_mace", "sacresant_shield"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 10 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Aegis of the Emperor",
+      "description": "This unit has a 6+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Sacresant Shield",
+      "description": "While this unit has any models equipped with sacresant shields, models in this unit have a 4+ invulnerable save instead.",
+      "type": "wargear",
+      "timing": "passive",
+      "condition": {
+        "type": "has_wargear_option",
+        "option_id": "sacresant_shields"
+      }
+    },
+    {
+      "name": "Bodyguard",
+      "description": "While this unit contains 5 or more models, it can be set up as a bodyguard for a CHARACTER. While a CHARACTER is within this unit, that CHARACTER cannot be targeted by ranged attacks.",
+      "type": "unit",
+      "timing": "passive"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["INFANTRY", "CELESTIAN SACRESANTS"]
+  },
+  "constraints": [
+    {
+      "id": "unit-size-valid",
+      "type": "unit_size",
+      "description": "Celestian Sacresants must contain 5 or 10 models.",
+      "severity": "error",
+      "params": {
+        "allowed_sizes": [5, 10]
+      }
+    }
+  ],
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 82
+    }
+  ]
+}

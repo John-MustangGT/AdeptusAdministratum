@@ -1,0 +1,234 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-terminator-squad",
+  "name": "Terminator Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Elites",
+  "points": { "base": 200, "per_additional_model": 40, "free_wargear_included": true },
+  "unit_size": { "min": 5, "max": 10, "step": 5 },
+  "profiles": [
+    {
+      "name": "Terminator Sergeant",
+      "count": 1,
+      "stats": { "M": "5\"", "T": 5, "Sv": "2+", "W": 4, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Terminator",
+      "count": "remainder",
+      "stats": { "M": "5\"", "T": 5, "Sv": "2+", "W": 3, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "storm_bolter",
+        "name": "Storm Bolter",
+        "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["RAPID FIRE 2"]
+      },
+      {
+        "id": "heavy_flamer",
+        "name": "Heavy Flamer",
+        "stats": { "range": "12\"", "A": "D6", "BS": "auto", "S": 5, "AP": -1, "D": 1 },
+        "abilities": ["IGNORES COVER", "TORRENT"]
+      },
+      {
+        "id": "assault_cannon",
+        "name": "Assault Cannon",
+        "stats": { "range": "24\"", "A": "6", "BS": "3+", "S": 6, "AP": 0, "D": 1 },
+        "abilities": ["DEVASTATING WOUNDS"]
+      },
+      {
+        "id": "cyclone_missile_launcher",
+        "name": "Cyclone Missile Launcher",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Frag",
+            "stats": { "range": "48\"", "A": "2D6", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+            "abilities": ["BLAST", "HEAVY"]
+          },
+          {
+            "name": "Krak",
+            "stats": { "range": "48\"", "A": "2", "BS": "3+", "S": 9, "AP": -2, "D": "D6" },
+            "abilities": ["HEAVY"]
+          }
+        ]
+      }
+    ],
+    "melee": [
+      {
+        "id": "power_fist",
+        "name": "Power Fist",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": []
+      },
+      {
+        "id": "chainfist",
+        "name": "Chainfist",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -4, "D": 2 },
+        "abilities": ["ANTI-VEHICLE 2+"]
+      },
+      {
+        "id": "thunder_hammer",
+        "name": "Thunder Hammer",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": ["DEVASTATING WOUNDS"]
+      },
+      {
+        "id": "lightning_claws_pair",
+        "name": "Lightning Claws (pair)",
+        "stats": { "range": "Melee", "A": "5", "WS": "3+", "S": 5, "AP": -2, "D": 1 },
+        "abilities": ["TWIN-LINKED"]
+      }
+    ]
+  },
+  "default_loadout": [
+    {
+      "weapon_id": "storm_bolter",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Terminator" }
+    },
+    {
+      "weapon_id": "power_fist",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Terminator" }
+    },
+    {
+      "weapon_id": "storm_bolter",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Terminator Sergeant" }
+    },
+    {
+      "weapon_id": "power_fist",
+      "quantity": 1,
+      "applies_to": { "profile_name": "Terminator Sergeant" }
+    }
+  ],
+  "wargear_options": [
+    {
+      "id": "terminator_heavy_flamer",
+      "description": "Any Terminator can replace their storm bolter with a heavy flamer.",
+      "type": "replace",
+      "replaces": ["storm_bolter"],
+      "adds": ["heavy_flamer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": []
+    },
+    {
+      "id": "terminator_assault_cannon",
+      "description": "One Terminator can replace their storm bolter with an assault cannon.",
+      "type": "replace",
+      "replaces": ["storm_bolter"],
+      "adds": ["assault_cannon"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["terminator_cyclone_missile_launcher"]
+    },
+    {
+      "id": "terminator_cyclone_missile_launcher",
+      "description": "One Terminator can add a cyclone missile launcher (in addition to their storm bolter).",
+      "type": "add",
+      "adds": ["cyclone_missile_launcher"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["terminator_assault_cannon"]
+    },
+    {
+      "id": "terminator_chainfist",
+      "description": "Any Terminator can replace their power fist with a chainfist.",
+      "type": "replace",
+      "replaces": ["power_fist"],
+      "adds": ["chainfist"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": ["terminator_thunder_hammer", "terminator_lightning_claws"]
+    },
+    {
+      "id": "terminator_thunder_hammer",
+      "description": "Any Terminator can replace their storm bolter and power fist with a thunder hammer.",
+      "type": "replace",
+      "replaces": ["storm_bolter", "power_fist"],
+      "adds": ["thunder_hammer"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": ["terminator_chainfist", "terminator_lightning_claws"]
+    },
+    {
+      "id": "terminator_lightning_claws",
+      "description": "Any Terminator can replace their storm bolter and power fist with a pair of lightning claws.",
+      "type": "replace",
+      "replaces": ["storm_bolter", "power_fist"],
+      "adds": ["lightning_claws_pair"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 10 },
+      "mutually_exclusive_with": ["terminator_chainfist", "terminator_thunder_hammer"]
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Terminator Armour",
+      "description": "Models in this unit have a 4+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Deep Strike",
+      "description": "During the Reinforcements step of any of your Movement phases, this unit can be set up anywhere on the battlefield that is more than 9\" horizontally away from all enemy models.",
+      "type": "unit",
+      "timing": "movement phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["INFANTRY", "TERMINATOR SQUAD"],
+    "transport_keywords": ["INFANTRY", "TERMINATOR"]
+  },
+  "constraints": [
+    {
+      "id": "terminator-unit-size",
+      "type": "unit_size",
+      "description": "Terminator Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [5, 10] }
+    },
+    {
+      "id": "terminator-assault-cannon-one",
+      "type": "wargear_limit",
+      "description": "Only one Terminator may carry an assault cannon.",
+      "severity": "error",
+      "params": { "option_id": "terminator_assault_cannon", "max": 1 }
+    },
+    {
+      "id": "terminator-cyclone-one",
+      "type": "wargear_limit",
+      "description": "Only one Terminator may carry a cyclone missile launcher.",
+      "severity": "error",
+      "params": { "option_id": "terminator_cyclone_missile_launcher", "max": 1 }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (200 pts per 5 models). 4+ invulnerable save from Terminator Armour. TERMINATOR keyword restricts which transports can carry this unit (Land Raiders only). CHAPTER keyword replaced with army's specific chapter."
+}

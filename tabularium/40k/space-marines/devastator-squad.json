@@ -1,0 +1,187 @@
+{
+  "$schema": "../../../schemas/unit-datasheet.schema.json",
+  "id": "40k-sm-devastator-squad",
+  "name": "Devastator Squad",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-index",
+  "faction": {
+    "primary": "Space Marines",
+    "sub_factions": [
+      "Ultramarines", "Blood Angels", "Dark Angels", "Space Wolves",
+      "Imperial Fists", "Iron Hands", "Salamanders", "Raven Guard",
+      "White Scars", "Black Templars"
+    ],
+    "allies": ["Adeptus Custodes", "Adepta Sororitas", "Astra Militarum"]
+  },
+  "battlefield_role": "Heavy Support",
+  "points": { "base": 95, "per_additional_model": 13, "free_wargear_included": true },
+  "unit_size": { "min": 5, "max": 10, "step": 5 },
+  "profiles": [
+    {
+      "name": "Devastator Sergeant",
+      "count": 1,
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 3, "Ld": "6+", "OC": 2 }
+    },
+    {
+      "name": "Devastator",
+      "count": "remainder",
+      "stats": { "M": "6\"", "T": 4, "Sv": "3+", "W": 2, "Ld": "6+", "OC": 2 }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "bolt_pistol",
+        "name": "Bolt Pistol",
+        "stats": { "range": "12\"", "A": "1", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["PISTOL"]
+      },
+      {
+        "id": "boltgun",
+        "name": "Boltgun",
+        "stats": { "range": "24\"", "A": "2", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": ["RAPID FIRE 1"]
+      },
+      {
+        "id": "heavy_bolter",
+        "name": "Heavy Bolter",
+        "stats": { "range": "36\"", "A": "3", "BS": "3+", "S": 5, "AP": -1, "D": 2 },
+        "abilities": ["HEAVY", "SUSTAINED HITS 1"]
+      },
+      {
+        "id": "lascannon",
+        "name": "Lascannon",
+        "stats": { "range": "48\"", "A": "1", "BS": "3+", "S": 12, "AP": -3, "D": "D6+1" },
+        "abilities": ["HEAVY"]
+      },
+      {
+        "id": "missile_launcher",
+        "name": "Missile Launcher",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Frag",
+            "stats": { "range": "48\"", "A": "D6", "BS": "3+", "S": 4, "AP": 0, "D": 1 },
+            "abilities": ["BLAST", "HEAVY"]
+          },
+          {
+            "name": "Krak",
+            "stats": { "range": "48\"", "A": "1", "BS": "3+", "S": 9, "AP": -2, "D": "D6" },
+            "abilities": ["HEAVY"]
+          }
+        ]
+      },
+      {
+        "id": "plasma_cannon",
+        "name": "Plasma Cannon",
+        "stats": {},
+        "profiles": [
+          {
+            "name": "Standard",
+            "stats": { "range": "36\"", "A": "D3", "BS": "3+", "S": 7, "AP": -2, "D": 1 },
+            "abilities": ["BLAST", "HEAVY"]
+          },
+          {
+            "name": "Supercharge",
+            "stats": { "range": "36\"", "A": "D3", "BS": "3+", "S": 8, "AP": -3, "D": 2 },
+            "abilities": ["BLAST", "HAZARDOUS", "HEAVY"]
+          }
+        ]
+      },
+      {
+        "id": "multi_melta",
+        "name": "Multi-melta",
+        "stats": { "range": "18\"", "A": "2", "BS": "3+", "S": 9, "AP": -4, "D": "D6" },
+        "abilities": ["HEAVY", "MELTA 2"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "astartes_chainsword",
+        "name": "Astartes Chainsword",
+        "stats": { "range": "Melee", "A": "5", "WS": "3+", "S": 4, "AP": 0, "D": 1 },
+        "abilities": []
+      },
+      {
+        "id": "power_fist",
+        "name": "Power Fist",
+        "stats": { "range": "Melee", "A": "3", "WS": "4+", "S": 8, "AP": -2, "D": 2 },
+        "abilities": []
+      },
+      {
+        "id": "power_sword",
+        "name": "Power Sword",
+        "stats": { "range": "Melee", "A": "4", "WS": "3+", "S": 5, "AP": -2, "D": 1 },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "bolt_pistol", "quantity": 1 },
+    { "weapon_id": "boltgun", "quantity": 1 },
+    { "weapon_id": "astartes_chainsword", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "heavy_weapon",
+      "description": "Up to 4 Devastators can each replace their boltgun with one heavy weapon.",
+      "type": "replace",
+      "replaces": ["boltgun"],
+      "adds": ["heavy_bolter", "lascannon", "missile_launcher", "plasma_cannon", "multi_melta"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 4 }
+    },
+    {
+      "id": "sergeant_power_sword",
+      "description": "The Sergeant can replace their astartes chainsword with a power sword.",
+      "type": "replace",
+      "replaces": ["astartes_chainsword"],
+      "adds": ["power_sword"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_fist"]
+    },
+    {
+      "id": "sergeant_power_fist",
+      "description": "The Sergeant can replace their astartes chainsword with a power fist.",
+      "type": "replace",
+      "replaces": ["astartes_chainsword"],
+      "adds": ["power_fist"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 },
+      "mutually_exclusive_with": ["sergeant_power_sword"]
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Oath of Moment",
+      "description": "At the start of your Command Phase, select one enemy unit visible to your WARLORD. Until the start of your next Command Phase, that unit is your Oath of Moment target. Each time a friendly ADEPTUS ASTARTES unit makes an attack against your Oath of Moment target, you can re-roll the Hit roll.",
+      "type": "faction",
+      "timing": "command phase"
+    },
+    {
+      "name": "Signum",
+      "description": "Once per battle round, one model in this unit can use a signum. When it does, until the end of the phase, one friendly ADEPTUS ASTARTES INFANTRY unit within 6\" of this unit has the LETHAL HITS ability on its ranged attacks.",
+      "type": "unit",
+      "timing": "shooting phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTUS ASTARTES", "CHAPTER"],
+    "unit": ["INFANTRY", "DEVASTATOR SQUAD"],
+    "transport_keywords": ["INFANTRY"]
+  },
+  "constraints": [
+    {
+      "id": "devastator-unit-size",
+      "type": "unit_size",
+      "description": "Devastator Squad must contain 5 or 10 models.",
+      "severity": "error",
+      "params": { "allowed_sizes": [5, 10] }
+    }
+  ],
+  "notes": "VERIFY POINTS against latest Munitorum Field Manual (95 pts per 5 models). Maximum 4 heavy weapons per unit regardless of unit size. Signum ability wording — verify against current index card. CHAPTER keyword replaced with army's specific chapter."
+}

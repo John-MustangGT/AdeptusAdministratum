@@ -1,0 +1,134 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-penitent-engines",
+  "name": "Penitent Engines",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Elites",
+  "points": {
+    "base": 70,
+    "per_additional_model": 35,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 3
+  },
+  "profiles": [
+    {
+      "name": "Penitent Engine",
+      "count": "remainder",
+      "stats": {
+        "M": "8\"",
+        "T": 6,
+        "Sv": "3+",
+        "W": 5,
+        "Ld": "8+",
+        "OC": 2
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "penitent_flamers",
+        "name": "Penitent Flamers",
+        "stats": {
+          "range": "12\"",
+          "A": "2D6",
+          "BS": "N/A",
+          "S": 4,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": ["IGNORES COVER", "TORRENT", "TWIN-LINKED"]
+      },
+      {
+        "id": "twin_meltaguns",
+        "name": "Twin Meltaguns",
+        "stats": {
+          "range": "12\"",
+          "A": "2",
+          "BS": "4+",
+          "S": 9,
+          "AP": -4,
+          "D": "D6"
+        },
+        "abilities": ["MELTA 2", "TWIN-LINKED"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "penitent_buzz_blades",
+        "name": "Penitent Buzz-blades",
+        "stats": {
+          "range": "Melee",
+          "A": "5",
+          "WS": "4+",
+          "S": 6,
+          "AP": -2,
+          "D": 2
+        },
+        "abilities": ["TWIN-LINKED"]
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "penitent_flamers", "quantity": 1 },
+    { "weapon_id": "penitent_buzz_blades", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "penitent_twin_meltaguns",
+      "description": "Any Penitent Engine can replace its penitent flamers with twin meltaguns.",
+      "type": "replace",
+      "replaces": ["penitent_flamers"],
+      "adds": ["twin_meltaguns"],
+      "points_cost": 0,
+      "cost_per": "model",
+      "limits": { "max_per_unit": 3 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Crazed Penitent",
+      "description": "Each time this unit is selected to fight, add 1 to the Attacks characteristic of each model in this unit until the end of the phase.",
+      "type": "unit",
+      "timing": "fight phase"
+    },
+    {
+      "name": "Driven by Pain",
+      "description": "Each time a model in this unit loses a wound, roll one D6: on a 6, that model regains 1 lost wound.",
+      "type": "unit",
+      "timing": "any phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["VEHICLE", "WALKER", "PENITENT ENGINES"]
+  },
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 96
+    }
+  ]
+}

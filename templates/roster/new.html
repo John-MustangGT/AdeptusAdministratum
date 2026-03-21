@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}New Roster — AdRostra{% endblock %}
+
+{% block content %}
+<div class="new-roster-container">
+  <h1 class="page-title">New Roster</h1>
+  <p class="text-dim" style="margin-bottom:1.5rem">Choose your game system and army, then start building.</p>
+
+  <form method="post" action="/roster/new" class="new-roster-form">
+    <div class="form-field">
+      <label for="roster_name">Roster Name</label>
+      <input type="text" id="roster_name" name="roster_name"
+             placeholder="My Army" value="My Army" required autofocus>
+    </div>
+
+    {% for (gs, factions) in factions_by_system %}
+    <div class="form-field">
+      <label>Game System</label>
+      <div class="gs-label">{{ gs }}</div>
+      <input type="hidden" name="game_system" value="{{ gs }}">
+    </div>
+
+    <div class="form-field">
+      <label for="faction">Army / Faction</label>
+      <select id="faction" name="faction" required>
+        {% for f in factions %}
+        <option value="{{ f }}">{{ f }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endfor %}
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary btn-large">Create Roster →</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

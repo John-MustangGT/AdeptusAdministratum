@@ -1,0 +1,175 @@
+{
+  "$schema": "../../schemas/unit-datasheet.schema.json",
+  "id": "40k-as-castigator",
+  "name": "Castigator",
+  "game_system": "warhammer-40k-10e",
+  "version": "2024-q3",
+  "faction": {
+    "primary": "Adepta Sororitas",
+    "sub_factions": [
+      "Order of Our Martyred Lady",
+      "Order of the Bloody Rose",
+      "Order of the Argent Shroud",
+      "Order of the Valorous Heart",
+      "Order of the Sacred Rose",
+      "Order of the Ebon Chalice"
+    ],
+    "allies": ["Adeptus Ministorum", "Adeptus Custodes"]
+  },
+  "battlefield_role": "Heavy Support",
+  "points": {
+    "base": 160,
+    "free_wargear_included": true
+  },
+  "unit_size": {
+    "min": 1,
+    "max": 1
+  },
+  "profiles": [
+    {
+      "name": "Castigator",
+      "count": 1,
+      "stats": {
+        "M": "10\"",
+        "T": 10,
+        "Sv": "2+",
+        "W": 12,
+        "Ld": "6+",
+        "OC": 3
+      }
+    }
+  ],
+  "weapons": {
+    "ranged": [
+      {
+        "id": "castigator_bolt_cannon",
+        "name": "Castigator Bolt Cannon",
+        "stats": {
+          "range": "24\"",
+          "A": "12",
+          "BS": "3+",
+          "S": 6,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["RAPID FIRE 12"]
+      },
+      {
+        "id": "castigator_autocannons",
+        "name": "Castigator Autocannons",
+        "stats": {
+          "range": "36\"",
+          "A": "4",
+          "BS": "3+",
+          "S": 9,
+          "AP": -1,
+          "D": 3
+        },
+        "abilities": ["HEAVY", "TWIN-LINKED"]
+      },
+      {
+        "id": "castigator_heavy_flamer",
+        "name": "Heavy Flamer",
+        "stats": {
+          "range": "12\"",
+          "A": "D6",
+          "BS": "N/A",
+          "S": 5,
+          "AP": -1,
+          "D": 1
+        },
+        "abilities": ["IGNORES COVER", "TORRENT"]
+      },
+      {
+        "id": "hunter_killer_missile",
+        "name": "Hunter-killer Missile",
+        "stats": {
+          "range": "48\"",
+          "A": "1",
+          "BS": "3+",
+          "S": 14,
+          "AP": -3,
+          "D": "D6"
+        },
+        "abilities": ["ONE SHOT"]
+      }
+    ],
+    "melee": [
+      {
+        "id": "armoured_tracks",
+        "name": "Armoured Tracks",
+        "stats": {
+          "range": "Melee",
+          "A": "3",
+          "WS": "4+",
+          "S": 6,
+          "AP": 0,
+          "D": 1
+        },
+        "abilities": []
+      }
+    ]
+  },
+  "default_loadout": [
+    { "weapon_id": "castigator_bolt_cannon", "quantity": 1 },
+    { "weapon_id": "castigator_heavy_flamer", "quantity": 1 },
+    { "weapon_id": "armoured_tracks", "quantity": 1 }
+  ],
+  "wargear_options": [
+    {
+      "id": "castigator_autocannons_upgrade",
+      "description": "The Castigator can replace its castigator bolt cannon with castigator autocannons.",
+      "type": "replace",
+      "replaces": ["castigator_bolt_cannon"],
+      "adds": ["castigator_autocannons"],
+      "points_cost": 0,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    },
+    {
+      "id": "castigator_hunter_killer",
+      "description": "The Castigator can be equipped with a hunter-killer missile.",
+      "type": "add",
+      "adds": ["hunter_killer_missile"],
+      "points_cost": 5,
+      "cost_per": "selection",
+      "limits": { "max_per_unit": 1 }
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Acts of Faith",
+      "description": "At the start of each phase, if you have not used an Act of Faith this phase, one unit from your army with this ability can use an Act of Faith. If it does, gain D3 Miracle dice.",
+      "type": "faction",
+      "timing": "any phase"
+    },
+    {
+      "name": "Invulnerable Save",
+      "description": "This model has a 5+ invulnerable save.",
+      "type": "unit",
+      "timing": "passive"
+    },
+    {
+      "name": "Blessed Bolts",
+      "description": "Each time this model makes an attack with its castigator bolt cannon, on an unmodified wound roll of 6, that attack has the DEVASTATING WOUNDS ability.",
+      "type": "unit",
+      "timing": "shooting phase"
+    },
+    {
+      "name": "Smoke",
+      "description": "Once per battle, at the start of your Shooting phase, this model can use its Smoke. Until the start of your next turn, each time a ranged attack is allocated to this model, subtract 1 from the Hit roll.",
+      "type": "unit",
+      "timing": "shooting phase"
+    }
+  ],
+  "keywords": {
+    "faction": ["IMPERIUM", "ADEPTA SORORITAS", "ADEPTUS MINISTORUM"],
+    "unit": ["VEHICLE", "CASTIGATOR"]
+  },
+  "sources": [
+    {
+      "name": "Codex: Adepta Sororitas (10th Edition)",
+      "page": 104
+    }
+  ]
+}
