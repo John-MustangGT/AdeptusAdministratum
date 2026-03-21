@@ -568,6 +568,66 @@ section h2 { font-size: 1.15rem; margin-bottom: 0.6rem; border-bottom: 1px solid
 }
 .btn-unlink:hover { border-color: var(--red); color: var(--red); }
 
+/* ----- Weapon breakdown (qty spinners) ----- */
+.weapon-breakdown {
+  padding: 0.5rem 0.75rem 0.4rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.weapon-group-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  align-items: center;
+}
+
+.weapon-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
+/* Shared styling for both the static count and the number spinner */
+.weapon-slot-count {
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: 1.6rem;
+  text-align: center;
+}
+
+/* Static base-weapon count */
+.weapon-slot-base {
+  color: #9090a8;
+  line-height: 1.6rem;
+}
+
+/* Number spinner for replaceable weapons */
+.weapon-qty-input {
+  width: 3.4rem;
+  padding: 0.1rem 0.3rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 0.9rem;
+  text-align: center;
+  -moz-appearance: textfield; /* Firefox: remove inner spin button padding */
+}
+.weapon-qty-input::-webkit-outer-spin-button,
+.weapon-qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.weapon-qty-input:focus  { outline: none; border-color: #6666aa; }
+.weapon-qty-input:hover  { border-color: var(--accent-dim); }
+.weapon-qty-input:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.weapon-slot-name {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
 /* ----- Validation issues ----- */
 .issue-list {
   list-style: none;

@@ -1,4 +1,4 @@
-use crate::datasheet::{Severity, TransportRule, UnitDatasheet};
+use crate::datasheet::{ProfileCount, Severity, TransportRule, UnitDatasheet, WargearOptionType};
 use crate::roster::{RosterEntry, RosterList};
 use crate::store::DatasheetStore;
 use crate::validation::{calculate_points, validate_unit, UnitSelection};
@@ -67,6 +67,25 @@ struct OwnedOptionView {
     mutually_exclusive_ids: String,
 }
 
+/// One weapon slot inside a weapon group (either the base weapon or one replacement option).
+struct WeaponSlotView {
+    weapon_name: String,
+    /// Current count — for the base slot this is auto-computed; for option slots it's chosen qty.
+    count: i32,
+    /// Empty string = this is the base/default weapon (read-only display).
+    option_id: String,
+    /// Stored on the base slot as `data-base-max` so JS can recalculate the display live.
+    /// For option slots this is the per-unit max qty at the current model count.
+    max_qty: u32,
+    /// Comma-separated option IDs mutually exclusive with this slot (for JS live-exclusion).
+    mutually_exclusive_ids: String,
+}
+
+/// A group of weapon slots that share the same "base" weapon being replaced.
+struct WeaponGroupView {
+    slots: Vec<WeaponSlotView>,
+}
+
 struct RosterEntryViewOwned {
     entry_id: String,
     datasheet_id: String,
@@ -94,6 +113,8 @@ struct RosterEntryViewOwned {
     units_leading: Vec<String>,
     /// Display names of units this entry is currently carrying (TRANSPORT → passengers).
     units_transporting: Vec<String>,
+    /// Weapon groups for qty-mode weapon-swap options (shown as number spinners).
+    weapon_groups: Vec<WeaponGroupView>,
 }
 
 // ---------------------------------------------------------------------------
@@ -146,6 +167,163 @@ fn can_board_transport(transport_ds: &UnitDatasheet, unit_keywords: &[String]) -
     true
 }
 
+/// Maximum number of times a wargear option may be taken at the current model count.
+fn compute_max_qty(opt: &crate::datasheet::WargearOption, model_count: u32) -> u32 {
+    if let Some(n) = opt.limits.one_per_n_models {
+        model_count / n
+    } else if let Some(max) = opt.limits.max_per_unit {
+        max
+    } else {
+        1
+    }
+}
+
+/// Build weapon groups for qty-mode replace options (those that can be taken by >1 model).
+///
+/// Returns one `WeaponGroupView` per distinct set of replaced weapons.  Each group
+/// contains a read-only base-weapon slot followed by one editable slot per option.
+fn build_weapon_groups(
+    ds: &UnitDatasheet,
+    sel: &crate::validation::UnitSelection,
+) -> Vec<WeaponGroupView> {
+    use std::collections::HashMap;
+
+    // Collect Replace-type options that can be taken by more than one model.
+    let qty_opts: Vec<&crate::datasheet::WargearOption> = ds
+        .wargear_options
+        .iter()
+        .filter(|opt| {
+            opt.option_type == WargearOptionType::Replace
+                && compute_max_qty(opt, sel.model_count) > 1
+        })
+        .collect();
+
+    if qty_opts.is_empty() {
+        return vec![];
+    }
+
+    // Resolve effective model count for each profile (Fixed vs Remainder).
+    let fixed_total: u32 = ds
+        .profiles
+        .iter()
+        .filter_map(|p| match &p.count {
+            Some(ProfileCount::Fixed(n)) => Some(*n),
+            _ => None,
+        })
+        .sum();
+
+    let profile_model_count = |profile_name: &str| -> u32 {
+        ds.profiles
+            .iter()
+            .find(|p| p.name == profile_name)
+            .map(|p| match &p.count {
+                Some(ProfileCount::Fixed(n)) => *n,
+                Some(ProfileCount::Remainder(_)) => sel.model_count.saturating_sub(fixed_total),
+                None => sel.model_count,
+            })
+            .unwrap_or(0)
+    };
+
+    // Group options by their sorted replaces-key, maintaining JSON order.
+    let mut group_keys: Vec<String> = Vec::new();
+    let mut groups_map: HashMap<String, Vec<&crate::datasheet::WargearOption>> = HashMap::new();
+    for opt in &qty_opts {
+        let mut key = opt.replaces.clone();
+        key.sort();
+        let key_str = key.join(",");
+        if !groups_map.contains_key(&key_str) {
+            group_keys.push(key_str.clone());
+        }
+        groups_map.entry(key_str).or_default().push(opt);
+    }
+
+    let mut result = Vec::new();
+
+    for key_str in group_keys {
+        let opts = &groups_map[&key_str];
+        let replaced_ids: Vec<&str> = key_str.split(',').collect();
+
+        // Count how many models carry the replaced weapon(s) in the default loadout.
+        let base_count: i32 = ds
+            .default_loadout
+            .iter()
+            .filter(|e| replaced_ids.contains(&e.weapon_id.as_str()))
+            .map(|e| {
+                let models: u32 = if let Some(at) = &e.applies_to {
+                    if let Some(pname) = &at.profile_name {
+                        profile_model_count(pname)
+                    } else if let Some(mc) = at.model_count {
+                        mc
+                    } else {
+                        sel.model_count
+                    }
+                } else {
+                    sel.model_count
+                };
+                models as i32 * e.quantity as i32
+            })
+            .sum();
+
+        if base_count == 0 {
+            continue; // Can't determine base count — skip this group.
+        }
+
+        // Sum of all chosen quantities across options in this group.
+        let total_chosen: i32 = opts
+            .iter()
+            .map(|opt| {
+                sel.chosen_options
+                    .iter()
+                    .filter(|o| o.as_str() == opt.id)
+                    .count() as i32
+            })
+            .sum();
+
+        let base_name = replaced_ids
+            .first()
+            .and_then(|id| ds.weapons.find(id).map(|w| w.name.clone()))
+            .unwrap_or_default();
+
+        let mut slots = Vec::new();
+
+        // First slot: the base/default weapon (read-only display).
+        slots.push(WeaponSlotView {
+            weapon_name: base_name,
+            count: (base_count - total_chosen).max(0),
+            option_id: String::new(),
+            max_qty: base_count as u32, // used as data-base-max for JS live-recalculation
+            mutually_exclusive_ids: String::new(),
+        });
+
+        // Remaining slots: one per option (in JSON order).
+        for opt in opts.iter() {
+            let current_qty = sel
+                .chosen_options
+                .iter()
+                .filter(|o| o.as_str() == opt.id)
+                .count() as i32;
+            let max_qty = compute_max_qty(opt, sel.model_count);
+            let weapon_name = opt
+                .adds
+                .first()
+                .and_then(|id| ds.weapons.find(id).map(|w| w.name.clone()))
+                .unwrap_or_else(|| opt.description.clone());
+
+            slots.push(WeaponSlotView {
+                weapon_name,
+                count: current_qty,
+                option_id: opt.id.clone(),
+                max_qty,
+                mutually_exclusive_ids: opt.mutually_exclusive_with.join(","),
+            });
+        }
+
+        result.push(WeaponGroupView { slots });
+    }
+
+    result
+}
+
 fn build_entry_view(
     entry: &RosterEntry,
     ds: &UnitDatasheet,
@@ -166,9 +344,21 @@ fn build_entry_view(
         })
         .collect();
 
+    // Options shown as quantity spinners in the weapon breakdown — exclude from checkboxes.
+    let qty_mode_ids: std::collections::HashSet<String> = ds
+        .wargear_options
+        .iter()
+        .filter(|opt| {
+            opt.option_type == WargearOptionType::Replace
+                && compute_max_qty(opt, sel.model_count) > 1
+        })
+        .map(|opt| opt.id.clone())
+        .collect();
+
     let options = ds
         .wargear_options
         .iter()
+        .filter(|opt| !qty_mode_ids.contains(&opt.id))
         .map(|opt| {
             let checked = sel.chosen_options.contains(&opt.id);
             let disabled = opt
@@ -270,6 +460,8 @@ fn build_entry_view(
         .map(|(other_entry, other_ds)| display_name(other_entry, other_ds))
         .collect();
 
+    let weapon_groups = build_weapon_groups(ds, &sel);
+
     RosterEntryViewOwned {
         entry_id: entry.entry_id.clone(),
         datasheet_id: entry.datasheet_id.clone(),
@@ -289,6 +481,7 @@ fn build_entry_view(
         available_transports,
         units_leading,
         units_transporting,
+        weapon_groups,
     }
 }
 

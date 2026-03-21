@@ -69,6 +69,33 @@
       </label>
     </div>
 
+    {# ── Weapon breakdown: qty spinners for replace-type options with >1 allowed ── #}
+    {% if !entry.weapon_groups.is_empty() %}
+    <div class="weapon-breakdown">
+      {% for group in entry.weapon_groups %}
+      <div class="weapon-group-row">
+        {% for slot in group.slots %}
+        <div class="weapon-slot">
+          {% if slot.option_id.is_empty() %}
+          <span class="weapon-slot-count weapon-slot-base"
+                data-base-max="{{ slot.max_qty }}">{{ slot.count }}</span>
+          {% else %}
+          <input class="weapon-slot-count weapon-qty-input"
+                 data-option-id="{{ slot.option_id }}"
+                 data-excl="{{ slot.mutually_exclusive_ids }}"
+                 value="{{ slot.count }}"
+                 min="0"
+                 max="{{ slot.max_qty }}"
+                 type="number">
+          {% endif %}
+          <span class="weapon-slot-name">{{ slot.weapon_name }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
     {% if !entry.options.is_empty() %}
     <details class="wargear-details" id="wargear-{{ entry.entry_id }}">
       <summary>Wargear Options</summary>

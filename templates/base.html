@@ -41,8 +41,99 @@
         document.querySelectorAll('details[id]').forEach(function (d) {
           if (saved[d.id]) d.setAttribute('open', '');
         });
+        initWargearQtyInputs();
       });
     })();
+
+    // ── Weapon qty inputs ──────────────────────────────────────────────────
+    // Qty spinners are display-only inputs (no `name`).  Their values are
+    // mirrored to hidden `name="options"` inputs so the configure form sends
+    // the correct repeated values to the server.
+
+    function syncWargearQty(input) {
+      var optId = input.dataset.optionId;
+      var qty   = Math.max(0, parseInt(input.value, 10) || 0);
+      var form  = input.closest('form.unit-configure-form');
+      if (!form) return;
+      // Remove stale hidden inputs for this option.
+      form.querySelectorAll('input[type="hidden"][name="options"][data-qty-opt="' + optId + '"]')
+          .forEach(function (el) { el.remove(); });
+      // Re-add qty copies.
+      for (var i = 0; i < qty; i++) {
+        var h       = document.createElement('input');
+        h.type      = 'hidden';
+        h.name      = 'options';
+        h.value     = optId;
+        h.dataset.qtyOpt = optId;
+        form.appendChild(h);
+      }
+    }
+
+    function refreshBaseWeaponDisplays(form) {
+      form.querySelectorAll('.weapon-group-row').forEach(function (row) {
+        var base = row.querySelector('[data-base-max]');
+        if (!base) return;
+        var baseMax    = parseInt(base.dataset.baseMax, 10) || 0;
+        var totalSwaps = 0;
+        row.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+          totalSwaps += Math.max(0, parseInt(inp.value, 10) || 0);
+        });
+        base.textContent = Math.max(0, baseMax - totalSwaps);
+      });
+    }
+
+    function refreshQtyMutualExclusion(form) {
+      var activeIds = new Set();
+      form.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+        if ((parseInt(inp.value, 10) || 0) > 0) activeIds.add(inp.dataset.optionId);
+      });
+      form.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+        var excl    = inp.dataset.excl ? inp.dataset.excl.split(',').filter(Boolean) : [];
+        var blocked = excl.some(function (id) { return activeIds.has(id); });
+        if (blocked && !activeIds.has(inp.dataset.optionId)) {
+          inp.disabled = true;
+          if ((parseInt(inp.value, 10) || 0) !== 0) {
+            inp.value = '0';
+            syncWargearQty(inp);
+          }
+        } else {
+          inp.disabled = false;
+        }
+      });
+    }
+
+    function initWargearQtyInputs() {
+      document.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+        syncWargearQty(inp);
+      });
+      document.querySelectorAll('form.unit-configure-form').forEach(function (form) {
+        refreshQtyMutualExclusion(form);
+        refreshBaseWeaponDisplays(form);
+      });
+    }
+
+    // Run once on initial page load.
+    initWargearQtyInputs();
+
+    // Live update: fires on every keystroke for immediate base-count feedback.
+    document.body.addEventListener('input', function (evt) {
+      if (!evt.target.classList.contains('weapon-qty-input')) return;
+      var form = evt.target.closest('form.unit-configure-form');
+      if (!form) return;
+      refreshBaseWeaponDisplays(form);
+    });
+
+    // Commit update: fires when value is committed (blur / Enter / spinner click).
+    document.body.addEventListener('change', function (evt) {
+      if (!evt.target.classList.contains('weapon-qty-input')) return;
+      var form = evt.target.closest('form.unit-configure-form');
+      if (!form) return;
+      syncWargearQty(evt.target);
+      refreshQtyMutualExclusion(form);
+      refreshBaseWeaponDisplays(form);
+      // The form's own hx-trigger="change delay:200ms" will also fire here,
+      // submitting the configure request with the updated hidden inputs.
+    });
 
     // Live mutual-exclusion for wargear checkboxes.
     // Disables conflicting options the instant the user checks something,
