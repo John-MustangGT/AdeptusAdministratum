@@ -574,23 +574,14 @@ section h2 { font-size: 1.15rem; margin-bottom: 0.6rem; border-bottom: 1px solid
   border-top: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
-/* One group per replaced base weapon — stacks the base-weapon line + cluster rows */
-.weapon-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-/* Cluster rows are indented under the base weapon display */
 .weapon-group-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem 0.9rem;
   align-items: center;
-  padding-left: 1.1rem;
 }
 
 .weapon-slot {

@@ -73,28 +73,22 @@
     {% if !entry.weapon_groups.is_empty() %}
     <div class="weapon-breakdown">
       {% for group in entry.weapon_groups %}
-      <div class="weapon-group">
-        {# Base weapon — read-only count updated live by JS #}
-        <div class="weapon-slot weapon-slot-base-row">
+      <div class="weapon-group-row">
+        {% for slot in group.slots %}
+        <div class="weapon-slot">
+          {% if slot.option_id.is_empty() %}
           <span class="weapon-slot-count weapon-slot-base"
-                data-base-max="{{ group.base_slot.max_qty }}">{{ group.base_slot.count }}</span>
-          <span class="weapon-slot-name">{{ group.base_slot.weapon_name }}</span>
-        </div>
-        {# One row per mutual-exclusion cluster (independent swap pools get their own line) #}
-        {% for cluster in group.clusters %}
-        <div class="weapon-group-row">
-          {% for slot in cluster %}
-          <div class="weapon-slot">
-            <input class="weapon-slot-count weapon-qty-input"
-                   data-option-id="{{ slot.option_id }}"
-                   data-excl="{{ slot.mutually_exclusive_ids }}"
-                   value="{{ slot.count }}"
-                   min="0"
-                   max="{{ slot.max_qty }}"
-                   type="number">
-            <span class="weapon-slot-name">{{ slot.weapon_name }}</span>
-          </div>
-          {% endfor %}
+                data-base-max="{{ slot.max_qty }}">{{ slot.count }}</span>
+          {% else %}
+          <input class="weapon-slot-count weapon-qty-input"
+                 data-option-id="{{ slot.option_id }}"
+                 data-excl="{{ slot.mutually_exclusive_ids }}"
+                 value="{{ slot.count }}"
+                 min="0"
+                 max="{{ slot.max_qty }}"
+                 type="number">
+          {% endif %}
+          <span class="weapon-slot-name">{{ slot.weapon_name }}</span>
         </div>
         {% endfor %}
       </div>

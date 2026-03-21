@@ -70,14 +70,12 @@
     }
 
     function refreshBaseWeaponDisplays(form) {
-      // Query .weapon-group (one per replaced base weapon) so we sum swaps
-      // across ALL cluster rows within a group before updating the base count.
-      form.querySelectorAll('.weapon-group').forEach(function (groupEl) {
-        var base = groupEl.querySelector('[data-base-max]');
+      form.querySelectorAll('.weapon-group-row').forEach(function (row) {
+        var base = row.querySelector('[data-base-max]');
         if (!base) return;
         var baseMax    = parseInt(base.dataset.baseMax, 10) || 0;
         var totalSwaps = 0;
-        groupEl.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
+        row.querySelectorAll('.weapon-qty-input').forEach(function (inp) {
           totalSwaps += Math.max(0, parseInt(inp.value, 10) || 0);
         });
         base.textContent = Math.max(0, baseMax - totalSwaps);

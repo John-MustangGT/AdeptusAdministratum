@@ -212,45 +212,6 @@
             "abilities": ["ANTI-PSYKER 2+", "DEVASTATING WOUNDS"]
           }
         ]
-      },
-      {
-        "id": "heavy_bolter",
-        "name": "Heavy Bolter",
-        "stats": {
-          "range": "36\"",
-          "A": "3",
-          "BS": "3+",
-          "S": 5,
-          "AP": -1,
-          "D": 2
-        },
-        "abilities": ["HEAVY", "SUSTAINED HITS 1"]
-      },
-      {
-        "id": "heavy_flamer",
-        "name": "Heavy Flamer",
-        "stats": {
-          "range": "12\"",
-          "A": "D6",
-          "BS": "N/A",
-          "S": 5,
-          "AP": -1,
-          "D": 1
-        },
-        "abilities": ["IGNORES COVER", "TORRENT"]
-      },
-      {
-        "id": "multi_melta",
-        "name": "Multi-Melta",
-        "stats": {
-          "range": "18\"",
-          "A": "2",
-          "BS": "3+",
-          "S": 9,
-          "AP": -4,
-          "D": "D6"
-        },
-        "abilities": ["MELTA 2"]
       }
     ],
     "melee": [
@@ -512,54 +473,6 @@
       "mutually_exclusive_with": [
         "special_weapon_plasma",
         "special_weapon_melta"
-      ]
-    },
-    {
-      "id": "heavy_weapon_heavy_bolter",
-      "description": "One Battle Sister can replace her boltgun with a heavy bolter.",
-      "type": "replace",
-      "replaces": ["boltgun"],
-      "adds": ["heavy_bolter"],
-      "points_cost": 0,
-      "cost_per": "selection",
-      "limits": {
-        "max_per_unit": 1
-      },
-      "mutually_exclusive_with": [
-        "heavy_weapon_heavy_flamer",
-        "heavy_weapon_multi_melta"
-      ]
-    },
-    {
-      "id": "heavy_weapon_heavy_flamer",
-      "description": "One Battle Sister can replace her boltgun with a heavy flamer.",
-      "type": "replace",
-      "replaces": ["boltgun"],
-      "adds": ["heavy_flamer"],
-      "points_cost": 0,
-      "cost_per": "selection",
-      "limits": {
-        "max_per_unit": 1
-      },
-      "mutually_exclusive_with": [
-        "heavy_weapon_heavy_bolter",
-        "heavy_weapon_multi_melta"
-      ]
-    },
-    {
-      "id": "heavy_weapon_multi_melta",
-      "description": "One Battle Sister can replace her boltgun with a multi-melta.",
-      "type": "replace",
-      "replaces": ["boltgun"],
-      "adds": ["multi_melta"],
-      "points_cost": 0,
-      "cost_per": "selection",
-      "limits": {
-        "max_per_unit": 1
-      },
-      "mutually_exclusive_with": [
-        "heavy_weapon_heavy_bolter",
-        "heavy_weapon_heavy_flamer"
       ]
     },
     {
