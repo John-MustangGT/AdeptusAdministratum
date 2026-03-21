@@ -67,23 +67,27 @@ struct OwnedOptionView {
     mutually_exclusive_ids: String,
 }
 
-/// One weapon slot inside a weapon group (either the base weapon or one replacement option).
+/// One weapon slot — either the static base weapon display or an editable option spinner.
+#[derive(Clone)]
 struct WeaponSlotView {
     weapon_name: String,
-    /// Current count — for the base slot this is auto-computed; for option slots it's chosen qty.
     count: i32,
-    /// Empty string = this is the base/default weapon (read-only display).
     option_id: String,
-    /// Stored on the base slot as `data-base-max` so JS can recalculate the display live.
-    /// For option slots this is the per-unit max qty at the current model count.
+    /// On the base slot: stored as `data-base-max` for JS live-recalculation.
+    /// On option slots: the per-unit maximum qty at the current model count.
     max_qty: u32,
-    /// Comma-separated option IDs mutually exclusive with this slot (for JS live-exclusion).
+    /// Comma-separated IDs of mutually exclusive options (for JS live-exclusion).
     mutually_exclusive_ids: String,
 }
 
-/// A group of weapon slots that share the same "base" weapon being replaced.
+/// A group for one base weapon.  Options that replace it are split into one
+/// `cluster` row per mutual-exclusion chain, so independent pools (e.g.
+/// "special weapon" vs "heavy weapon") each get their own line.
 struct WeaponGroupView {
-    slots: Vec<WeaponSlotView>,
+    /// The base/default weapon with a read-only count display.
+    base_slot: WeaponSlotView,
+    /// Each inner `Vec` is one mutual-exclusion cluster shown on its own row.
+    clusters: Vec<Vec<WeaponSlotView>>,
 }
 
 struct RosterEntryViewOwned {
@@ -178,17 +182,56 @@ fn compute_max_qty(opt: &crate::datasheet::WargearOption, model_count: u32) -> u
     }
 }
 
+/// Partition `n` options into mutual-exclusion clusters using union-find.
+/// Returns a list of index-sets (one per cluster), sorted by first member index
+/// so the output preserves JSON declaration order.
+fn build_clusters(opts: &[&crate::datasheet::WargearOption]) -> Vec<Vec<usize>> {
+    let n = opts.len();
+    let mut parent: Vec<usize> = (0..n).collect();
+
+    let find_root = |parent: &Vec<usize>, mut x: usize| -> usize {
+        while parent[x] != x {
+            x = parent[x];
+        }
+        x
+    };
+
+    for (i, opt) in opts.iter().enumerate() {
+        for excl_id in &opt.mutually_exclusive_with {
+            if let Some(j) = opts.iter().position(|o| o.id == *excl_id) {
+                let ri = find_root(&parent, i);
+                let rj = find_root(&parent, j);
+                if ri != rj {
+                    parent[ri] = rj;
+                }
+            }
+        }
+    }
+
+    let mut map: std::collections::HashMap<usize, Vec<usize>> =
+        std::collections::HashMap::new();
+    for i in 0..n {
+        let root = find_root(&parent, i);
+        map.entry(root).or_default().push(i);
+    }
+
+    let mut clusters: Vec<Vec<usize>> = map.into_values().collect();
+    clusters.sort_by_key(|c| *c.iter().min().unwrap_or(&0));
+    clusters
+}
+
 /// Build weapon groups for qty-mode replace options (those that can be taken by >1 model).
 ///
-/// Returns one `WeaponGroupView` per distinct set of replaced weapons.  Each group
-/// contains a read-only base-weapon slot followed by one editable slot per option.
+/// Each `WeaponGroupView` covers one replaced base weapon.  Options are split
+/// into one cluster row per mutual-exclusion chain so that independent pools
+/// (e.g. "special weapons" and "heavy weapons") each get their own row.
 fn build_weapon_groups(
     ds: &UnitDatasheet,
     sel: &crate::validation::UnitSelection,
 ) -> Vec<WeaponGroupView> {
     use std::collections::HashMap;
 
-    // Collect Replace-type options that can be taken by more than one model.
+    // Qty-mode = Replace type, can be taken by more than one model.
     let qty_opts: Vec<&crate::datasheet::WargearOption> = ds
         .wargear_options
         .iter()
@@ -265,10 +308,10 @@ fn build_weapon_groups(
             .sum();
 
         if base_count == 0 {
-            continue; // Can't determine base count — skip this group.
+            continue;
         }
 
-        // Sum of all chosen quantities across options in this group.
+        // Total swaps chosen across ALL options in this group (all clusters).
         let total_chosen: i32 = opts
             .iter()
             .map(|opt| {
@@ -284,41 +327,47 @@ fn build_weapon_groups(
             .and_then(|id| ds.weapons.find(id).map(|w| w.name.clone()))
             .unwrap_or_default();
 
-        let mut slots = Vec::new();
-
-        // First slot: the base/default weapon (read-only display).
-        slots.push(WeaponSlotView {
+        let base_slot = WeaponSlotView {
             weapon_name: base_name,
             count: (base_count - total_chosen).max(0),
             option_id: String::new(),
-            max_qty: base_count as u32, // used as data-base-max for JS live-recalculation
+            max_qty: base_count as u32, // data-base-max used by JS
             mutually_exclusive_ids: String::new(),
-        });
+        };
 
-        // Remaining slots: one per option (in JSON order).
-        for opt in opts.iter() {
-            let current_qty = sel
-                .chosen_options
-                .iter()
-                .filter(|o| o.as_str() == opt.id)
-                .count() as i32;
-            let max_qty = compute_max_qty(opt, sel.model_count);
-            let weapon_name = opt
-                .adds
-                .first()
-                .and_then(|id| ds.weapons.find(id).map(|w| w.name.clone()))
-                .unwrap_or_else(|| opt.description.clone());
+        // Build flat option slot list (same order as JSON).
+        let option_slots: Vec<WeaponSlotView> = opts
+            .iter()
+            .map(|opt| {
+                let current_qty = sel
+                    .chosen_options
+                    .iter()
+                    .filter(|o| o.as_str() == opt.id)
+                    .count() as i32;
+                let max_qty = compute_max_qty(opt, sel.model_count);
+                let weapon_name = opt
+                    .adds
+                    .first()
+                    .and_then(|id| ds.weapons.find(id).map(|w| w.name.clone()))
+                    .unwrap_or_else(|| opt.description.clone());
+                WeaponSlotView {
+                    weapon_name,
+                    count: current_qty,
+                    option_id: opt.id.clone(),
+                    max_qty,
+                    mutually_exclusive_ids: opt.mutually_exclusive_with.join(","),
+                }
+            })
+            .collect();
 
-            slots.push(WeaponSlotView {
-                weapon_name,
-                count: current_qty,
-                option_id: opt.id.clone(),
-                max_qty,
-                mutually_exclusive_ids: opt.mutually_exclusive_with.join(","),
-            });
-        }
+        // Cluster by mutual exclusion so independent pools get separate rows.
+        let cluster_indices = build_clusters(opts);
+        let clusters: Vec<Vec<WeaponSlotView>> = cluster_indices
+            .into_iter()
+            .map(|indices| indices.into_iter().map(|i| option_slots[i].clone()).collect())
+            .collect();
 
-        result.push(WeaponGroupView { slots });
+        result.push(WeaponGroupView { base_slot, clusters });
     }
 
     result
