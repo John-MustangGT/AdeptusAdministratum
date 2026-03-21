@@ -188,13 +188,16 @@ fn build_weapon_groups(
 ) -> Vec<WeaponGroupView> {
     use std::collections::HashMap;
 
-    // Collect Replace-type options that can be taken by more than one model.
+    // Collect Replace-type options that are available at the current model count
+    // and replace exactly one weapon (multi-weapon swaps have ambiguous base
+    // counts and stay as checkboxes).
     let qty_opts: Vec<&crate::datasheet::WargearOption> = ds
         .wargear_options
         .iter()
         .filter(|opt| {
             opt.option_type == WargearOptionType::Replace
-                && compute_max_qty(opt, sel.model_count) > 1
+                && opt.replaces.len() == 1
+                && compute_max_qty(opt, sel.model_count) >= 1
         })
         .collect();
 
@@ -350,7 +353,8 @@ fn build_entry_view(
         .iter()
         .filter(|opt| {
             opt.option_type == WargearOptionType::Replace
-                && compute_max_qty(opt, sel.model_count) > 1
+                && opt.replaces.len() == 1
+                && compute_max_qty(opt, sel.model_count) >= 1
         })
         .map(|opt| opt.id.clone())
         .collect();
